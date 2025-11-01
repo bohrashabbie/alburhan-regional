@@ -1340,7 +1340,7 @@ export default function Home() {
               {[
                 // Optimized order for masonry layout - images arranged to fill gaps efficiently
                 { src: '/Projects/Project2.png', alt: t('projects.project2'), key: 'project2' },
-                { src: '/Projects/Project5.png', alt: t('projects.project5'), key: 'project5' },
+                { src: '/Projects/project5.png', alt: t('projects.project5'), key: 'project5' },
                 { src: '/Projects/Project3.png', alt: t('projects.project3'), key: 'project3' },
                 { src: '/Projects/Project7.png', alt: t('projects.project7'), key: 'project7' },
                 { src: '/Projects/Project4.png', alt: t('projects.project4'), key: 'project4' },
