@@ -221,7 +221,7 @@ export default function Home() {
                         style={{ width: '100%', height: '100%', position: 'relative' }}
                       >
                         <Image
-                          src="/Projects/Project 1.jfif"
+                          src="/Projects/Project 1.png"
                           alt="AL-Burhan Project"
                           fill
                           style={{
@@ -1339,12 +1339,12 @@ export default function Home() {
             >
               {[
                 // Optimized order for masonry layout - images arranged to fill gaps efficiently
-                { src: '/Projects/Project2.jfif', alt: t('projects.project2'), key: 'project2' },
-                { src: '/Projects/Project5.jfif', alt: t('projects.project5'), key: 'project5' },
-                { src: '/Projects/Project3.jfif', alt: t('projects.project3'), key: 'project3' },
-                { src: '/Projects/Project7.jfif', alt: t('projects.project7'), key: 'project7' },
-                { src: '/Projects/Project4.jfif', alt: t('projects.project4'), key: 'project4' },
-                { src: '/Projects/Project6.jfif', alt: t('projects.project6'), key: 'project6' },
+                { src: '/Projects/Project2.png', alt: t('projects.project2'), key: 'project2' },
+                { src: '/Projects/Project5.png', alt: t('projects.project5'), key: 'project5' },
+                { src: '/Projects/Project3.png', alt: t('projects.project3'), key: 'project3' },
+                { src: '/Projects/Project7.png', alt: t('projects.project7'), key: 'project7' },
+                { src: '/Projects/Project4.png', alt: t('projects.project4'), key: 'project4' },
+                { src: '/Projects/Project6.png', alt: t('projects.project6'), key: 'project6' },
               ].map((project, index) => (
                     <motion.div
                   key={index}
