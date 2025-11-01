@@ -67,7 +67,7 @@ export default function About() {
       >
         <Box
           sx={{
-            background: `linear-gradient(135deg, ${theme.palette.primary[50]} 0%, ${theme.palette.secondary[50]} 100%)`,
+            background: `linear-gradient(135deg, ${(theme.palette.primary as any)[50]} 0%, ${(theme.palette.secondary as any)[50]} 100%)`,
             py: { xs: 6, md: 10 },
           }}
         >
@@ -157,7 +157,7 @@ export default function About() {
 
               <Grid container spacing={4}>
                 {services.map((service, index) => (
-                  <Grid item xs={12} sm={6} md={3} key={index}>
+                  <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
                     <motion.div
                       variants={staggerItem}
                       whileHover="hover"
@@ -213,7 +213,7 @@ export default function About() {
         whileInView="animate"
         viewport={{ once: true, amount: 0.1 }}
       >
-        <Box sx={{ py: { xs: 6, md: 10 }, backgroundColor: 'neutral.50' }}>
+        <Box sx={{ py: { xs: 6, md: 10 }, backgroundColor: 'background.default' }}>
           <Container maxWidth="xl">
             <motion.div
               variants={staggerContainer}
@@ -248,7 +248,7 @@ export default function About() {
 
               <Grid container spacing={4}>
                 {[1, 2, 3, 4].map((member, index) => (
-                  <Grid item xs={12} sm={6} md={3} key={index}>
+                  <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
                     <motion.div
                       variants={staggerItem}
                       whileHover={{ scale: 1.05 }}

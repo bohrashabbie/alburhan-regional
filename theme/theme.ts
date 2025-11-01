@@ -196,27 +196,27 @@ export const muiTheme = {
   typography: {
     fontFamily: theme.typography.fontFamily.sans.join(','),
     h1: {
-      fontSize: theme.typography.fontSize['4xl'][0],
+      fontSize: theme.typography.fontSize['4xl'][0] as string,
       fontWeight: theme.typography.fontWeight.bold,
     },
     h2: {
-      fontSize: theme.typography.fontSize['3xl'][0],
+      fontSize: theme.typography.fontSize['3xl'][0] as string,
       fontWeight: theme.typography.fontWeight.bold,
     },
     h3: {
-      fontSize: theme.typography.fontSize['2xl'][0],
+      fontSize: theme.typography.fontSize['2xl'][0] as string,
       fontWeight: theme.typography.fontWeight.semibold,
     },
     h4: {
-      fontSize: theme.typography.fontSize.xl[0],
+      fontSize: theme.typography.fontSize.xl[0] as string,
       fontWeight: theme.typography.fontWeight.semibold,
     },
     h5: {
-      fontSize: theme.typography.fontSize.lg[0],
+      fontSize: theme.typography.fontSize.lg[0] as string,
       fontWeight: theme.typography.fontWeight.medium,
     },
     h6: {
-      fontSize: theme.typography.fontSize.base[0],
+      fontSize: theme.typography.fontSize.base[0] as string,
       fontWeight: theme.typography.fontWeight.medium,
     },
   },
