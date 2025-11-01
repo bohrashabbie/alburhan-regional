@@ -1,0 +1,151 @@
+{
+  "common": {
+    "companyName": "AL-Burhan",
+    "allRightsReserved": "All rights reserved"
+  },
+  "header": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title1": "Illuminating",
+    "title2": "Your Vision",
+    "title3": "Beyond Light",
+    "description": "Transforming spaces with innovative lighting solutions that combine aesthetics, functionality, and sustainability."
+  },
+  "carousel": {
+    "slide1": {
+      "title": "AL-Burhan",
+      "subtitle": "Light Up Your Life",
+      "description": "Transforming spaces with innovative lighting solutions that blend elegance, functionality, and cutting-edge technology to create breathtaking environments."
+    },
+    "slide2": {
+      "title": "Innovation",
+      "subtitle": "Leading Lighting Solutions",
+      "description": "Pioneering the future of illumination with state-of-the-art LED technology, smart lighting systems, and energy-efficient designs that redefine modern living."
+    },
+    "slide3": {
+      "title": "Excellence",
+      "subtitle": "Premium Quality Products",
+      "description": "Crafted with precision and passion, our premium lighting collections combine exceptional craftsmanship with luxurious materials to elevate any space."
+    },
+    "slide4": {
+      "title": "Design",
+      "subtitle": "Elegant Lighting Designs",
+      "description": "Where artistry meets functionality. Our curated designs seamlessly integrate aesthetic beauty with practical innovation, creating timeless pieces that inspire."
+    },
+    "slide5": {
+      "title": "Experience",
+      "subtitle": "20+ Years of Expertise",
+      "description": "Drawing from over two decades of industry excellence, we deliver unmatched expertise in lighting design, installation, and project implementation across the globe."
+    },
+    "slide6": {
+      "title": "Quality",
+      "subtitle": "Exceptional Craftsmanship",
+      "description": "Every fixture is meticulously engineered and quality-assured, ensuring durability, performance, and lasting beauty that exceeds the highest international standards."
+    },
+    "slide7": {
+      "title": "Vision",
+      "subtitle": "Illuminating Your Future",
+      "description": "Embracing tomorrow's possibilities today. We envision a world where intelligent lighting transforms how we live, work, and experience our surroundings."
+    }
+  },
+  "sections": {
+    "aboutUs": "About us",
+    "introduction": "Introduction",
+    "fromOwner": "From Owner",
+    "ourBrand": "Our Brand",
+    "ourProjects": "Our Projects",
+    "contactUs": "Contact Us"
+  },
+  "aboutUs": {
+    "china": {
+      "firmName": "AL-Bohan",
+      "countryName": "China"
+    },
+    "kuwait": {
+      "firmName": "Al-Burhan Regional",
+      "countryName": "Kuwait"
+    },
+    "dubai": {
+      "firmName": "Al-Burhan Hagezi",
+      "countryName": "UAE"
+    },
+    "egypt": {
+      "firmName": "Al-Burhan",
+      "countryName": "Egypt"
+    }
+  },
+  "introduction": {
+    "title": "About AL-Burhan",
+    "description": "AL-Burhan is a leading lighting solutions provider with over 20 years of experience in the industry. We specialize in delivering innovative and exceptional lighting services across the region, combining quality, expertise, and customer satisfaction.",
+    "additionalInfo": "Throughout our 20+ years of operation, we have successfully completed hundreds of projects across the globe, establishing a strong presence in China, Kuwait, UAE, and Egypt. Our commitment to quality craftsmanship, cutting-edge technology, and exceptional customer service has made us the trusted choice for lighting solutions."
+  },
+  "owners": {
+    "founder": {
+      "name": "Mr. Murtaza Bohra",
+      "designation": "Founder",
+      "quote": "Our commitment to excellence has driven us to become a leading force in the lighting industry, delivering innovative solutions that transform spaces and inspire communities worldwide.",
+      "quote2": "With over two decades of experience, we continue to set new standards in quality, innovation, and customer satisfaction, lighting the way for a brighter future."
+    },
+    "coFounder": {
+      "name": "Mr. Shabbir Ratlamwala",
+      "designation": "Co-founder",
+      "quote": "Our vision extends beyond business success; we strive to make a meaningful impact on the communities we serve, one project at a time."
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch with us. We'd love to hear from you.",
+    "headOffice": "Head Office",
+    "address": "Address",
+    "addressLine": "Office 5, 4th Floor, Al Rifai Building",
+    "addressLine2": "Tunis Street, Hawally, Kuwait",
+    "phoneNumbers": "Phone Numbers",
+    "phone1": "+965 99935529",
+    "phone2": "+965 22280853",
+    "email": "Email",
+    "emailValue": "info@albhurhanregional.com",
+    "businessHours": "Business Hours",
+    "hours": "Sat-Thu: 9:00 AM - 7:00 PM, Friday: Closed",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "subject": "Subject",
+      "message": "Message",
+      "sendMessage": "Send Message"
+    }
+  },
+  "footer": {
+    "description": "Leading lighting solutions provider delivering innovative and exceptional lighting services across the region.",
+    "services": {
+      "title": "Services",
+      "interior": "Interior Lighting",
+      "commercial": "Commercial Lighting",
+      "exterior": "Exterior Lighting",
+      "smart": "Smart Lighting",
+      "design": "Lighting Design",
+      "installation": "Installation Services"
+    },
+    "legal": {
+      "title": "Legal",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "cookies": "Cookie Policy",
+      "gdpr": "GDPR"
+    },
+    "copyright": "All rights reserved"
+  },
+  "projects": {
+    "project2": "Project 2",
+    "project3": "Project 3",
+    "project4": "Project 4",
+    "project5": "Project 5",
+    "project6": "Project 6",
+    "project7": "Project 7"
+  }
+}
+
