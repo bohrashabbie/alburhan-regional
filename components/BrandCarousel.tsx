@@ -12,14 +12,11 @@ export default function BrandCarousel() {
   const isRTL = locale === 'ar';
   const isMobile = useMediaQuery(theme.breakpoints.down('md')); // < 960px
 
-  // Brand images array
+  // Brand images array (excluding featured brands: brand6, brand4, brand15, brand3)
   const brands = [
     '/Brands/brand1.png',
     '/Brands/brand2.png',
-    '/Brands/brand3.png',
-    '/Brands/brand4.jpg',
     '/Brands/brand5.png',
-    '/Brands/brand6.jpg',
     '/Brands/brand7.png',
     '/Brands/brand8.png',
     '/Brands/brand9.png',
@@ -27,7 +24,6 @@ export default function BrandCarousel() {
     '/Brands/brand11.png',
     '/Brands/brand12.png',
     '/Brands/brand13.png',
-    '/Brands/brand15.png',
   ];
 
   // Show 5 images on desktop, 3 on mobile

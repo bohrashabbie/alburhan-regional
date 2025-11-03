@@ -2,16 +2,16 @@
 export const theme = {
   colors: {
     primary: {
-      50: '#fef2f2',
-      100: '#fee2e2',
-      200: '#fecaca',
-      300: '#fca5a5',
-      400: '#f87171',
-      500: '#dc2626', // Mid dark red
-      600: '#b91c1c',
-      700: '#991b1b',
-      800: '#7f1d1d',
-      900: '#450a0a',
+      50: '#f8f4f4',
+      100: '#e8dddd',
+      200: '#d4bdbd',
+      300: '#b89595',
+      400: '#9d6f6f',
+      500: '#800020', // Matte maroon
+      600: '#6b0019',
+      700: '#560014',
+      800: '#40000f',
+      900: '#2b000a',
     },
     secondary: {
       50: '#ffffff',
@@ -26,16 +26,16 @@ export const theme = {
       900: '#c8c8c8',
     },
     accent: {
-      50: '#fef2f2',
-      100: '#fee2e2',
-      200: '#fecaca',
-      300: '#fca5a5',
-      400: '#f87171',
-      500: '#dc2626',
-      600: '#b91c1c',
-      700: '#991b1b',
-      800: '#7f1d1d',
-      900: '#450a0a',
+      50: '#f8f4f4',
+      100: '#e8dddd',
+      200: '#d4bdbd',
+      300: '#b89595',
+      400: '#9d6f6f',
+      500: '#800020', // Matte maroon
+      600: '#6b0019',
+      700: '#560014',
+      800: '#40000f',
+      900: '#2b000a',
     },
     neutral: {
       50: '#ffffff',
@@ -74,16 +74,16 @@ export const theme = {
       900: '#78350f',
     },
     error: {
-      50: '#fef2f2',
-      100: '#fee2e2',
-      200: '#fecaca',
-      300: '#fca5a5',
-      400: '#f87171',
-      500: '#dc2626',
-      600: '#b91c1c',
-      700: '#b91c1c',
-      800: '#991b1b',
-      900: '#7f1d1d',
+      50: '#f8f4f4',
+      100: '#e8dddd',
+      200: '#d4bdbd',
+      300: '#b89595',
+      400: '#9d6f6f',
+      500: '#800020', // Matte maroon
+      600: '#6b0019',
+      700: '#560014',
+      800: '#40000f',
+      900: '#2b000a',
     },
   },
   spacing: {
@@ -158,7 +158,7 @@ export const theme = {
 export const muiTheme = {
   palette: {
     primary: {
-      main: theme.colors.primary[500], // Mid dark red
+      main: theme.colors.primary[500], // Matte maroon
       light: theme.colors.primary[300],
       dark: theme.colors.primary[700],
       contrastText: '#ffffff',

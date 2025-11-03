@@ -25,6 +25,8 @@ import {
   Info,
   ContactMail,
   Business,
+  ShoppingBag,
+  Work,
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
@@ -72,9 +74,11 @@ const Header: React.FC = () => {
 
   const navigationItems = [
     { label: t('home'), href: '/', icon: <Home /> },
-    { label: t('about'), href: '/about', icon: <Info /> },
+    { label: t('aboutUs'), href: '/about', icon: <Info /> },
+    { label: t('ourProducts'), href: '/products', icon: <ShoppingBag /> },
+    { label: t('ourProjects'), href: '/#projects', icon: <Work /> },
     { label: t('services'), href: '/services', icon: <Business /> },
-    { label: t('contact'), href: '/contact', icon: <ContactMail /> },
+    { label: t('contact'), href: '/#contact', icon: <ContactMail /> },
   ];
 
   const DesktopNavigation = () => (
@@ -241,15 +245,15 @@ const Header: React.FC = () => {
                   <Box
                     sx={{
                       position: 'relative',
-                      width: { xs: 100, md: 140 },
-                      height: { xs: 40, md: 50 },
+                      width: { xs: 180, md: 240 },
+                      height: { xs: 70, md: 90 },
                       display: 'flex',
                       alignItems: 'center',
                     }}
                   >
                     <Image
-                      src="/logo/al-burhanilogo.png"
-                      alt="AL-Burhani Logo"
+                      src="/logo/Al burhan group logo.png"
+                      alt="AL-Burhan Group Logo"
                       fill
                       style={{
                         objectFit: 'contain',

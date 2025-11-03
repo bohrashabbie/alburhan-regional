@@ -5,7 +5,9 @@
   },
   "header": {
     "home": "Home",
-    "about": "About",
+    "aboutUs": "About Us",
+    "ourProducts": "Our Products",
+    "ourProjects": "Our Projects",
     "services": "Services",
     "contact": "Contact"
   },
@@ -53,9 +55,10 @@
     }
   },
   "sections": {
-    "aboutUs": "About us",
+    "aboutUs": "Our Global Companies",
+    "aboutUsTitle": "About Us",
     "introduction": "Introduction",
-    "fromOwner": "From Owner",
+    "fromOwner": "A Word from the Founder",
     "ourBrand": "Our Brand",
     "ourProjects": "Our Projects",
     "contactUs": "Contact Us"
@@ -63,15 +66,18 @@
   "aboutUs": {
     "china": {
       "firmName": "AL-Bohan",
-      "countryName": "China"
+      "countryName": "China",
+      "description": "AL-Burhan's presence in China represents our commitment to manufacturing excellence and innovation. Through our strategic partnerships and state-of-the-art facilities, we deliver world-class lighting solutions that combine quality craftsmanship with cutting-edge technology, serving markets across the globe."
     },
     "kuwait": {
       "firmName": "Al-Burhan Regional",
-      "countryName": "Kuwait"
+      "countryName": "Kuwait",
+      "description": "Al-Burhan Regional has been a cornerstone of the lighting industry in Kuwait for over two decades. Our extensive network of branches across the country ensures accessibility and exceptional service to clients throughout the region, from residential to commercial projects."
     },
     "dubai": {
       "firmName": "Al-Burhan Hagezi",
-      "countryName": "UAE"
+      "countryName": "UAE",
+      "description": "In the heart of Dubai, Al-Burhan Hagezi serves as our gateway to the dynamic Middle Eastern market. We bring innovative lighting solutions to one of the world's most ambitious architectural landscapes, contributing to iconic projects that define modern luxury and sophistication."
     },
     "egypt": {
       "firmName": "Al-Burhan",
@@ -80,20 +86,21 @@
   },
   "introduction": {
     "title": "About AL-Burhan",
-    "description": "AL-Burhan is a leading lighting solutions provider with over 20 years of experience in the industry. We specialize in delivering innovative and exceptional lighting services across the region, combining quality, expertise, and customer satisfaction.",
-    "additionalInfo": "Throughout our 20+ years of operation, we have successfully completed hundreds of projects across the globe, establishing a strong presence in China, Kuwait, UAE, and Egypt. Our commitment to quality craftsmanship, cutting-edge technology, and exceptional customer service has made us the trusted choice for lighting solutions."
+    "description": "AL-Burhan is a leading provider of innovative lighting solutions with over 20 years of industry experience. We combine quality, expertise, and customer satisfaction to deliver exceptional lighting services across the region.",
+    "additionalInfo": "With hundreds of successful projects worldwide, including in China, Kuwait, UAE, and Egypt, AL-Burhan has established itself as a trusted name in lighting.",
+    "thirdParagraph": "From cutting-edge LED technologies to elegant designer collections, we transform visions into reality, creating inspiring lighting experiences that elevate every space."
   },
   "owners": {
     "founder": {
       "name": "Mr. Murtaza Bohra",
       "designation": "Founder",
-      "quote": "Our commitment to excellence has driven us to become a leading force in the lighting industry, delivering innovative solutions that transform spaces and inspire communities worldwide.",
-      "quote2": "With over two decades of experience, we continue to set new standards in quality, innovation, and customer satisfaction, lighting the way for a brighter future."
+      "quote": "Twenty years ago, all I had was a small dream to bring something different to the world of lighting.\n\nWe started with humble steps, and over time that dream grew. Today, it has become a name we are proud of Al Burhan Regional Lighting.\n\nEvery achievement we've made is the result of hard work, dedication, and belief that success comes from honesty and persistence.\n\nI'm proud of everyone who has been part of this journey, and of every light we've brought into people's lives.\n\nOur journey is far from over. Every new project is a new beginning, a new dream to shine brighter.",
+      "quote2": ""
     },
     "coFounder": {
       "name": "Mr. Shabbir Ratlamwala",
       "designation": "Co-founder",
-      "quote": "Our vision extends beyond business success; we strive to make a meaningful impact on the communities we serve, one project at a time."
+      "quote": "It all began with a simple idea to create lighting that inspires and beautifies every space.\n\nToday, that dream has become a reality under the name al burhan Regional, where quality and creativity are at the heart of every project.\n\nThe journey has been full of challenges, but it has taught us that determination, hard work, and a belief in innovation make all the difference.\n\nI am proud of everyone who has been part of this journey, and of every light we have shared to bring warmth and beauty into people's lives.\n\nBecause we still believe in the dream, every new step is an opportunity to shine even brighter and turn ideas into radiant realities."
     }
   },
   "contact": {
@@ -117,6 +124,56 @@
       "subject": "Subject",
       "message": "Message",
       "sendMessage": "Send Message"
+    }
+  },
+  "countryContact": {
+    "dubai": {
+      "companyName": "AL BURHAN HEGAZI GENERAL TRADING LLC",
+      "office": "OFFICE #13",
+      "floor": "M FLOOR, AL OWAIS BUSINESS TOWER",
+      "area": "AL SABHKA, DEIRA",
+      "city": "DUBAI, UNITED ARAB EMIRATES",
+      "phone1": "+971 56 6032 765",
+      "phone2": "+971 4 5775 302",
+      "email": "bdm@alburhan-regional.com"
+    },
+    "kuwait": {
+      "branch1": {
+        "name": "Hawally 1st branch",
+        "phone": "66895662",
+        "address": "Tunis street in front of al rehab complex"
+      },
+      "branch2": {
+        "name": "Hawally second branch",
+        "phone": "69979153",
+        "address": "Tunis street Opposite Hawalli Governorate"
+      },
+      "branch3": {
+        "name": "Shuweikh branch",
+        "phone": "60344088",
+        "address": "electricity street"
+      },
+      "branch4": {
+        "name": "Jahraa branch",
+        "phone": "66890566",
+        "address": "Jahra Industrial Area"
+      }
+    },
+    "china": {
+      "companyName": "JIANGMEN BOHAN LIGHTING CO., LTD.",
+      "website": "www.alburhanlighting.com",
+      "email": "AL@ALBURHANLIGHTING.COM",
+      "address": "B2 BUILDING, NO. 159th, YUOIN ROAD,",
+      "district": "JIANGHAI DISTRICT, JIANGMEN CITY,",
+      "province": "GUANGDONG PROVINCE, CHINA",
+      "postalCode": "529000",
+      "phone": "+8613726006786"
+    },
+    "egypt": {
+      "companyName": "Al-Burhan",
+      "address": "Address information to be added",
+      "phone": "Phone information to be added",
+      "email": "Email information to be added"
     }
   },
   "footer": {
