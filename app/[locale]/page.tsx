@@ -238,7 +238,7 @@ export default function Home() {
                         whileInView={{ 
                           scale: 1, 
                           opacity: 1, 
-                          filter: 'blur(0px) brightness(1)',
+                          filter: 'blur(1px) brightness(1)',
                           rotate: 0
                         }}
                         viewport={{ once: true, amount: 0.3 }}
@@ -280,6 +280,47 @@ export default function Home() {
                           zIndex: 1,
                         }}
                       />
+                      
+                      {/* Logo in corner */}
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: { xs: 12, sm: 16, md: 20 },
+                          left: { xs: 12, sm: 16, md: 20 },
+                          width: { xs: 100, sm: 120, md: 140 },
+                          height: { xs: 100, sm: 120, md: 140 },
+                          zIndex: 3,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ 
+                            duration: 0.6,
+                            delay: 0.8,
+                            ease: [0.34, 1.56, 0.64, 1]
+                          }}
+                          style={{
+                            position: 'relative',
+                            width: '100%',
+                            height: '100%',
+                          }}
+                        >
+                          <Image
+                            src="/logo/AL BURHAN GROUP .png"
+                            alt="Al Burhan Group Logo"
+                            fill
+                            style={{
+                              objectFit: 'contain',
+                            }}
+                            sizes="(max-width: 600px) 100px, (max-width: 960px) 120px, 140px"
+                          />
+                        </motion.div>
+                      </Box>
                       
                       {/* Shine effect on hover */}
                       <motion.div
@@ -347,6 +388,15 @@ export default function Home() {
                         'egypt': '/egypt'
                       };
                       const countryRoute = countryRoutes[country.key] || '/';
+                      
+                      // Map country keys to logo paths
+                      const countryLogos: { [key: string]: string } = {
+                        'china': '/logo/AL BURHAN CHINA.png',
+                        'kuwait': '/logo/AL BURHAN GROUP .png',
+                        'dubai': '/logo/AL BURHAN UAE.png',
+                        'egypt': '/logo/AL BURHAN EGYPT.png'
+                      };
+                      const countryLogo = countryLogos[country.key] || '/logo/AL BURHAN GROUP .png';
                       
                       return (
                       <Grid size={{ xs: 12, sm: 6 }} key={index}>
@@ -479,9 +529,9 @@ export default function Home() {
                               sx={{
                                 position: 'absolute',
                                 top: { xs: 8, sm: 10, md: 12 },
-                                right: { xs: 8, sm: 10, md: 12 },
-                                width: { xs: 28, sm: 32, md: 36 },
-                                height: { xs: 28, sm: 32, md: 36 },
+                                left: { xs: 8, sm: 10, md: 12 },
+                                width: { xs: 50, sm: 60, md: 70 },
+                                height: { xs: 50, sm: 60, md: 70 },
                                 zIndex: 3,
                                 display: 'flex',
                                 alignItems: 'center',
@@ -504,13 +554,13 @@ export default function Home() {
                                 }}
                               >
                                 <Image
-                                  src="/logo/Al burhan group logo.png"
-                                  alt="Al Burhan Group Logo"
+                                  src={countryLogo}
+                                  alt="Al Burhan Logo"
                                   fill
                                   style={{
                                     objectFit: 'contain',
                                   }}
-                                  sizes="(max-width: 600px) 28px, (max-width: 960px) 32px, 36px"
+                                  sizes="(max-width: 600px) 50px, (max-width: 960px) 60px, 70px"
                                 />
                               </motion.div>
                             </Box>
@@ -784,7 +834,7 @@ export default function Home() {
                       }}
                     >
                       <Image
-                          src="/logo/Al burhan group logo.png"
+                          src="/logo/AL BURHAN GROUP .png"
                           alt="AL-Burhan Group Logo"
                         fill
                         style={{
@@ -1382,8 +1432,8 @@ export default function Home() {
                 {[
                   '/Brands/brand6.jpg',
                   '/Brands/brand4.jpg',
-                  '/Brands/brand15.png',
                   '/Brands/brand3.png',
+                  '/Brands/kosla_page-0001.jpg',
                 ].map((brand, index) => (
                   <Grid size={{ xs: 6, sm: 6, md: 3 }} key={index}>
                     <motion.div
@@ -1432,7 +1482,8 @@ export default function Home() {
                           fill
                           style={{
                             objectFit: 'contain',
-                            padding: '12px',
+                            padding: index === 1 || index === 2 ? '4px' : '12px',
+                            transform: index === 1 || index === 2 ? 'scale(1.3)' : 'scale(1)',
                           }}
                           sizes="(max-width: 600px) 50vw, (max-width: 960px) 50vw, 25vw"
                         />
@@ -1445,13 +1496,43 @@ export default function Home() {
           </Container>
           
           {/* Brand Carousel - Remaining Brands */}
+          <Container maxWidth="xl">
+            <Box sx={{ mb: { xs: 3, md: 4 }, mt: { xs: 4, md: 5 } }}>
+              <motion.div
+                initial={{ opacity: 0, y: -30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ 
+                  duration: 0.8,
+                  ease: [0.34, 1.56, 0.64, 1]
+                }}
+              >
+                <Typography
+                  variant={isMobile ? 'h5' : 'h4'}
+                  sx={{
+                    fontWeight: 600,
+                    color: 'text.primary',
+                    textAlign: 'center',
+                    mb: { xs: 3, md: 4 },
+                    fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem', lg: '2.25rem', xl: '2.5rem' },
+                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                    letterSpacing: { xs: '0.02em', md: '0.04em' },
+                    lineHeight: 1.4,
+                    px: { xs: 2, sm: 0 },
+                  }}
+                >
+                  European Brands we deal with
+                </Typography>
+              </motion.div>
+            </Box>
+          </Container>
           <Box sx={{ width: '100%', overflow: 'hidden' }}>
             <BrandCarousel />
           </Box>
         </Box>
       </motion.div>
 
-      {/* Our Service Section */}
+      {/* Our Services Section */}
       <motion.div
         variants={fadeInUp}
         initial="initial"
@@ -1466,7 +1547,7 @@ export default function Home() {
               whileInView="animate"
               viewport={{ once: true }}
             >
-              {/* Our Service Heading */}
+              {/* Our Services Heading */}
               <motion.div variants={staggerItem}>
                 <Typography
                   variant={isMobile ? 'h4' : 'h3'}
@@ -1481,7 +1562,7 @@ export default function Home() {
                     lineHeight: 1.4,
                   }}
                 >
-                  Our Service
+                  Our Services
                 </Typography>
               </motion.div>
 
@@ -1675,6 +1756,8 @@ export default function Home() {
                               position: 'relative',
                               p: { xs: 3, sm: 3.5, md: 4, lg: 4.5 },
                               pt: { xs: 4, sm: 4.5, md: 5, lg: 5.5 },
+                              zIndex: 3,
+                              overflow: 'visible',
                             }}
                           >
                             <motion.div
@@ -1698,7 +1781,8 @@ export default function Home() {
                                 display: 'block',
                                 width: '100%',
                                 position: 'relative',
-                                zIndex: 3
+                                zIndex: 3,
+                                overflow: 'visible',
                               }}
                             >
                               <Typography
@@ -1706,11 +1790,11 @@ export default function Home() {
                                 sx={{
                                   fontWeight: 700,
                                   fontSize: { 
-                                    xs: '1.35rem', 
-                                    sm: '1.6rem', 
-                                    md: '1.85rem',
-                                    lg: '2.1rem',
-                                    xl: '2.4rem' 
+                                    xs: '1.1rem', 
+                                    sm: '1.25rem', 
+                                    md: '1.4rem',
+                                    lg: '1.6rem',
+                                    xl: '1.8rem' 
                                   },
                                   color: '#ffffff',
                                   textShadow: `
@@ -1721,7 +1805,11 @@ export default function Home() {
                                     0 0 60px rgba(0,0,0,0.3)
                                   `,
                                   fontFamily: 'var(--font-montserrat), var(--font-poppins), "Roboto", sans-serif',
-                                  letterSpacing: { xs: '0.05em', sm: '0.08em', md: '0.1em' },
+                                  overflow: 'visible',
+                                  whiteSpace: 'normal',
+                                  wordBreak: 'normal',
+                                  wordWrap: 'break-word',
+                                  letterSpacing: { xs: '0.03em', sm: '0.05em', md: '0.08em' },
                                   lineHeight: 1.3,
                                   textTransform: 'uppercase',
                                   display: 'block',

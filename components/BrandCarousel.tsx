@@ -12,14 +12,14 @@ export default function BrandCarousel() {
   const isRTL = locale === 'ar';
   const isMobile = useMediaQuery(theme.breakpoints.down('md')); // < 960px
 
-  // Brand images array (excluding featured brands: brand6, brand4, brand15, brand3)
+  // Brand images array (excluding featured brands: brand6, brand4, brand3, kosla_page-0001)
   const brands = [
     '/Brands/brand1.png',
     '/Brands/brand2.png',
     '/Brands/brand5.png',
     '/Brands/brand7.png',
     '/Brands/brand8.png',
-    '/Brands/brand9.png',
+    '/Brands/brand9new.jpeg',
     '/Brands/brand10.png',
     '/Brands/brand11.png',
     '/Brands/brand12.png',

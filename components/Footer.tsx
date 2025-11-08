@@ -6,7 +6,6 @@ import {
   Container,
   Grid,
   Typography,
-  Link,
   IconButton,
   Divider,
   useTheme,
@@ -31,34 +30,12 @@ import {
   hoverLift,
 } from '../utils/animations';
 import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/routing';
 
 const Footer: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const t = useTranslations();
-
-  const footerSections = [
-    {
-      title: t('footer.services.title'),
-      links: [
-        { label: t('footer.services.interior'), href: '/services/interior-lighting' },
-        { label: t('footer.services.commercial'), href: '/services/commercial-lighting' },
-        { label: t('footer.services.exterior'), href: '/services/exterior-lighting' },
-        { label: t('footer.services.smart'), href: '/services/smart-lighting' },
-        { label: t('footer.services.design'), href: '/services/lighting-design' },
-        { label: t('footer.services.installation'), href: '/services/installation' },
-      ],
-    },
-    {
-      title: t('footer.legal.title'),
-      links: [
-        { label: t('footer.legal.privacy'), href: '/privacy' },
-        { label: t('footer.legal.terms'), href: '/terms' },
-        { label: t('footer.legal.cookies'), href: '/cookies' },
-        { label: t('footer.legal.gdpr'), href: '/gdpr' },
-      ],
-    },
-  ];
 
   const socialLinks = [
     { icon: <Facebook />, href: '#', label: 'Facebook' },
@@ -69,10 +46,10 @@ const Footer: React.FC = () => {
 
   const contactInfo = [
     { icon: <Email />, text: t('contact.emailValue') },
-    { icon: <Phone />, text: `${t('contact.phone1')} | ${t('contact.phone2')}` },
+    { icon: <Phone />, text: t('contact.phone1') },
     { 
       icon: <LocationOn />, 
-      text: `${t('contact.headOffice')}, ${t('contact.addressLine')}, ${t('contact.addressLine2')}` 
+      text: `${t('contact.headOffice')}: ${t('contact.addressLine')}${t('contact.addressLine2') ? `, ${t('contact.addressLine2')}` : ''}` 
     },
     { 
       icon: <AccessTime />, 
@@ -90,7 +67,7 @@ const Footer: React.FC = () => {
       <Box
         component="footer"
         sx={{
-          backgroundColor: 'secondary.50',
+          backgroundColor: 'primary.main',
           borderTop: 1,
           borderColor: 'divider',
           mt: 'auto',
@@ -106,7 +83,7 @@ const Footer: React.FC = () => {
           >
             <Grid container spacing={{ xs: 3, md: 4 }}>
               {/* Company Info */}
-              <Grid size={{ xs: 12, md: 4 }}>
+              <Grid size={{ xs: 12, md: 12 }}>
                 <motion.div variants={staggerItem}>
                   <Box sx={{ mb: 2 }}>
                     <motion.div
@@ -115,11 +92,11 @@ const Footer: React.FC = () => {
                     >
                       <Typography
                         variant="h5"
-                        component="a"
+                        component={Link}
                         href="/"
                         sx={{
                           fontWeight: 'bold',
-                          color: 'primary.main',
+                          color: 'white',
                           textDecoration: 'none',
                           display: 'block',
                           mb: 2,
@@ -131,8 +108,7 @@ const Footer: React.FC = () => {
                     </motion.div>
                     <Typography
                       variant="body2"
-                      color="text.secondary"
-                      sx={{ mb: 2, lineHeight: 1.6 }}
+                      sx={{ mb: 2, lineHeight: 1.6, color: 'white' }}
                     >
                       {t('footer.description')}
                     </Typography>
@@ -157,10 +133,10 @@ const Footer: React.FC = () => {
                             mb: 1,
                           }}
                         >
-                          <Box sx={{ color: 'primary.main', fontSize: '1.2rem' }}>
+                          <Box sx={{ color: 'white', fontSize: '1.2rem' }}>
                             {contact.icon}
                           </Box>
-                          <Typography variant="body2" color="text.secondary">
+                          <Typography variant="body2" sx={{ color: 'white' }}>
                             {contact.text}
                           </Typography>
                         </Box>
@@ -181,10 +157,10 @@ const Footer: React.FC = () => {
                         <IconButton
                           href={social.href}
                           sx={{
-                            color: 'primary.main',
-                            backgroundColor: 'primary.50',
+                            color: 'white',
+                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
                             '&:hover': {
-                              backgroundColor: 'primary.100',
+                              backgroundColor: 'rgba(255, 255, 255, 0.2)',
                             },
                             transition: 'all 0.2s ease-in-out',
                           }}
@@ -197,59 +173,12 @@ const Footer: React.FC = () => {
                   </Box>
                 </motion.div>
               </Grid>
-
-              {/* Footer Links */}
-              {footerSections.map((section, index) => (
-                <Grid size={{ xs: 6, sm: 3, md: 2 }} key={index}>
-                  <motion.div variants={staggerItem}>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: 600,
-                        color: 'text.primary',
-                        mb: 2,
-                        fontSize: '1rem',
-                      }}
-                    >
-                      {section.title}
-                    </Typography>
-                    <Box component="nav">
-                      {section.links.map((link, linkIndex) => (
-                        <motion.div
-                          key={linkIndex}
-                          variants={staggerItem}
-                          whileHover={{ x: 5 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <Link
-                            href={link.href}
-                            sx={{
-                              display: 'block',
-                              color: 'text.secondary',
-                              textDecoration: 'none',
-                              mb: 1,
-                              fontSize: '0.875rem',
-                              '&:hover': {
-                                color: 'primary.main',
-                                textDecoration: 'underline',
-                              },
-                              transition: 'color 0.2s ease-in-out',
-                            }}
-                          >
-                            {link.label}
-                          </Link>
-                        </motion.div>
-                      ))}
-                    </Box>
-                  </motion.div>
-                </Grid>
-              ))}
             </Grid>
           </motion.div>
 
           {/* Footer Bottom */}
           <motion.div variants={staggerItem}>
-            <Divider sx={{ my: { xs: 3, md: 4 } }} />
+            <Divider sx={{ my: { xs: 3, md: 4 }, borderColor: 'rgba(255, 255, 255, 0.2)' }} />
             <Box
               sx={{
                 display: 'flex',
@@ -259,7 +188,7 @@ const Footer: React.FC = () => {
                 gap: 2,
               }}
             >
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" sx={{ color: 'white' }}>
                 © {new Date().getFullYear()} {t('common.companyName')}. {t('footer.copyright')}
               </Typography>
               <Box
@@ -267,30 +196,42 @@ const Footer: React.FC = () => {
                   display: 'flex',
                   gap: { xs: 2, md: 3 },
                   flexWrap: 'wrap',
+                  '& a': {
+                    color: 'white',
+                    textDecoration: 'none',
+                    fontSize: '0.875rem',
+                    transition: 'all 0.2s ease-in-out',
+                    '&:hover': {
+                      color: 'rgba(255, 255, 255, 0.8)',
+                      textDecoration: 'underline',
+                    },
+                  },
                 }}
               >
-                {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((link, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Link
-                      href={`/${link.toLowerCase().replace(' ', '-')}`}
-                      sx={{
-                        color: 'text.secondary',
-                        textDecoration: 'none',
-                        fontSize: '0.875rem',
-                        '&:hover': {
-                          color: 'primary.main',
-                          textDecoration: 'underline',
-                        },
-                      }}
-                    >
-                      {link}
-                    </Link>
-                  </motion.div>
-                ))}
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link href="/privacy">
+                    {t('footer.legal.privacy')}
+                  </Link>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link href="/terms">
+                    {t('footer.legal.terms')}
+                  </Link>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link href="/cookies">
+                    {t('footer.legal.cookies')}
+                  </Link>
+                </motion.div>
               </Box>
             </Box>
           </motion.div>

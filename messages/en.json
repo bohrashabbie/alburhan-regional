@@ -1,6 +1,6 @@
 {
   "common": {
-    "companyName": "AL-Burhan",
+    "companyName": "AL-Burhan Group",
     "allRightsReserved": "All rights reserved"
   },
   "header": {
@@ -19,7 +19,7 @@
   },
   "carousel": {
     "slide1": {
-      "title": "AL-Burhan",
+      "title": "AL-Burhan Group",
       "subtitle": "Light Up Your Life",
       "description": "Transforming spaces with innovative lighting solutions that blend elegance, functionality, and cutting-edge technology to create breathtaking environments."
     },
@@ -59,7 +59,7 @@
     "aboutUsTitle": "About Us",
     "introduction": "Introduction",
     "fromOwner": "A Word from the Founder",
-    "ourBrand": "Our Brand",
+    "ourBrand": "Our Brands",
     "ourProjects": "Our Projects",
     "contactUs": "Contact Us"
   },
@@ -90,6 +90,11 @@
     "additionalInfo": "With hundreds of successful projects worldwide, including in China, Kuwait, UAE, and Egypt, AL-Burhan has established itself as a trusted name in lighting.",
     "thirdParagraph": "From cutting-edge LED technologies to elegant designer collections, we transform visions into reality, creating inspiring lighting experiences that elevate every space."
   },
+  "aboutPage": {
+    "title": "ABOUT US",
+    "description": "With more than 15 years of experience, Al Burhan Lighting Company has successfully positioned itself as one of the leading companies in the field of providing lighting solutions in the State of Kuwait and providing a high degree of experience in the field of lighting to support projects in the State of Kuwait with the most appropriate products, and services for any type of project in the private sector, government, retail, commercial, residential or industrial market.",
+    "additionalInfo": "We also implement (supply and install) any project"
+  },
   "owners": {
     "founder": {
       "name": "Mr. Murtaza Bohra",
@@ -108,13 +113,13 @@
     "subtitle": "Get in touch with us. We'd love to hear from you.",
     "headOffice": "Head Office",
     "address": "Address",
-    "addressLine": "Office 5, 4th Floor, Al Rifai Building",
-    "addressLine2": "Tunis Street, Hawally, Kuwait",
+    "addressLine": "Kuwait, Hawally, Tunis Street, Al Refaei Building, 4th Floor, Office 5&6",
+    "addressLine2": "",
     "phoneNumbers": "Phone Numbers",
     "phone1": "+965 99935529",
     "phone2": "+965 22280853",
     "email": "Email",
-    "emailValue": "info@albhurhanregional.com",
+    "emailValue": "Info@alburhan-regional.com",
     "businessHours": "Business Hours",
     "hours": "Sat-Thu: 9:00 AM - 7:00 PM, Friday: Closed",
     "form": {

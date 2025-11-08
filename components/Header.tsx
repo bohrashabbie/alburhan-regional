@@ -38,7 +38,8 @@ import {
   staggerItem,
   hoverScale,
 } from '../utils/animations';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import { Link } from '@/i18n/routing';
 import LanguageSwitcher from './LanguageSwitcher';
 
 const Header: React.FC = () => {
@@ -47,6 +48,8 @@ const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const locale = useLocale();
+  const isRTL = locale === 'ar';
   const t = useTranslations('header');
 
   // Handle scroll effect
@@ -95,6 +98,7 @@ const Header: React.FC = () => {
           whileHover="hover"
         >
           <Button
+            component={Link}
             href={item.href}
             sx={{
               color: 'text.primary',
@@ -102,10 +106,25 @@ const Header: React.FC = () => {
               textTransform: 'none',
               fontSize: '1rem',
               transition: 'all 0.3s ease',
+              position: 'relative',
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: '2px',
+                backgroundColor: 'primary.main',
+                transform: 'scaleX(0)',
+                transition: 'transform 0.3s ease',
+              },
               '&:hover': {
                 backgroundColor: 'primary.50',
                 color: 'primary.600',
                 transform: 'translateY(-2px)',
+                '&::after': {
+                  transform: 'scaleX(1)',
+                },
               },
             }}
           >
@@ -162,12 +181,14 @@ const Header: React.FC = () => {
                     whileTap={{ scale: 0.98 }}
                   >
                     <ListItem
-                      component="a"
+                      component={Link}
                       href={item.href}
+                      onClick={handleMobileMenuToggle}
                       sx={{
                         borderRadius: 1,
                         mb: 0.5,
                         cursor: 'pointer',
+                        textDecoration: 'none',
                         '&:hover': {
                           backgroundColor: 'primary.50',
                         },
@@ -219,6 +240,7 @@ const Header: React.FC = () => {
               sx={{
                 minHeight: { xs: 56, md: 64 },
                 px: { xs: 1, sm: 2 },
+                direction: isRTL ? 'ltr' : 'ltr',
               }}
             >
               {/* Logo */}
@@ -252,7 +274,7 @@ const Header: React.FC = () => {
                     }}
                   >
                     <Image
-                      src="/logo/Al burhan group logo.png"
+                      src="/logo/AL BURHAN GROUP .png"
                       alt="AL-Burhan Group Logo"
                       fill
                       style={{
@@ -266,12 +288,24 @@ const Header: React.FC = () => {
               </motion.div>
 
               {/* Desktop Navigation */}
-              <Box sx={{ display: { xs: 'none', md: 'flex' }, flex: 1, justifyContent: 'center' }}>
+              <Box 
+                sx={{ 
+                  display: { xs: 'none', md: 'flex' }, 
+                  flex: 1, 
+                  justifyContent: 'center',
+                }}
+              >
                 <DesktopNavigation />
               </Box>
 
               {/* Language Switcher */}
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box 
+                sx={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 1,
+                }}
+              >
                 <LanguageSwitcher />
               </Box>
 

@@ -10,7 +10,9 @@ import {
   Grid,
   Paper,
   TextField,
-  Button
+  Button,
+  Card,
+  CardContent
 } from '@mui/material';
 import { LocationOn, Phone, Email, ArrowBack, Send } from '@mui/icons-material';
 import { motion } from 'framer-motion';
@@ -110,8 +112,8 @@ export default function UAEPage() {
               }}
             >
               <Image
-                src="/logo/Al burhan group logo.png"
-                alt="Al Burhan Group Logo"
+                src="/logo/AL BURHAN UAE.png"
+                alt="Al Burhan UAE Logo"
                 fill
                 style={{
                   objectFit: 'contain',
@@ -211,7 +213,7 @@ export default function UAEPage() {
                         lg: '3.5rem',
                         xl: '4rem' 
                       },
-                      color: 'primary.main',
+                      color: '#ffffff',
                       fontFamily: 'var(--font-montserrat), var(--font-poppins), "Roboto", sans-serif',
                       letterSpacing: { xs: '0.05em', sm: '0.08em', md: '0.1em' },
                       lineHeight: 1.2,
@@ -252,7 +254,7 @@ export default function UAEPage() {
                         md: '1.125rem',
                         lg: '1.25rem'
                       },
-                      color: 'primary.main',
+                      color: '#ffffff',
                       fontWeight: 500,
                       fontFamily: 'var(--font-montserrat), var(--font-poppins), "Roboto", sans-serif',
                       letterSpacing: { xs: '0.03em', sm: '0.05em', md: '0.08em' },
@@ -503,6 +505,89 @@ export default function UAEPage() {
           </Container>
         </Box>
       </motion.div>
+
+      {/* Team Section */}
+      <Box sx={{ py: { xs: 6, md: 10 }, backgroundColor: 'background.paper' }}>
+        <Container maxWidth="xl">
+          <Box sx={{ textAlign: 'center', mb: 6 }}>
+            <Typography
+              variant="h3"
+              component="h2"
+              sx={{
+                fontWeight: 'bold',
+                color: 'text.primary',
+                mb: 2,
+              }}
+            >
+              Our Team
+            </Typography>
+            <Typography
+              variant="h6"
+              color="text.secondary"
+              sx={{ maxWidth: 600, mx: 'auto' }}
+            >
+              Meet the talented individuals who make our success possible.
+            </Typography>
+          </Box>
+
+          <Grid container spacing={4}>
+            {[1, 2, 3, 4].map((member, index) => (
+              <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
+                <Card
+                  sx={{
+                    textAlign: 'center',
+                    transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                    '&:hover': {
+                      boxShadow: theme.shadows[8],
+                      transform: 'translateY(-4px)',
+                    },
+                  }}
+                >
+                  <CardContent sx={{ p: 3 }}>
+                    <Box
+                      sx={{
+                        width: 200,
+                        height: 200,
+                        borderRadius: '50%',
+                        mx: 'auto',
+                        mb: 2,
+                        position: 'relative',
+                        overflow: 'hidden',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Image
+                        src="/OurTeam/ourteam.jpg"
+                        alt={`Team Member ${index + 1}`}
+                        fill
+                        style={{
+                          objectFit: 'cover',
+                          borderRadius: '50%',
+                        }}
+                      />
+                    </Box>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 600,
+                        color: 'text.primary',
+                        mb: 1,
+                      }}
+                    >
+                      Team Member {index + 1}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Role Description
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
 
       {/* Contact Section */}
       <Box sx={{ py: { xs: 6, md: 8, lg: 10 }, backgroundColor: 'background.default' }}>
