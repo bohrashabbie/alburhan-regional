@@ -129,7 +129,9 @@
       "subject": "Subject",
       "message": "Message",
       "sendMessage": "Send Message"
-    }
+    },
+    "ourLocation": "Our Location",
+    "ourLocations": "Our Locations"
   },
   "countryContact": {
     "dubai": {

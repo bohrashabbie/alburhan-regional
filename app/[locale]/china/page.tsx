@@ -589,6 +589,209 @@ export default function ChinaPage() {
         </Container>
       </Box>
 
+      {/* Showrooms Section */}
+      <Box sx={{ py: { xs: 6, md: 8, lg: 10 }, backgroundColor: 'background.paper' }}>
+        <Container maxWidth="lg">
+          <motion.div
+            initial={{ opacity: 0, y: -30, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{
+              duration: 0.8,
+              ease: [0.34, 1.56, 0.64, 1],
+            }}
+          >
+            <Typography
+              variant={isMobile ? 'h5' : 'h4'}
+              sx={{
+                fontWeight: 600,
+                color: 'text.primary',
+                textAlign: 'center',
+                mb: { xs: 3, md: 4 },
+                fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem', lg: '2.25rem', xl: '2.5rem' },
+                fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                letterSpacing: { xs: '0.02em', md: '0.04em' },
+                lineHeight: 1.4,
+              }}
+            >
+              {t('contact.ourLocation')}
+            </Typography>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{
+              duration: 0.6,
+              ease: [0.25, 0.46, 0.45, 0.94],
+            }}
+          >
+            <Card
+              sx={{
+                borderRadius: 3,
+                overflow: 'hidden',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                '&:hover': {
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+                  '& .showroom-image': {
+                    transform: 'scale(1.05)',
+                  },
+                },
+              }}
+            >
+              <Grid container spacing={0}>
+                {/* Details Section */}
+                <Grid
+                  size={{ xs: 12, md: 7 }}
+                  sx={{
+                    order: { xs: 2, md: 1 },
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      p: { xs: 2.5, sm: 3.5, md: 4, lg: 5 },
+                      width: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        fontWeight: 700,
+                        color: 'text.primary',
+                        mb: { xs: 1.5, sm: 2 },
+                        fontSize: { xs: '1.125rem', sm: '1.375rem', md: '1.5rem', lg: '1.75rem' },
+                        fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                      }}
+                    >
+                      {t('countryContact.china.companyName')}
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: { xs: 1, sm: 1.5 }, mb: { xs: 2, sm: 2.5 } }}>
+                      <LocationOn
+                        sx={{
+                          color: 'primary.main',
+                          fontSize: { xs: 20, sm: 22, md: 24 },
+                          mt: 0.5,
+                          flexShrink: 0,
+                        }}
+                      />
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          color: 'text.secondary',
+                          lineHeight: 1.8,
+                          fontSize: { xs: '0.875rem', sm: '0.9375rem', md: '1rem' },
+                        }}
+                      >
+                        {t('countryContact.china.address')}<br />
+                        {t('countryContact.china.district')}<br />
+                        {t('countryContact.china.province')}<br />
+                        {t('countryContact.china.postalCode')}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1.25, sm: 1.5 } }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
+                        <Phone
+                          sx={{
+                            color: 'primary.main',
+                            fontSize: { xs: 18, sm: 20, md: 22 },
+                            flexShrink: 0,
+                          }}
+                        />
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            color: 'text.secondary',
+                            fontWeight: 500,
+                            fontSize: { xs: '0.875rem', sm: '0.9375rem', md: '1rem' },
+                          }}
+                        >
+                          {t('countryContact.china.phone')}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
+                        <Language
+                          sx={{
+                            color: 'primary.main',
+                            fontSize: { xs: 18, sm: 20, md: 22 },
+                            flexShrink: 0,
+                          }}
+                        />
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            color: 'text.secondary',
+                            fontWeight: 500,
+                            fontSize: { xs: '0.875rem', sm: '0.9375rem', md: '1rem' },
+                          }}
+                        >
+                          {t('countryContact.china.website')}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
+                        <Email
+                          sx={{
+                            color: 'primary.main',
+                            fontSize: { xs: 18, sm: 20, md: 22 },
+                            flexShrink: 0,
+                          }}
+                        />
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            color: 'text.secondary',
+                            fontWeight: 500,
+                            fontSize: { xs: '0.875rem', sm: '0.9375rem', md: '1rem' },
+                          }}
+                        >
+                          {t('countryContact.china.email')}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Grid>
+
+                {/* Image Section */}
+                <Grid
+                  size={{ xs: 12, md: 5 }}
+                  sx={{
+                    order: { xs: 1, md: 2 },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      position: 'relative',
+                      width: '100%',
+                      height: { xs: 220, sm: 280, md: 300, lg: 320 },
+                      overflow: 'hidden',
+                      backgroundColor: 'grey.100',
+                    }}
+                  >
+                    <Image
+                      src="/location/showroom.png"
+                      alt={t('countryContact.china.companyName')}
+                      fill
+                      className="showroom-image"
+                      style={{
+                        objectFit: 'cover',
+                        transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                      }}
+                      sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 40vw"
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+            </Card>
+          </motion.div>
+        </Container>
+      </Box>
+
       {/* Contact Section */}
       <Box sx={{ py: { xs: 6, md: 8, lg: 10 }, backgroundColor: 'background.default' }}>
         <Container maxWidth="lg">
@@ -653,36 +856,6 @@ export default function ChinaPage() {
                     {t('countryContact.china.companyName')}
                   </Typography>
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
-                      <Box
-                        sx={{
-                          backgroundColor: 'primary.main',
-                          borderRadius: '50%',
-                          p: 1.5,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          minWidth: 48,
-                          height: 48,
-                        }}
-                      >
-                        <LocationOn sx={{ color: 'white', fontSize: 24 }} />
-                      </Box>
-                      <Box>
-                        <Typography
-                          variant="body2"
-                          sx={{ fontWeight: 600, mb: 0.5, color: 'text.primary' }}
-                        >
-                          {t('contact.address')}
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.6 }}>
-                          {t('countryContact.china.address')}<br />
-                          {t('countryContact.china.district')}<br />
-                          {t('countryContact.china.province')}<br />
-                          {t('countryContact.china.postalCode')}
-                        </Typography>
-                      </Box>
-                    </Box>
                     <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
                       <Box
                         sx={{

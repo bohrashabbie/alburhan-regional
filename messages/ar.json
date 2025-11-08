@@ -129,7 +129,9 @@
       "subject": "الموضوع",
       "message": "الرسالة",
       "sendMessage": "إرسال الرسالة"
-    }
+    },
+    "ourLocation": "موقعنا",
+    "ourLocations": "مواقعنا"
   },
   "countryContact": {
     "dubai": {

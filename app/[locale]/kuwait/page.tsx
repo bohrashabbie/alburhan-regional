@@ -597,6 +597,175 @@ export default function KuwaitPage() {
         </Container>
       </Box>
 
+      {/* Showrooms Section */}
+      <Box sx={{ py: { xs: 6, md: 8, lg: 10 }, backgroundColor: 'background.paper' }}>
+        <Container maxWidth="lg">
+          <motion.div
+            initial={{ opacity: 0, y: -30, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{
+              duration: 0.8,
+              ease: [0.34, 1.56, 0.64, 1],
+            }}
+          >
+            <Typography
+              variant={isMobile ? 'h5' : 'h4'}
+              sx={{
+                fontWeight: 600,
+                color: 'text.primary',
+                textAlign: 'center',
+                mb: { xs: 3, md: 4 },
+                fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem', lg: '2.25rem', xl: '2.5rem' },
+                fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                letterSpacing: { xs: '0.02em', md: '0.04em' },
+                lineHeight: 1.4,
+              }}
+            >
+              {t('contact.ourLocations')}
+            </Typography>
+          </motion.div>
+
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 4, md: 5 } }}>
+            {branches.map((branch, index) => {
+              const isEven = index % 2 === 0;
+              return (
+                <motion.div
+                  key={branch.key}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.6,
+                    delay: index * 0.1,
+                    ease: [0.25, 0.46, 0.45, 0.94],
+                  }}
+                >
+                  <Card
+                    sx={{
+                      borderRadius: 3,
+                      overflow: 'hidden',
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      '&:hover': {
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+                        '& .showroom-image': {
+                          transform: 'scale(1.05)',
+                        },
+                      },
+                    }}
+                  >
+                    <Grid container spacing={0}>
+                      {/* Image Section */}
+                      <Grid
+                        size={{ xs: 12, md: 5 }}
+                        sx={{
+                          order: { xs: 1, md: isEven ? 1 : 2 },
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            position: 'relative',
+                            width: '100%',
+                            height: { xs: 220, sm: 280, md: 300, lg: 320 },
+                            overflow: 'hidden',
+                            backgroundColor: 'grey.100',
+                          }}
+                        >
+                          <Image
+                            src="/location/showroom.png"
+                            alt={t(`countryContact.kuwait.${branch.key}.name`)}
+                            fill
+                            className="showroom-image"
+                            style={{
+                              objectFit: 'cover',
+                              transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                            }}
+                            sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 40vw"
+                          />
+                        </Box>
+                      </Grid>
+
+                      {/* Details Section */}
+                      <Grid
+                        size={{ xs: 12, md: 7 }}
+                        sx={{
+                          order: { xs: 2, md: isEven ? 2 : 1 },
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            p: { xs: 2.5, sm: 3.5, md: 4, lg: 5 },
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <Typography
+                            variant="h5"
+                            sx={{
+                              fontWeight: 700,
+                              color: 'text.primary',
+                              mb: { xs: 1.5, sm: 2 },
+                              fontSize: { xs: '1.125rem', sm: '1.375rem', md: '1.5rem', lg: '1.75rem' },
+                              fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                            }}
+                          >
+                            {t(`countryContact.kuwait.${branch.key}.name`)}
+                          </Typography>
+                          <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: { xs: 1, sm: 1.5 }, mb: { xs: 2, sm: 2.5 } }}>
+                            <LocationOn
+                              sx={{
+                                color: 'primary.main',
+                                fontSize: { xs: 20, sm: 22, md: 24 },
+                                mt: 0.5,
+                                flexShrink: 0,
+                              }}
+                            />
+                            <Typography
+                              variant="body1"
+                              sx={{
+                                color: 'text.secondary',
+                                lineHeight: 1.8,
+                                fontSize: { xs: '0.875rem', sm: '0.9375rem', md: '1rem' },
+                              }}
+                            >
+                              {t(`countryContact.kuwait.${branch.key}.address`)}
+                            </Typography>
+                          </Box>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
+                            <Phone
+                              sx={{
+                                color: 'primary.main',
+                                fontSize: { xs: 18, sm: 20, md: 22 },
+                                flexShrink: 0,
+                              }}
+                            />
+                            <Typography
+                              variant="body1"
+                              sx={{
+                                color: 'text.secondary',
+                                fontWeight: 500,
+                                fontSize: { xs: '0.875rem', sm: '0.9375rem', md: '1rem' },
+                              }}
+                            >
+                              {t(`countryContact.kuwait.${branch.key}.phone`)}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </Box>
+        </Container>
+      </Box>
+
       {/* Contact Section */}
       <Box sx={{ py: { xs: 6, md: 8, lg: 10 }, backgroundColor: 'background.default' }}>
         <Container maxWidth="lg">
@@ -676,7 +845,7 @@ export default function KuwaitPage() {
                               height: 48,
                             }}
                           >
-                            <LocationOn sx={{ color: 'white', fontSize: 24 }} />
+                            <Phone sx={{ color: 'white', fontSize: 24 }} />
                           </Box>
                           <Box sx={{ flex: 1 }}>
                             <Typography
@@ -685,10 +854,7 @@ export default function KuwaitPage() {
                             >
                               {t(`countryContact.kuwait.${branch.key}.name`)}
                             </Typography>
-                            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 1, lineHeight: 1.6 }}>
-                              {t('contact.address')}: {t(`countryContact.kuwait.${branch.key}.address`)}
-                            </Typography>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                               <Phone sx={{ fontSize: 16, color: 'primary.main' }} />
                               <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.6 }}>
                                 {t('contact.phoneNumbers')}: {t(`countryContact.kuwait.${branch.key}.phone`)}

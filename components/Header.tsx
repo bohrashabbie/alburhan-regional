@@ -241,6 +241,9 @@ const Header: React.FC = () => {
                 minHeight: { xs: 56, md: 64 },
                 px: { xs: 1, sm: 2 },
                 direction: isRTL ? 'ltr' : 'ltr',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
               {/* Logo */}
@@ -258,7 +261,7 @@ const Header: React.FC = () => {
                     display: 'flex',
                     alignItems: 'center',
                     textDecoration: 'none',
-                    flexGrow: { xs: 1, md: 0 },
+                    flexGrow: { xs: 0, md: 0 },
                     mr: { md: 4 },
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
@@ -293,43 +296,54 @@ const Header: React.FC = () => {
                   display: { xs: 'none', md: 'flex' }, 
                   flex: 1, 
                   justifyContent: 'center',
+                  mx: 4,
                 }}
               >
                 <DesktopNavigation />
               </Box>
 
-              {/* Language Switcher */}
+              {/* Right Side: Language Switcher and Menu Button */}
               <Box 
                 sx={{ 
                   display: 'flex', 
                   alignItems: 'center', 
-                  gap: 1,
+                  gap: { xs: 0.5, sm: 1 },
+                  ml: 'auto',
                 }}
               >
-                <LanguageSwitcher />
-              </Box>
-
-              {/* Mobile Menu Button */}
-              <motion.div
-                variants={fadeInRight}
-                initial="initial"
-                animate="animate"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <IconButton
-                  edge="end"
-                  color="inherit"
-                  aria-label="menu"
-                  onClick={handleMobileMenuToggle}
-                  sx={{
-                    display: { xs: 'block', md: 'none' },
-                    color: 'text.primary',
+                {/* Language Switcher */}
+                <Box 
+                  sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
                   }}
                 >
-                  <MenuIcon />
-                </IconButton>
-              </motion.div>
+                  <LanguageSwitcher />
+                </Box>
+
+                {/* Mobile Menu Button */}
+                <motion.div
+                  variants={fadeInRight}
+                  initial="initial"
+                  animate="animate"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <IconButton
+                    edge="end"
+                    color="inherit"
+                    aria-label="menu"
+                    onClick={handleMobileMenuToggle}
+                    sx={{
+                      display: { xs: 'block', md: 'none' },
+                      color: 'text.primary',
+                      ml: { xs: 0.5, sm: 1 },
+                    }}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                </motion.div>
+              </Box>
             </Toolbar>
           </Container>
         </AppBar>
