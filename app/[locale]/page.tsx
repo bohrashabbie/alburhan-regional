@@ -58,6 +58,9 @@ export default function Home() {
   const renderBoldText = (text: string) => {
     const alBurhanWords = locale === 'ar' 
       ? ['البرهان']
+      : ['AL-Burhan Group', 'AL BURHAN GROUP'];
+    const alBurhanSingle = locale === 'ar' 
+      ? []
       : ['AL-Burhan'];
     const countryWords = locale === 'ar' 
       ? ['الصين', 'الكويت', 'الإمارات', 'مصر', 'الإمارات العربية المتحدة']
@@ -65,11 +68,36 @@ export default function Home() {
     
     let processedText = text;
     
-    // Process AL-Burhan with darker bold
+    // First, process complete phrases like "AL-Burhan Group" and "AL BURHAN GROUP"
+    // Process longer phrases first to avoid partial matches
+    alBurhanWords.sort((a, b) => b.length - a.length);
     alBurhanWords.forEach(word => {
-      const regex = new RegExp(`(${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+      // Escape special regex characters
+      const escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      // Match the complete phrase - check if not already processed
+      const regex = new RegExp(`(${escapedWord})`, 'gi');
       processedText = processedText.replace(regex, (match) => {
-        return `***${match}***`;
+        // Only process if the match itself doesn't contain *** (not already processed)
+        if (!match.includes('***')) {
+          return `***${match}***`;
+        }
+        return match;
+      });
+    });
+    
+    // Then, process single "AL-Burhan" only if it's NOT followed by " Group"
+    // This ensures we don't match "AL-Burhan" when it's part of "AL-Burhan Group"
+    alBurhanSingle.forEach(word => {
+      // Escape special regex characters
+      const escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      // Match "AL-Burhan" only if NOT followed by " Group" (negative lookahead)
+      const regex = new RegExp(`(${escapedWord})(?!\\s+Group)`, 'gi');
+      processedText = processedText.replace(regex, (match) => {
+        // Only process if the match itself doesn't contain *** (not already processed)
+        if (!match.includes('***')) {
+          return `***${match}***`;
+        }
+        return match;
       });
     });
     
@@ -535,7 +563,13 @@ export default function Home() {
                               sx={{
                                 position: 'absolute',
                                 top: { xs: 8, sm: 10, md: 12 },
-                                left: { xs: 8, sm: 10, md: 12 },
+                                ...(locale === 'en' ? {
+                                  right: { xs: 8, sm: 10, md: 12 },
+                                  left: 'auto',
+                                } : {
+                                  left: { xs: 8, sm: 10, md: 12 },
+                                  right: 'auto',
+                                }),
                                 width: { xs: 50, sm: 60, md: 70 },
                                 height: { xs: 50, sm: 60, md: 70 },
                                 zIndex: 3,

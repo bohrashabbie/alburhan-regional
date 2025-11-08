@@ -34,15 +34,18 @@ export default function BrandCarousel() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Auto-slide functionality - move one image every 3 seconds with infinite loop
+  // English: slides right to left (forward direction)
+  // Arabic: slides left to right (backward direction)
   useEffect(() => {
     const startAutoSlide = () => {
       intervalRef.current = setInterval(() => {
         setCurrentIndex((prevIndex) => {
-          // In RTL mode, move backwards
+          // English: move forward (right to left visually)
+          // Arabic: move backward (left to right visually)
           const direction = isRTL ? -1 : 1;
           const nextIndex = prevIndex + direction;
           
-          // If we've reached the end of the second cycle, reset to start of second cycle
+          // English: If we've reached the end of the second cycle, reset to start of second cycle
           // This creates a seamless infinite loop (visually identical position)
           if (!isRTL && nextIndex >= brands.length * 2) {
             // Set flag for instant transition
@@ -53,7 +56,7 @@ export default function BrandCarousel() {
             return brands.length;
           }
           
-          // In RTL mode, if we've gone below 0, reset to end of second cycle
+          // Arabic: If we've gone below 0, reset to end of second cycle
           if (isRTL && nextIndex < 0) {
             setIsResetting(true);
             setTimeout(() => setIsResetting(false), 100);
@@ -86,8 +89,8 @@ export default function BrandCarousel() {
   const itemWidthPercent = `calc(40% / ${visibleItems})`;
   
   // Calculate transform - move one item at a time
-  // Move by: item width only (no gap)
-  // In RTL, we need to reverse the direction
+  // English: slides right to left (negative transform)
+  // Arabic: slides left to right (positive transform)
   const moveDistance = itemWidthPercent;
 
   return (
@@ -114,11 +117,13 @@ export default function BrandCarousel() {
           component={motion.div}
           sx={{
             display: 'flex',
-            flexDirection: isRTL ? 'row-reverse' : 'row',
+            flexDirection: 'row',
             gap: 0,
             willChange: 'transform',
           }}
           animate={{
+            // English: slides right to left (negative transform moves left)
+            // Arabic: slides left to right (positive transform moves right)
             x: isRTL ? `calc(${currentIndex} * ${moveDistance})` : `calc(-${currentIndex} * ${moveDistance})`,
           }}
           transition={{
