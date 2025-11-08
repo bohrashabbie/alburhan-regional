@@ -286,7 +286,13 @@ export default function Home() {
                         sx={{
                           position: 'absolute',
                           top: { xs: 12, sm: 16, md: 20 },
-                          left: { xs: 12, sm: 16, md: 20 },
+                          ...(locale === 'en' ? {
+                            left: { xs: 12, sm: 16, md: 20 },
+                            right: 'auto',
+                          } : {
+                            right: { xs: 12, sm: 16, md: 20 },
+                            left: 'auto',
+                          }),
                           width: { xs: 100, sm: 120, md: 140 },
                           height: { xs: 100, sm: 120, md: 140 },
                           zIndex: 3,
@@ -1521,7 +1527,7 @@ export default function Home() {
                     px: { xs: 2, sm: 0 },
                   }}
                 >
-                  European Brands we deal with
+                  {t('sections.europeanBrands')}
                 </Typography>
               </motion.div>
             </Box>
