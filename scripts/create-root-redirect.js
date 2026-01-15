@@ -27,8 +27,9 @@ const redirectHtml = `<!DOCTYPE html>
 
 // Ensure out directory exists
 if (!fs.existsSync(outDir)) {
-  console.error('Error: out directory does not exist. Please run "npm run build" first.');
-  process.exit(1);
+  console.warn('Warning: out directory does not exist. This script is only needed for static export builds.');
+  console.warn('For Vercel deployments, use "npm run build" instead of "npm run build:export"');
+  process.exit(0); // Exit gracefully instead of erroring
 }
 
 // Write the redirect file
