@@ -5,7 +5,7 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 const nextConfig: NextConfig = {
   // Enable static export for cPanel hosting
-  output: 'export',
+  //output: 'export',
   
   // Disable image optimization (cPanel doesn't support Next.js Image Optimization API)
   images: {
