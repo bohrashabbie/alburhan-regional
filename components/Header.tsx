@@ -80,8 +80,7 @@ const Header: React.FC = () => {
     { label: t('aboutUs'), href: '/about', icon: <Info /> },
     { label: t('ourProducts'), href: '/products', icon: <ShoppingBag /> },
     { label: t('ourProjects'), href: '/#projects', icon: <Work /> },
-    { label: t('services'), href: '/services', icon: <Business /> },
-    { label: t('contact'), href: '/#contact', icon: <ContactMail /> },
+    { label: t('contact'), href: '/contact', icon: <ContactMail /> },
   ];
 
   const DesktopNavigation = () => (

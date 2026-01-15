@@ -179,6 +179,241 @@ export default function Home() {
       {/* Spotlight Animation Hero Section */}
       <SpotlightAnimation />
 
+      {/* Introduction Section */}
+      <motion.div
+        variants={fadeInUp}
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, amount: 0.1 }}
+      >
+        <Box sx={{ py: { xs: 3, md: 4 }, backgroundColor: 'background.paper', position: 'relative' }}>
+          <Container maxWidth="xl">
+            <motion.div
+              variants={staggerContainer}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true }}
+            >
+              {/* Main Heading */}
+              <motion.div
+                initial={{ opacity: 0, y: -30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ 
+                  duration: 0.8,
+                  ease: [0.34, 1.56, 0.64, 1]
+                }}
+              >
+                <Typography
+                  variant={isMobile ? 'h4' : 'h3'}
+                  sx={{
+                    fontWeight: 700,
+                    color: 'primary.main',
+                    textAlign: 'center',
+                    mb: 4,
+                    fontSize: { xs: '1.75rem', sm: '2rem', md: '2.25rem', lg: '2.5rem' },
+                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                    letterSpacing: { xs: '0.02em', md: '0.04em' },
+                    lineHeight: 1.4,
+                  }}
+                >
+                  {t('sections.aboutUsTitle')}
+                </Typography>
+              </motion.div>
+
+              <Grid container spacing={{ xs: 2, md: 4 }} alignItems="center">
+                {/* Logo Image - Left Side */}
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <motion.div
+                    initial={{ opacity: 0, x: -80, scale: 0.9, rotateY: -15 }}
+                    whileInView={{ opacity: 1, x: 0, scale: 1, rotateY: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ 
+                      duration: 1.2,
+                      ease: [0.34, 1.56, 0.64, 1],
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 15
+                    }}
+                    whileHover={{ 
+                      scale: 1.05,
+                      transition: { duration: 0.4 }
+                    }}
+                    style={{ 
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        position: 'relative',
+                        width: '100%',
+                        maxWidth: { xs: 200, sm: 250, md: 320, lg: 380 },
+                        height: { xs: 200, sm: 250, md: 320, lg: 380 },
+                        mx: 'auto',
+                      }}
+                    >
+                      <motion.div
+                        initial={{ scale: 1.2, opacity: 0, filter: 'blur(10px)' }}
+                        whileInView={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
+                        viewport={{ once: true }}
+                        transition={{ 
+                          duration: 1,
+                          delay: 0.3,
+                          ease: [0.34, 1.56, 0.64, 1]
+                        }}
+                        whileHover={{ 
+                          scale: 1.08,
+                          transition: { duration: 0.3 }
+                        }}
+                        style={{
+                          position: 'relative', 
+                          width: '100%',
+                        height: '100%',
+                      }}
+                    >
+                      <Image
+                          src="/logo/AL BURHAN GROUP .png"
+                          alt="AL-Burhan Group Logo"
+                        fill
+                        style={{
+                            objectFit: 'contain',
+                          }}
+                          sizes="(max-width: 600px) 200px, (max-width: 960px) 250px, 320px"
+                        />
+                      </motion.div>
+                    </Box>
+                  </motion.div>
+                </Grid>
+
+                {/* Text Content - Right Side */}
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <motion.div
+                    initial={{ opacity: 0, x: 50, y: 20 }}
+                    whileInView={{ opacity: 1, x: 0, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ 
+                      duration: 1.2,
+                      ease: [0.34, 1.56, 0.64, 1],
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 15
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1.5, md: 2 } }}>
+                      {/* Introduction Subheading */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 40, x: 30, filter: 'blur(12px)', scale: 0.95 }}
+                        whileInView={{ opacity: 1, y: 0, x: 0, filter: 'blur(0px)', scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ 
+                          duration: 1,
+                          delay: 0.4,
+                          ease: [0.34, 1.56, 0.64, 1]
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            fontSize: { xs: '1.1rem', sm: '1.25rem', md: '1.4rem' },
+                            color: 'primary.main',
+                            lineHeight: 1.8,
+                            mb: 2,
+                            fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                            fontWeight: 600,
+                          }}
+                        >
+                          {t('sections.introduction')}
+                        </Typography>
+                      </motion.div>
+
+                      {/* Description Paragraphs with Enhanced Animations */}
+                        <motion.div
+                        initial={{ opacity: 0, y: 40, x: 30, filter: 'blur(12px)', scale: 0.95 }}
+                        whileInView={{ opacity: 1, y: 0, x: 0, filter: 'blur(0px)', scale: 1 }}
+                          viewport={{ once: true }}
+                        transition={{ 
+                          duration: 1,
+                          delay: 0.5,
+                          ease: [0.34, 1.56, 0.64, 1]
+                        }}
+                        >
+                          <Typography
+                          variant="body1"
+                            sx={{
+                            fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
+                            color: 'text.secondary',
+                            lineHeight: 1.8,
+                            mb: 1.5,
+                            fontFamily: 'var(--font-roboto), var(--font-open-sans), sans-serif',
+                            fontWeight: 400,
+                          }}
+                          component="div"
+                        >
+                          {renderBoldText(t('introduction.description'))}
+                          </Typography>
+                        </motion.div>
+
+                        <motion.div
+                        initial={{ opacity: 0, y: 40, x: 30, filter: 'blur(12px)', scale: 0.95 }}
+                        whileInView={{ opacity: 1, y: 0, x: 0, filter: 'blur(0px)', scale: 1 }}
+                          viewport={{ once: true }}
+                        transition={{ 
+                          duration: 1,
+                          delay: 0.6,
+                          ease: [0.34, 1.56, 0.64, 1]
+                        }}
+                        >
+                          <Typography
+                          variant="body1"
+                            sx={{
+                            fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
+                            color: 'text.secondary',
+                            lineHeight: 1.8,
+                            mb: 1.5,
+                            fontFamily: 'var(--font-roboto), var(--font-open-sans), sans-serif',
+                            fontWeight: 400,
+                          }}
+                          component="div"
+                        >
+                          {renderBoldText(t('introduction.additionalInfo'))}
+                          </Typography>
+                        </motion.div>
+
+                        <motion.div
+                        initial={{ opacity: 0, y: 40, x: 30, filter: 'blur(12px)', scale: 0.95 }}
+                        whileInView={{ opacity: 1, y: 0, x: 0, filter: 'blur(0px)', scale: 1 }}
+                          viewport={{ once: true }}
+                        transition={{ 
+                          duration: 1,
+                          delay: 0.8,
+                          ease: [0.34, 1.56, 0.64, 1]
+                        }}
+                        >
+                          <Typography
+                            variant="body1"
+                            sx={{
+                            fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
+                            color: 'text.secondary',
+                            lineHeight: 1.8,
+                            fontFamily: 'var(--font-roboto), var(--font-open-sans), sans-serif',
+                            fontWeight: 400,
+                          }}
+                          component="div"
+                        >
+                          {renderBoldText(t('introduction.thirdParagraph'))}
+                          </Typography>
+                        </motion.div>
+                    </Box>
+                  </motion.div>
+                </Grid>
+              </Grid>
+            </motion.div>
+          </Container>
+        </Box>
+      </motion.div>
+
       {/* About Us Section */}
       <motion.div
         variants={fadeInUp}
@@ -282,7 +517,7 @@ export default function Home() {
                         style={{ width: '100%', height: '100%', position: 'relative' }}
                       >
                         <Image
-                          src="/Projects/Project 1.png"
+                          src="/Projects/Project 1.jpg"
                           alt="AL-Burhan Project"
                           fill
                           style={{
@@ -779,241 +1014,6 @@ export default function Home() {
         </Box>
       </motion.div>
 
-      {/* Introduction Section */}
-      <motion.div
-        variants={fadeInUp}
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, amount: 0.1 }}
-      >
-        <Box sx={{ py: { xs: 3, md: 4 }, backgroundColor: 'background.paper', position: 'relative' }}>
-          <Container maxWidth="xl">
-            <motion.div
-              variants={staggerContainer}
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true }}
-            >
-              {/* Main Heading */}
-              <motion.div
-                initial={{ opacity: 0, y: -30, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ 
-                  duration: 0.8,
-                  ease: [0.34, 1.56, 0.64, 1]
-                }}
-              >
-                <Typography
-                  variant={isMobile ? 'h4' : 'h3'}
-                  sx={{
-                    fontWeight: 700,
-                    color: 'primary.main',
-                    textAlign: 'center',
-                    mb: 4,
-                    fontSize: { xs: '1.75rem', sm: '2rem', md: '2.25rem', lg: '2.5rem' },
-                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                    letterSpacing: { xs: '0.02em', md: '0.04em' },
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {t('sections.aboutUsTitle')}
-                </Typography>
-              </motion.div>
-
-              <Grid container spacing={{ xs: 2, md: 4 }} alignItems="center">
-                {/* Logo Image - Left Side */}
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <motion.div
-                    initial={{ opacity: 0, x: -80, scale: 0.9, rotateY: -15 }}
-                    whileInView={{ opacity: 1, x: 0, scale: 1, rotateY: 0 }}
-                    viewport={{ once: true, amount: 0.2 }}
-                    transition={{ 
-                      duration: 1.2,
-                      ease: [0.34, 1.56, 0.64, 1],
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 15
-                    }}
-                    whileHover={{ 
-                      scale: 1.05,
-                      transition: { duration: 0.4 }
-                    }}
-                    style={{ 
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        position: 'relative',
-                        width: '100%',
-                        maxWidth: { xs: 200, sm: 250, md: 320, lg: 380 },
-                        height: { xs: 200, sm: 250, md: 320, lg: 380 },
-                        mx: 'auto',
-                      }}
-                    >
-                      <motion.div
-                        initial={{ scale: 1.2, opacity: 0, filter: 'blur(10px)' }}
-                        whileInView={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
-                        viewport={{ once: true }}
-                        transition={{ 
-                          duration: 1,
-                          delay: 0.3,
-                          ease: [0.34, 1.56, 0.64, 1]
-                        }}
-                        whileHover={{ 
-                          scale: 1.08,
-                          transition: { duration: 0.3 }
-                        }}
-                        style={{
-                          position: 'relative', 
-                          width: '100%',
-                        height: '100%',
-                      }}
-                    >
-                      <Image
-                          src="/logo/AL BURHAN GROUP .png"
-                          alt="AL-Burhan Group Logo"
-                        fill
-                        style={{
-                            objectFit: 'contain',
-                          }}
-                          sizes="(max-width: 600px) 200px, (max-width: 960px) 250px, 320px"
-                        />
-                      </motion.div>
-                    </Box>
-                  </motion.div>
-                </Grid>
-
-                {/* Text Content - Right Side */}
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <motion.div
-                    initial={{ opacity: 0, x: 50, y: 20 }}
-                    whileInView={{ opacity: 1, x: 0, y: 0 }}
-                    viewport={{ once: true, amount: 0.2 }}
-                    transition={{ 
-                      duration: 1.2,
-                      ease: [0.34, 1.56, 0.64, 1],
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 15
-                    }}
-                  >
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1.5, md: 2 } }}>
-                      {/* Introduction Subheading */}
-                      <motion.div
-                        initial={{ opacity: 0, y: 40, x: 30, filter: 'blur(12px)', scale: 0.95 }}
-                        whileInView={{ opacity: 1, y: 0, x: 0, filter: 'blur(0px)', scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ 
-                          duration: 1,
-                          delay: 0.4,
-                          ease: [0.34, 1.56, 0.64, 1]
-                        }}
-                      >
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            fontSize: { xs: '1.1rem', sm: '1.25rem', md: '1.4rem' },
-                            color: 'primary.main',
-                            lineHeight: 1.8,
-                            mb: 2,
-                            fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                            fontWeight: 600,
-                          }}
-                        >
-                          {t('sections.introduction')}
-                        </Typography>
-                      </motion.div>
-
-                      {/* Description Paragraphs with Enhanced Animations */}
-                        <motion.div
-                        initial={{ opacity: 0, y: 40, x: 30, filter: 'blur(12px)', scale: 0.95 }}
-                        whileInView={{ opacity: 1, y: 0, x: 0, filter: 'blur(0px)', scale: 1 }}
-                          viewport={{ once: true }}
-                        transition={{ 
-                          duration: 1,
-                          delay: 0.5,
-                          ease: [0.34, 1.56, 0.64, 1]
-                        }}
-                        >
-                          <Typography
-                          variant="body1"
-                            sx={{
-                            fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
-                            color: 'text.secondary',
-                            lineHeight: 1.8,
-                            mb: 1.5,
-                            fontFamily: 'var(--font-roboto), var(--font-open-sans), sans-serif',
-                            fontWeight: 400,
-                          }}
-                          component="div"
-                        >
-                          {renderBoldText(t('introduction.description'))}
-                          </Typography>
-                        </motion.div>
-
-                        <motion.div
-                        initial={{ opacity: 0, y: 40, x: 30, filter: 'blur(12px)', scale: 0.95 }}
-                        whileInView={{ opacity: 1, y: 0, x: 0, filter: 'blur(0px)', scale: 1 }}
-                          viewport={{ once: true }}
-                        transition={{ 
-                          duration: 1,
-                          delay: 0.6,
-                          ease: [0.34, 1.56, 0.64, 1]
-                        }}
-                        >
-                          <Typography
-                          variant="body1"
-                            sx={{
-                            fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
-                            color: 'text.secondary',
-                            lineHeight: 1.8,
-                            mb: 1.5,
-                            fontFamily: 'var(--font-roboto), var(--font-open-sans), sans-serif',
-                            fontWeight: 400,
-                          }}
-                          component="div"
-                        >
-                          {renderBoldText(t('introduction.additionalInfo'))}
-                          </Typography>
-                        </motion.div>
-
-                        <motion.div
-                        initial={{ opacity: 0, y: 40, x: 30, filter: 'blur(12px)', scale: 0.95 }}
-                        whileInView={{ opacity: 1, y: 0, x: 0, filter: 'blur(0px)', scale: 1 }}
-                          viewport={{ once: true }}
-                        transition={{ 
-                          duration: 1,
-                          delay: 0.8,
-                          ease: [0.34, 1.56, 0.64, 1]
-                        }}
-                        >
-                          <Typography
-                            variant="body1"
-                            sx={{
-                            fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
-                            color: 'text.secondary',
-                            lineHeight: 1.8,
-                            fontFamily: 'var(--font-roboto), var(--font-open-sans), sans-serif',
-                            fontWeight: 400,
-                          }}
-                          component="div"
-                        >
-                          {renderBoldText(t('introduction.thirdParagraph'))}
-                          </Typography>
-                        </motion.div>
-                    </Box>
-                  </motion.div>
-                </Grid>
-              </Grid>
-            </motion.div>
-          </Container>
-        </Box>
-      </motion.div>
-
       {/* From Owner Section */}
                   <motion.div
         variants={fadeInUp}
@@ -1058,7 +1058,7 @@ export default function Home() {
               </motion.div>
 
               {/* First Owner - Quote Left, Image Right */}
-              <Grid container spacing={{ xs: 3, sm: 3, md: 4, lg: 5 }} alignItems="center" sx={{ mb: { xs: 4, sm: 4, md: 4, lg: 5 } }}>
+              <Grid container spacing={{ xs: 3, sm: 3, md: 4, lg: 5 }} alignItems="center" sx={{ mb: { xs: 6, sm: 7, md: 8, lg: 10 } }}>
                 {/* Owner Image - Show First on Mobile, Right Side on Desktop */}
                 <Grid size={{ xs: 12, sm: 12, md: 5, lg: 5 }} sx={{ order: { xs: 1, md: 2 } }}>
                         <motion.div
@@ -1091,17 +1091,41 @@ export default function Home() {
                         borderRadius: { xs: 2, md: 3 },
                               overflow: 'hidden',
                         boxShadow: { xs: '0 10px 30px rgba(0,0,0,0.1)', md: '0 15px 40px rgba(0,0,0,0.1)' },
+                        background: 'linear-gradient(to bottom, #f8f8f8 0%, #f0f0f0 100%)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                               }}
                             >
-                              <Image
-                        src="/Owners/Owner1.jpeg"
-                        alt="Owner"
-                                fill
-                                style={{
-                                  objectFit: 'cover',
+                              <Box
+                                sx={{
+                                  position: 'absolute',
+                                  bottom: 0,
+                                  left: '50%',
+                                  transform: 'translateX(-50%)',
+                                  width: { xs: '55%', sm: '50%', md: '45%' },
+                                  height: { xs: '80%', sm: '82%', md: '85%' },
+                                  backgroundImage: 'url("/Owners/Owner1.jpeg")',
+                                  backgroundSize: 'cover',
+                                  backgroundPosition: 'center',
+                                  backgroundRepeat: 'no-repeat',
+                                  filter: 'brightness(0) saturate(100%) contrast(0%) opacity(0.3)',
+                                  mixBlendMode: 'multiply',
+                                  zIndex: 1,
                                 }}
-                        sizes="(max-width: 600px) 100vw, (max-width: 960px) 100vw, 40vw"
-                      />
+                              />
+                              <Box
+                                sx={{
+                                  position: 'absolute',
+                                  bottom: 0,
+                                  left: '50%',
+                                  transform: 'translateX(-50%)',
+                                  width: { xs: '55%', sm: '50%', md: '45%' },
+                                  height: { xs: '80%', sm: '82%', md: '85%' },
+                                  background: 'radial-gradient(ellipse at center bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 50%, transparent 100%)',
+                                  zIndex: 2,
+                                }}
+                              />
                       {/* Overlay with Owner Name and Designation */}
                       <Box
                         sx={{
@@ -1251,7 +1275,7 @@ export default function Home() {
                 </Grid>
 
               {/* Second Owner - Image Left, Quote Right */}
-              <Grid container spacing={{ xs: 3, sm: 3, md: 4, lg: 5 }} alignItems="center">
+              <Grid container spacing={{ xs: 3, sm: 3, md: 4, lg: 5 }} alignItems="center" sx={{ mt: { xs: 2, sm: 3, md: 4, lg: 5 } }}>
                 {/* Owner Image - Left Side on Desktop, Show First on Mobile */}
                 <Grid size={{ xs: 12, sm: 12, md: 5, lg: 5 }} sx={{ order: { xs: 1, md: 1 } }}>
                   <motion.div
@@ -1288,7 +1312,7 @@ export default function Home() {
                               }}
                             >
                               <Image
-                        src="/Owners/owner2.webp"
+                        src="/Owners/owner_shabbir.jpeg"
                         alt="Owner"
                                 fill
                                 style={{
@@ -1572,7 +1596,7 @@ export default function Home() {
         </Box>
       </motion.div>
 
-      {/* Our Services Section */}
+      {/* Our Product Section */}
       <motion.div
         variants={fadeInUp}
         initial="initial"
@@ -1587,7 +1611,7 @@ export default function Home() {
               whileInView="animate"
               viewport={{ once: true }}
             >
-              {/* Our Services Heading */}
+              {/* Our Product Heading */}
               <motion.div variants={staggerItem}>
                 <Typography
                   variant={isMobile ? 'h4' : 'h3'}
@@ -1602,7 +1626,7 @@ export default function Home() {
                     lineHeight: 1.4,
                   }}
                 >
-                  Our Services
+                  {t('sections.ourProduct')}
                 </Typography>
               </motion.div>
 
@@ -1611,19 +1635,19 @@ export default function Home() {
                 {[
                   { 
                     image: '/Our Product/commercial lighting.jpg', 
-                    title: 'Commercial Lighting' 
+                    titleKey: 'products.commercialLighting' 
                   },
                   { 
                     image: '/Our Product/smart lighting.jpg', 
-                    title: 'Smart lighting' 
+                    titleKey: 'products.smartLighting' 
                   },
                   { 
                     image: '/Our Product/residential lighting.jpg', 
-                    title: 'Residential lighting' 
+                    titleKey: 'products.residentialLighting' 
                   },
                   { 
                     image: '/Our Product/industrial lighting.jpg', 
-                    title: 'industrial lighting' 
+                    titleKey: 'products.industrialLighting' 
                   },
                 ].map((service, index) => (
                   <Grid size={{ xs: 12, sm: 6, md: 6, lg: 3 }} key={index}>
@@ -1705,7 +1729,7 @@ export default function Home() {
                         >
                           <Image
                             src={service.image}
-                            alt={service.title}
+                            alt={t(service.titleKey)}
                             fill
                             style={{
                               objectFit: 'cover',
@@ -1870,7 +1894,7 @@ export default function Home() {
                                   }
                                 }}
                               >
-                                {service.title}
+                                {t(service.titleKey)}
                               </Typography>
                             </motion.div>
                           </Box>

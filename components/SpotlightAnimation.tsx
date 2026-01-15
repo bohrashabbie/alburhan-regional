@@ -76,12 +76,12 @@ const SpotlightAnimation: React.FC<SpotlightAnimationProps> = ({ onAnimationComp
     },
   ];
 
-  // Auto-advance slides every 5 seconds
+  // Auto-advance slides every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setDirection(1);
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [slides.length]);
@@ -394,7 +394,7 @@ const SpotlightAnimation: React.FC<SpotlightAnimationProps> = ({ onAnimationComp
               transition={{
                 duration: 0.5,
                 repeat: index === currentSlide ? Infinity : 0,
-                repeatDelay: 4.5,
+                repeatDelay: 2.5,
               }}
             />
           </Box>

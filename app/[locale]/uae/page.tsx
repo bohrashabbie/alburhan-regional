@@ -20,6 +20,7 @@ import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
 import { fadeInUp } from '../../../utils/animations';
 import { Link } from '@/i18n/routing';
+import ProjectGallery from '../../../components/ProjectGallery';
 
 export default function UAEPage() {
   const t = useTranslations();
@@ -54,6 +55,162 @@ export default function UAEPage() {
       message: '',
     });
   };
+
+  // Projects data from OurProject folder
+  const projects = [
+    {
+      name: 'Audi Showroom',
+      folderPath: '/OurProject/Audi Showroom/Audi Showroom',
+      images: [
+        '/OurProject/Audi Showroom/Audi Showroom/WhatsApp Image 2025-08-23 at 19.37.39_bf3d8686.jpg',
+        '/OurProject/Audi Showroom/Audi Showroom/WhatsApp Image 2025-08-26 at 13.10.38_774bc71a.jpg',
+      ],
+      firstImage: '/OurProject/Audi Showroom/Audi Showroom/WhatsApp Image 2025-08-23 at 19.37.39_bf3d8686.jpg',
+    },
+    {
+      name: 'Beverly Hills',
+      folderPath: '/OurProject/Beverly Hills/Beverly Hills',
+      images: [
+        '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.44 PM.jpeg',
+        '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.45 PM (1).jpeg',
+        '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.45 PM.jpeg',
+      ],
+      firstImage: '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.44 PM.jpeg',
+    },
+    {
+      name: 'Dar Al Saback',
+      folderPath: '/OurProject/Dar Al Saback/Dar Al Saback',
+      images: [
+        '/OurProject/Dar Al Saback/Dar Al Saback/WhatsApp Image 2025-12-09 at 8.30.23 PM (1).jpeg',
+        '/OurProject/Dar Al Saback/Dar Al Saback/WhatsApp Image 2025-12-09 at 8.30.23 PM.jpeg',
+      ],
+      firstImage: '/OurProject/Dar Al Saback/Dar Al Saback/WhatsApp Image 2025-12-09 at 8.30.23 PM (1).jpeg',
+    },
+    {
+      name: 'Dune London',
+      folderPath: '/OurProject/Dune London/Dune London',
+      images: [
+        '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.46 PM.jpeg',
+        '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.47 PM (2).jpeg',
+        '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.47 PM.jpeg',
+      ],
+      firstImage: '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.46 PM.jpeg',
+    },
+    {
+      name: 'HSBC',
+      folderPath: '/OurProject/HSBC/HSBC',
+      images: [
+        '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.24 PM (2).jpeg',
+        '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.25 PM (1).jpeg',
+        '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.25 PM.jpeg',
+      ],
+      firstImage: '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.24 PM (2).jpeg',
+    },
+    {
+      name: 'Inglot',
+      folderPath: '/OurProject/Inglot/Inglot',
+      images: [
+        '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.37 PM.jpeg',
+        '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.39 PM.jpeg',
+        '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.42 PM.jpeg',
+      ],
+      firstImage: '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.37 PM.jpeg',
+    },
+    {
+      name: 'Nandos Al Kout Mall',
+      folderPath: '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall',
+      images: [
+        '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/12.jpg',
+        '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/14.jpg',
+        '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/5.jpg',
+      ],
+      firstImage: '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/12.jpg',
+    },
+    {
+      name: 'Paul Le Cafe',
+      folderPath: '/OurProject/Paul Le Cafe/Paul Le Cafe',
+      images: [
+        '/OurProject/Paul Le Cafe/Paul Le Cafe/WhatsApp Image 2025-12-09 at 8.30.21 PM.jpeg',
+      ],
+      firstImage: '/OurProject/Paul Le Cafe/Paul Le Cafe/WhatsApp Image 2025-12-09 at 8.30.21 PM.jpeg',
+    },
+    {
+      name: 'STC Office Assima Tower',
+      folderPath: '/OurProject/STC Office Assima Tower/STC Office Assima Tower',
+      images: [
+        '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.19.jpeg',
+        '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.20 (2).jpeg',
+        '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.24.jpeg',
+        '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.25 (4).jpeg',
+      ],
+      firstImage: '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.19.jpeg',
+    },
+    {
+      name: 'Warba Bank',
+      folderPath: '/OurProject/Warba Bank/Warba Bank',
+      images: [
+        '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.27 PM.jpeg',
+        '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.28 PM (1).jpeg',
+        '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.28 PM (2).jpeg',
+        '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.28 PM.jpeg',
+      ],
+      firstImage: '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.27 PM.jpeg',
+    },
+    {
+      name: 'Wing Stop Al Bida',
+      folderPath: '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida',
+      images: [
+        '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.32 AM (1).jpeg',
+        '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.34 AM.jpeg',
+        '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.37 AM.jpeg',
+        '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.41 AM.jpeg',
+        '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.49 AM.jpeg',
+      ],
+      firstImage: '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.32 AM (1).jpeg',
+    },
+    {
+      name: 'Wing Stop Salmiya',
+      folderPath: '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya',
+      images: [
+        '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.29.56 AM (2).jpeg',
+        '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.29.58 AM.jpeg',
+        '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.30.03 AM.jpeg',
+      ],
+      firstImage: '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.29.56 AM (2).jpeg',
+    },
+    {
+      name: 'Wings Stop Assima Mall',
+      folderPath: '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall',
+      images: [
+        '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall/WhatsApp Image 2025-12-09 at 8.33.45 PM (1).jpeg',
+        '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall/WhatsApp Image 2025-12-09 at 8.33.46 PM.jpeg',
+      ],
+      firstImage: '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall/WhatsApp Image 2025-12-09 at 8.33.45 PM (1).jpeg',
+    },
+    {
+      name: 'Wings Stop Liwan',
+      folderPath: '/OurProject/Wings Stop Liwan/Wings Stop Liwan',
+      images: [
+        '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.47 PM.jpeg',
+        '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.48 PM (1).jpeg',
+        '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.48 PM.jpeg',
+        '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.49 PM (1).jpeg',
+      ],
+      firstImage: '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.47 PM.jpeg',
+    },
+    {
+      name: 'Zain Al Rai',
+      folderPath: '/OurProject/Zain Al Rai/Zain Al Rai',
+      images: [
+        '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.16 PM (2).jpeg',
+        '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.18 PM (1).jpeg',
+        '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.19 PM (1).jpeg',
+        '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.21 PM (1).jpeg',
+        '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.21 PM.jpeg',
+      ],
+      firstImage: '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.16 PM (2).jpeg',
+    },
+  ];
 
   return (
     <Box sx={{ flex: 1, minHeight: '100vh' }}>
@@ -402,192 +559,11 @@ export default function UAEPage() {
               </Typography>
             </motion.div>
 
-            {/* Projects Gallery - Masonry Layout to Minimize Gaps */}
-            <Box
-              sx={{
-                columnCount: { xs: 1, sm: 2, md: 3 },
-                columnGap: { xs: 2, sm: 2.5, md: 3 },
-                columnFill: 'balance',
-                WebkitColumnCount: { xs: 1, sm: 2, md: 3 },
-                WebkitColumnGap: { xs: 2, sm: 2.5, md: 3 },
-                WebkitColumnFill: 'balance',
-                '& > *': {
-                  breakInside: 'avoid',
-                  WebkitColumnBreakInside: 'avoid',
-                  pageBreakInside: 'avoid',
-                  marginBottom: { xs: 2, sm: 2.5, md: 3 },
-                  display: 'inline-block',
-                  width: '100%',
-                  verticalAlign: 'top',
-                },
-              }}
-            >
-              {[
-                { src: '/Projects/Project2.png', alt: t('projects.project2'), key: 'project2' },
-                { src: '/Projects/project5.png', alt: t('projects.project5'), key: 'project5' },
-                { src: '/Projects/Project3.png', alt: t('projects.project3'), key: 'project3' },
-                { src: '/Projects/Project7.png', alt: t('projects.project7'), key: 'project7' },
-                { src: '/Projects/Project4.png', alt: t('projects.project4'), key: 'project4' },
-                { src: '/Projects/Project6.png', alt: t('projects.project6'), key: 'project6' },
-              ].map((project, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 60, scale: 0.95 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{
-                    duration: 0.7,
-                    delay: index * 0.08,
-                    ease: [0.25, 0.46, 0.45, 0.94],
-                  }}
-                  whileHover={{ y: -12, scale: 1.03 }}
-                  style={{ width: '100%', display: 'inline-block' }}
-                >
-                  <Box
-                    className="project-card"
-                    sx={{
-                      position: 'relative',
-                      width: '100%',
-                      borderRadius: { xs: 2, sm: 2.5, md: 3 },
-                      overflow: 'hidden',
-                      boxShadow: '0 4px 24px rgba(0,0,0,0.12)',
-                      cursor: 'pointer',
-                      backgroundColor: 'background.default',
-                      transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-                      '&:hover': {
-                        boxShadow: '0 16px 48px rgba(0,0,0,0.2)',
-                        transform: 'translateY(-8px)',
-                        '& .project-image': {
-                          transform: 'scale(1.05)',
-                        },
-                      },
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        position: 'relative',
-                        width: '100%',
-                        overflow: 'hidden',
-                        backgroundColor: 'grey.100',
-                      }}
-                    >
-                      <Box
-                        component="span"
-                        sx={{
-                          position: 'relative',
-                          display: 'block',
-                          width: '100%',
-                          zIndex: 0,
-                        }}
-                      >
-                        <Image
-                          src={project.src}
-                          alt={project.alt}
-                          width={1200}
-                          height={900}
-                          sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
-                          className="project-image"
-                          style={{
-                            width: '100%',
-                            height: 'auto',
-                            display: 'block',
-                            objectFit: 'contain',
-                            transition: 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
-                          }}
-                          loading="lazy"
-                        />
-                      </Box>
-                    </Box>
-                  </Box>
-                </motion.div>
-              ))}
-            </Box>
+            {/* Projects Gallery Component */}
+            <ProjectGallery projects={projects} />
           </Container>
         </Box>
       </motion.div>
-
-      {/* Team Section */}
-      <Box sx={{ py: { xs: 6, md: 10 }, backgroundColor: 'background.paper' }}>
-        <Container maxWidth="xl">
-          <Box sx={{ textAlign: 'center', mb: 6 }}>
-            <Typography
-              variant="h3"
-              component="h2"
-              sx={{
-                fontWeight: 'bold',
-                color: 'text.primary',
-                mb: 2,
-              }}
-            >
-              Our Team
-            </Typography>
-            <Typography
-              variant="h6"
-              color="text.secondary"
-              sx={{ maxWidth: 600, mx: 'auto' }}
-            >
-              Meet the talented individuals who make our success possible.
-            </Typography>
-          </Box>
-
-          <Grid container spacing={4}>
-            {[1, 2, 3, 4].map((member, index) => (
-              <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
-                <Card
-                  sx={{
-                    textAlign: 'center',
-                    transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-                    '&:hover': {
-                      boxShadow: theme.shadows[8],
-                      transform: 'translateY(-4px)',
-                    },
-                  }}
-                >
-                  <CardContent sx={{ p: 3 }}>
-                    <Box
-                      sx={{
-                        width: 200,
-                        height: 200,
-                        borderRadius: '50%',
-                        mx: 'auto',
-                        mb: 2,
-                        position: 'relative',
-                        overflow: 'hidden',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Image
-                        src="/OurTeam/ourteam.jpg"
-                        alt={`Team Member ${index + 1}`}
-                        fill
-                        style={{
-                          objectFit: 'cover',
-                          borderRadius: '50%',
-                        }}
-                      />
-                    </Box>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: 600,
-                        color: 'text.primary',
-                        mb: 1,
-                      }}
-                    >
-                      Team Member {index + 1}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Role Description
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
 
       {/* Showrooms Section */}
       <Box sx={{ py: { xs: 6, md: 8, lg: 10 }, backgroundColor: 'background.paper' }}>
@@ -642,34 +618,9 @@ export default function UAEPage() {
               }}
             >
               <Grid container spacing={0}>
-                {/* Image Section */}
-                <Grid size={{ xs: 12, md: 5 }}>
-                  <Box
-                    sx={{
-                      position: 'relative',
-                      width: '100%',
-                      height: { xs: 220, sm: 280, md: 300, lg: 320 },
-                      overflow: 'hidden',
-                      backgroundColor: 'grey.100',
-                    }}
-                  >
-                    <Image
-                      src="/location/showroom.png"
-                      alt={t('countryContact.dubai.companyName')}
-                      fill
-                      className="showroom-image"
-                      style={{
-                        objectFit: 'cover',
-                        transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-                      }}
-                      sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 40vw"
-                    />
-                  </Box>
-                </Grid>
-
                 {/* Details Section */}
                 <Grid
-                  size={{ xs: 12, md: 7 }}
+                  size={{ xs: 12, md: 12 }}
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
@@ -696,11 +647,23 @@ export default function UAEPage() {
                     >
                       {t('countryContact.dubai.companyName')}
                     </Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: { xs: 1, sm: 1.5 }, mb: { xs: 2, sm: 2.5 } }}>
+                    <Box 
+                      sx={{ 
+                        display: 'flex', 
+                        alignItems: 'flex-start', 
+                        gap: { xs: 1.5, sm: 2 }, 
+                        mb: { xs: 2, sm: 2.5 },
+                        p: { xs: 2, sm: 2.5 },
+                        backgroundColor: 'primary.50',
+                        borderRadius: 2,
+                        borderLeft: '4px solid',
+                        borderColor: 'primary.main',
+                      }}
+                    >
                       <LocationOn
                         sx={{
                           color: 'primary.main',
-                          fontSize: { xs: 20, sm: 22, md: 24 },
+                          fontSize: { xs: 24, sm: 28, md: 32 },
                           mt: 0.5,
                           flexShrink: 0,
                         }}
@@ -708,9 +671,10 @@ export default function UAEPage() {
                       <Typography
                         variant="body1"
                         sx={{
-                          color: 'text.secondary',
+                          color: 'text.primary',
                           lineHeight: 1.8,
-                          fontSize: { xs: '0.875rem', sm: '0.9375rem', md: '1rem' },
+                          fontSize: { xs: '0.9375rem', sm: '1rem', md: '1.1rem' },
+                          fontWeight: 500,
                         }}
                       >
                         {t('countryContact.dubai.office')}<br />

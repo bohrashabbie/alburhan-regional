@@ -1,6 +1,6 @@
 {
   "common": {
-    "companyName": "AL-Burhan Group",
+    "companyName": "Al-Burhan Group",
     "allRightsReserved": "All rights reserved"
   },
   "header": {
@@ -19,7 +19,7 @@
   },
   "carousel": {
     "slide1": {
-      "title": "AL-Burhan Group",
+      "title": "Al-Burhan Group",
       "subtitle": "Light Up Your Life",
       "description": "Transforming spaces with innovative lighting solutions that blend elegance, functionality, and cutting-edge technology to create breathtaking environments."
     },
@@ -60,15 +60,26 @@
     "introduction": "Introduction",
     "fromOwner": "A Word from the Founder",
     "ourBrand": "Our Brands",
-    "europeanBrands": "European Brands we deal with",
+    "europeanBrands": "Our Partnership Brands",
     "ourProjects": "Our Projects",
+    "ourProduct": "Our Product",
     "contactUs": "Contact Us"
+  },
+  "contactPage": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch with our offices around the world",
+    "selectCountry": "Select a country to view contact details",
+    "kuwait": "Kuwait",
+    "egypt": "Egypt",
+    "china": "China",
+    "uae": "United Arab Emirates",
+    "viewDetails": "View Contact Details"
   },
   "aboutUs": {
     "china": {
-      "firmName": "AL-Bohan",
+      "firmName": "Al-Bohan",
       "countryName": "China",
-      "description": "AL-Burhan's presence in China represents our commitment to manufacturing excellence and innovation. Through our strategic partnerships and state-of-the-art facilities, we deliver world-class lighting solutions that combine quality craftsmanship with cutting-edge technology, serving markets across the globe."
+      "description": "Al-Burhan's presence in China represents our commitment to manufacturing excellence and innovation. Through our strategic partnerships and state-of-the-art facilities, we deliver world-class lighting solutions that combine quality craftsmanship with cutting-edge technology, serving markets across the globe."
     },
     "kuwait": {
       "firmName": "Al-Burhan Regional",
@@ -78,7 +89,7 @@
     "dubai": {
       "firmName": "Al-Burhan Hegazi",
       "countryName": "UAE",
-      "description": "In the heart of Dubai, Al-Burhan Hagezi serves as our gateway to the dynamic Middle Eastern market. We bring innovative lighting solutions to one of the world's most ambitious architectural landscapes, contributing to iconic projects that define modern luxury and sophistication."
+      "description": "In the heart of Dubai, Al-Burhan Hegazi serves as our gateway to the dynamic Middle Eastern market. We bring innovative lighting solutions to one of the world's most ambitious architectural landscapes, contributing to iconic projects that define modern luxury and sophistication."
     },
     "egypt": {
       "firmName": "Al-Burhan",
@@ -86,27 +97,85 @@
     }
   },
   "introduction": {
-    "title": "About AL-Burhan",
-    "description": "AL-Burhan Group is a leading provider of innovative lighting solutions with over 20 years of industry experience. We combine quality, expertise, and customer satisfaction to deliver exceptional lighting services across the region.",
-    "additionalInfo": "With hundreds of successful projects worldwide, including in China, Kuwait, UAE, and Egypt, AL-Burhan Group has established itself as a trusted name in lighting.",
+    "title": "About Al-Burhan",
+    "description": "Al-Burhan Group is a leading provider of innovative lighting solutions with over 20 years of industry experience. We combine quality, expertise, and customer satisfaction to deliver exceptional lighting services across the region.",
+    "additionalInfo": "With hundreds of successful projects worldwide, including in China, Kuwait, UAE, and Egypt, Al-Burhan Group has established itself as a trusted name in lighting.",
     "thirdParagraph": "From cutting-edge LED technologies to elegant designer collections, we transform visions into reality, creating inspiring lighting experiences that elevate every space."
   },
   "aboutPage": {
-    "title": "ABOUT US",
-    "description": "With more than 15 years of experience, Al Burhan Lighting Company has successfully positioned itself as one of the leading companies in the field of providing lighting solutions in the State of Kuwait and providing a high degree of experience in the field of lighting to support projects in the State of Kuwait with the most appropriate products, and services for any type of project in the private sector, government, retail, commercial, residential or industrial market.",
-    "additionalInfo": "We also implement (supply and install) any project"
+    "title": "About Us",
+    "mainDescription": "With more than 20 years of experience in the lighting industry, Al Burhan Regional has successfully established itself as one of the leading providers of comprehensive lighting solutions in the State of Kuwait. Our commitment to quality, innovation, and professional service has enabled us to deliver reliable lighting solutions for residential, commercial, governmental, and industrial projects.",
+    "journey": "Our journey began in Kuwait, where we built our foundation and reputation in the lighting market. As our expertise grew and demand for our services increased, we expanded our operations regionally and internationally. Today, Al Burhan Regional Lighting proudly operates branches in:",
+    "branches": {
+      "dubai": "Dubai – United Arab Emirates",
+      "china": "China",
+      "egypt": "Egypt",
+      "kuwait": "Kuwait"
+    },
+    "expansion": "This expansion reflects our vision of becoming a regional leader capable of delivering advanced lighting solutions across the Middle East and beyond. We have become the Burhan Group, which includes a group of companies around the world.",
+    "whatWeOffer": {
+      "title": "What We Offer",
+      "description": "We provide a fully integrated range of lighting services:",
+      "lightingDesign": {
+        "title": "Lighting Design",
+        "item1": "Project assessment and concept development",
+        "item2": "Interior and exterior lighting layouts",
+        "item3": "Fixture selection tailored to architectural and decorative needs"
+      },
+      "lightingSupply": {
+        "title": "Lighting Supply",
+        "item1": "A wide range of high-quality indoor and outdoor lighting products",
+        "item2": "Downlights, spotlights, LED strips, linear lighting, decorative fixtures, façade lighting, and more",
+        "item3": "Products selected from trusted global brands"
+      },
+      "supplyInstall": {
+        "title": "Supply & Install (Turnkey Solutions)",
+        "item1": "Complete project execution",
+        "item2": "Specialized installation teams",
+        "item3": "On-site coordination with contractors and consultants to ensure optimal results"
+      },
+      "afterSales": {
+        "title": "After-Sales Support",
+        "item1": "Post-installation follow-up",
+        "item2": "Technical support and maintenance",
+        "item3": "Alternative solutions for future upgrades or modifications"
+      }
+    },
+    "sectorsWeServe": {
+      "title": "Sectors We Serve",
+      "description": "We cover a wide range of project sectors, including:",
+      "item1": "Government Projects",
+      "item2": "Private Sector",
+      "item3": "Commercial Developments",
+      "item4": "Retail Stores",
+      "item5": "Residential Villas & Apartments",
+      "item6": "Industrial Warehouses and Facilities",
+      "closing": "Whether it is a private villa, office building, retail shop, restaurant, or governmental facility, we provide the most suitable lighting solutions based on project requirements and budget."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "To be the top provider of advanced lighting solutions in Kuwait and the regional market, offering modern, efficient, and high-quality products that enhance both functionality and aesthetics."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "To deliver complete lighting solutions through:",
+      "item1": "High-quality products",
+      "item2": "Professional design",
+      "item3": "Precise execution",
+      "item4": "On-time delivery"
+    }
   },
   "owners": {
     "founder": {
       "name": "Mr. Murtaza Bohra",
       "designation": "Founder",
-      "quote": "Twenty years ago, all I had was a small dream to bring something different to the world of lighting.\n\nWe started with humble steps, and over time that dream grew. Today, it has become a name we are proud of Al Burhan Regional Lighting.\n\nEvery achievement we've made is the result of hard work, dedication, and belief that success comes from honesty and persistence.\n\nI'm proud of everyone who has been part of this journey, and of every light we've brought into people's lives.\n\nOur journey is far from over. Every new project is a new beginning, a new dream to shine brighter.",
+      "quote": "Twenty years ago, all I had was a small dream to bring something different to the world of lighting.\n\nWe started with humble steps, and over time that dream grew. Today, it has become a name we are proud of Al Burhan Group.\n\nEvery achievement we've made is the result of hard work, dedication, and belief that success comes from honesty and persistence.\n\nI'm proud of everyone who has been part of this journey, and of every light we've brought into people's lives.\n\nOur journey is far from over. Every new project is a new beginning, a new dream to shine brighter.",
       "quote2": ""
     },
     "coFounder": {
-      "name": "Mr. Shabbir Ratlamwala",
+      "name": "Mr. Shabbir Hussain",
       "designation": "Co-founder",
-      "quote": "It all began with a simple idea to create lighting that inspires and beautifies every space.\n\nToday, that dream has become a reality under the name al burhan Regional, where quality and creativity are at the heart of every project.\n\nThe journey has been full of challenges, but it has taught us that determination, hard work, and a belief in innovation make all the difference.\n\nI am proud of everyone who has been part of this journey, and of every light we have shared to bring warmth and beauty into people's lives.\n\nBecause we still believe in the dream, every new step is an opportunity to shine even brighter and turn ideas into radiant realities."
+      "quote": "It all began with a simple idea to create lighting that inspires and beautifies every space.\n\nToday, that dream has become a reality under the name Al Burhan Group, where quality and creativity are at the heart of every project.\n\nThe journey has been full of challenges, but it has taught us that determination, hard work, and a belief in innovation make all the difference.\n\nI am proud of everyone who has been part of this journey, and of every light we have shared to bring warmth and beauty into people's lives.\n\nBecause we still believe in the dream, every new step is an opportunity to shine even brighter and turn ideas into radiant realities."
     }
   },
   "contact": {
@@ -211,6 +280,12 @@
     "project5": "Project 5",
     "project6": "Project 6",
     "project7": "Project 7"
+  },
+  "products": {
+    "smartLighting": "Smart Lighting",
+    "commercialLighting": "Commercial Lighting",
+    "industrialLighting": "Industrial Lighting",
+    "residentialLighting": "Residential Lighting"
   }
 }
 
