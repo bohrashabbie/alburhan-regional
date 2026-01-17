@@ -108,9 +108,92 @@ The application is built with mobile-first responsive design principles:
 ## Available Scripts
 
 - `npm run dev` - Start development server
-- `npm run build` - Build for production
+- `npm run build` - Build for production (static export for GoDaddy)
+- `npm run build:vercel` - Build for Vercel (without static export)
+- `npm run build:export` - Build with static export (same as `build`)
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
+
+## Deployment
+
+### GoDaddy Shared Hosting
+
+This project is configured for static export to work with GoDaddy shared hosting (which doesn't support Node.js).
+
+**Steps to Deploy:**
+
+1. **Build the project:**
+   ```bash
+   npm run build
+   ```
+   This will create a static export in the `out/` directory.
+
+2. **Upload to GoDaddy:**
+   - Connect to your GoDaddy hosting via FTP or File Manager
+   - Upload all contents from the `out/` directory to your `public_html` folder (or root directory)
+   - Make sure the `.htaccess` file is uploaded (it's already in the `out/` directory)
+
+3. **Verify:**
+   - Visit your domain - it should redirect to `/en/`
+   - Test both `/en/` and `/ar/` routes
+   - Verify all pages load correctly
+
+**Important Notes:**
+- The `.htaccess` file handles routing and redirects for static hosting
+- All images are unoptimized (as required for static hosting)
+- The build creates a root `index.html` that redirects to `/en/`
+
+**Troubleshooting Cache Issues:**
+
+If changes aren't reflecting after deployment:
+
+1. **Clear GoDaddy Cache (if available):**
+   - Log into GoDaddy hosting panel
+   - Look for "Cache" or "Performance" settings
+   - Clear/disable caching temporarily
+
+2. **Hard Refresh Browser:**
+   - Windows: `Ctrl + Shift + R` or `Ctrl + F5`
+   - Mac: `Cmd + Shift + R`
+   - Or open in Incognito/Private mode
+
+3. **Verify Files Uploaded:**
+   - Check file timestamps on server match your local build
+   - Ensure all files from `out/` directory were uploaded
+   - Verify `.htaccess` file is present and updated
+
+4. **Check File Permissions:**
+   - `.htaccess` should be readable (644 permissions)
+   - All files should be readable (644)
+   - Directories should be executable (755)
+
+5. **Wait for Propagation:**
+   - DNS/CDN changes can take 5-30 minutes
+   - Try accessing via direct IP if available
+
+6. **Force Rebuild:**
+   ```bash
+   # Delete old build
+   rm -rf out .next
+   
+   # Rebuild
+   npm run build
+   
+   # Upload fresh files
+   ```
+
+7. **Test Direct File Access:**
+   - Try accessing a specific file directly: `yoursite.com/en/index.html`
+   - Check if it shows the updated content
+
+### Vercel Deployment
+
+For Vercel deployments, use:
+```bash
+npm run build:vercel
+```
+
+Note: You'll need to temporarily disable `output: 'export'` in `next.config.ts` for Vercel deployments, or use environment-based configuration.
 
 ## Technologies Used
 

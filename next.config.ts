@@ -4,10 +4,10 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 const nextConfig: NextConfig = {
-  // Enable static export for cPanel hosting
-  //output: 'export',
+  // Enable static export for GoDaddy shared hosting (no Node.js support)
+  output: 'export',
   
-  // Disable image optimization (cPanel doesn't support Next.js Image Optimization API)
+  // Disable image optimization (shared hosting doesn't support Next.js Image Optimization API)
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
     ],
   },
   
-  // Ensure trailing slashes for better compatibility
+  // Ensure trailing slashes for better compatibility with static hosting
   trailingSlash: true,
   
   // Disable server-side features that won't work with static export

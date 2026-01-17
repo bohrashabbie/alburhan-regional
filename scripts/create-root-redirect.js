@@ -27,12 +27,23 @@ const redirectHtml = `<!DOCTYPE html>
 
 // Ensure out directory exists
 if (!fs.existsSync(outDir)) {
-  console.warn('Warning: out directory does not exist. This script is only needed for static export builds.');
-  console.warn('For Vercel deployments, use "npm run build" instead of "npm run build:export"');
-  process.exit(0); // Exit gracefully instead of erroring
+  console.error('Error: out directory does not exist. Please run "npm run build" first.');
+  console.error('Make sure output: "export" is enabled in next.config.ts for static export builds.');
+  process.exit(1);
 }
 
 // Write the redirect file
 fs.writeFileSync(rootIndexPath, redirectHtml, 'utf8');
 console.log('✓ Created root index.html redirect file');
+
+// Copy .htaccess file to out directory if it exists in root
+const htaccessSource = path.join(process.cwd(), '.htaccess');
+const htaccessDest = path.join(outDir, '.htaccess');
+
+if (fs.existsSync(htaccessSource)) {
+  fs.copyFileSync(htaccessSource, htaccessDest);
+  console.log('✓ Copied .htaccess file to out directory');
+} else {
+  console.warn('Warning: .htaccess file not found in root directory');
+}
 
