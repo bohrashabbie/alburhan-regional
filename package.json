@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node scripts/create-root-redirect.js",
+    "build": "next build",
     "build:vercel": "next build",
     "build:export": "next build && node scripts/create-root-redirect.js",
     "start": "next start",

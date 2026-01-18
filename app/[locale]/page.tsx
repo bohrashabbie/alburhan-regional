@@ -658,15 +658,6 @@ export default function Home() {
                       };
                       const countryRoute = countryRoutes[country.key] || '/';
                       
-                      // Map country keys to logo paths
-                      const countryLogos: { [key: string]: string } = {
-                        'china': '/logo/AL BURHAN CHINA.png',
-                        'kuwait': '/logo/AL BURHAN GROUP .png',
-                        'dubai': '/logo/AL BURHAN UAE.png',
-                        'egypt': '/logo/AL BURHAN EGYPT.png'
-                      };
-                      const countryLogo = countryLogos[country.key] || '/logo/AL BURHAN GROUP .png';
-                      
                       return (
                       <Grid size={{ xs: 12, sm: 6 }} key={index}>
                         <Link href={countryRoute} style={{ textDecoration: 'none' }}>
@@ -792,53 +783,6 @@ export default function Home() {
                                 pointerEvents: 'none',
                               }}
                             />
-                            
-                            {/* Logo in corner */}
-                            <Box
-                              sx={{
-                                position: 'absolute',
-                                top: { xs: 8, sm: 10, md: 12 },
-                                ...(locale === 'en' ? {
-                                  right: { xs: 8, sm: 10, md: 12 },
-                                  left: 'auto',
-                                } : {
-                                  left: { xs: 8, sm: 10, md: 12 },
-                                  right: 'auto',
-                                }),
-                                width: { xs: 50, sm: 60, md: 70 },
-                                height: { xs: 50, sm: 60, md: 70 },
-                                zIndex: 3,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              }}
-                            >
-                              <motion.div
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ 
-                                  duration: 0.6,
-                                  delay: index * 0.15 + 0.8,
-                                  ease: [0.34, 1.56, 0.64, 1]
-                                }}
-                                style={{
-                                  position: 'relative',
-                                  width: '100%',
-                                  height: '100%',
-                                }}
-                              >
-                                <Image
-                                  src={countryLogo}
-                                  alt="Al Burhan Logo"
-                                  fill
-                                  style={{
-                                    objectFit: 'contain',
-                                  }}
-                                  sizes="(max-width: 600px) 50px, (max-width: 960px) 60px, 70px"
-                                />
-                              </motion.div>
-                            </Box>
                             
                             {/* Text Overlay with Enhanced Animation */}
                             <Box

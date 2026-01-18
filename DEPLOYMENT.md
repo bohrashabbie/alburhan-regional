@@ -1,4 +1,40 @@
-# GoDaddy Deployment Guide
+# Deployment Guide
+
+## Vercel Deployment (Recommended)
+
+### Quick Deployment Steps
+
+1. **Connect to Vercel:**
+   - Install Vercel CLI: `npm i -g vercel`
+   - Run `vercel` in the project directory
+   - Or connect your GitHub/GitLab/Bitbucket repository to Vercel dashboard
+
+2. **Deploy:**
+   ```bash
+   vercel --prod
+   ```
+   
+   Or push to your connected repository - Vercel will auto-deploy
+
+3. **Environment Variables:**
+   - Vercel automatically detects Next.js projects
+   - No additional configuration needed
+   - All features (SSR, Image Optimization, etc.) work out of the box
+
+### Vercel Configuration
+
+✅ **Image Optimization** - Enabled (no `unoptimized: true`)  
+✅ **Server-Side Rendering** - Full Next.js support  
+✅ **Internationalization** - next-intl works perfectly  
+✅ **Automatic Deployments** - On every git push  
+
+The project is configured with:
+- `vercel.json` - Routing and security headers
+- `next.config.ts` - Optimized for Vercel (not static export)
+
+---
+
+## GoDaddy Deployment (Static Export)
 
 ## Quick Deployment Steps
 
