@@ -27,161 +27,232 @@ export default function EgyptPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  // Projects data from OurProject folder
-  const projects = [
-    {
-      name: 'Audi Showroom',
-      folderPath: '/OurProject/Audi Showroom/Audi Showroom',
-      images: [
-        '/OurProject/Audi Showroom/Audi Showroom/WhatsApp Image 2025-08-23 at 19.37.39_bf3d8686.jpg',
-        '/OurProject/Audi Showroom/Audi Showroom/WhatsApp Image 2025-08-26 at 13.10.38_774bc71a.jpg',
-      ],
-      firstImage: '/OurProject/Audi Showroom/Audi Showroom/WhatsApp Image 2025-08-23 at 19.37.39_bf3d8686.jpg',
-    },
-    {
-      name: 'Beverly Hills',
-      folderPath: '/OurProject/Beverly Hills/Beverly Hills',
-      images: [
-        '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.44 PM.jpeg',
-        '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.45 PM (1).jpeg',
-        '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.45 PM.jpeg',
-      ],
-      firstImage: '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.44 PM.jpeg',
-    },
-    {
-      name: 'Dar Al Saback',
-      folderPath: '/OurProject/Dar Al Saback/Dar Al Saback',
-      images: [
-        '/OurProject/Dar Al Saback/Dar Al Saback/WhatsApp Image 2025-12-09 at 8.30.23 PM (1).jpeg',
-        '/OurProject/Dar Al Saback/Dar Al Saback/WhatsApp Image 2025-12-09 at 8.30.23 PM.jpeg',
-      ],
-      firstImage: '/OurProject/Dar Al Saback/Dar Al Saback/WhatsApp Image 2025-12-09 at 8.30.23 PM (1).jpeg',
-    },
-    {
-      name: 'Dune London',
-      folderPath: '/OurProject/Dune London/Dune London',
-      images: [
-        '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.46 PM.jpeg',
-        '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.47 PM (2).jpeg',
-        '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.47 PM.jpeg',
-      ],
-      firstImage: '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.46 PM.jpeg',
-    },
-    {
-      name: 'HSBC',
-      folderPath: '/OurProject/HSBC/HSBC',
-      images: [
-        '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.24 PM (2).jpeg',
-        '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.25 PM (1).jpeg',
-        '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.25 PM.jpeg',
-      ],
-      firstImage: '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.24 PM (2).jpeg',
-    },
-    {
-      name: 'Inglot',
-      folderPath: '/OurProject/Inglot/Inglot',
-      images: [
-        '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.37 PM.jpeg',
-        '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.39 PM.jpeg',
-        '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.42 PM.jpeg',
-      ],
-      firstImage: '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.37 PM.jpeg',
-    },
-    {
-      name: 'Nandos Al Kout Mall',
-      folderPath: '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall',
-      images: [
-        '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/12.jpg',
-        '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/14.jpg',
-        '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/5.jpg',
-      ],
-      firstImage: '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/12.jpg',
-    },
-    {
-      name: 'Paul Le Cafe',
-      folderPath: '/OurProject/Paul Le Cafe/Paul Le Cafe',
-      images: [
-        '/OurProject/Paul Le Cafe/Paul Le Cafe/WhatsApp Image 2025-12-09 at 8.30.21 PM.jpeg',
-      ],
-      firstImage: '/OurProject/Paul Le Cafe/Paul Le Cafe/WhatsApp Image 2025-12-09 at 8.30.21 PM.jpeg',
-    },
-    {
-      name: 'STC Office Assima Tower',
-      folderPath: '/OurProject/STC Office Assima Tower/STC Office Assima Tower',
-      images: [
-        '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.19.jpeg',
-        '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.20 (2).jpeg',
-        '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.24.jpeg',
-        '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.25 (4).jpeg',
-      ],
-      firstImage: '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.19.jpeg',
-    },
-    {
-      name: 'Warba Bank',
-      folderPath: '/OurProject/Warba Bank/Warba Bank',
-      images: [
-        '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.27 PM.jpeg',
-        '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.28 PM (1).jpeg',
-        '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.28 PM (2).jpeg',
-        '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.28 PM.jpeg',
-      ],
-      firstImage: '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.27 PM.jpeg',
-    },
-    {
-      name: 'Wing Stop Al Bida',
-      folderPath: '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida',
-      images: [
-        '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.32 AM (1).jpeg',
-        '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.34 AM.jpeg',
-        '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.37 AM.jpeg',
-        '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.41 AM.jpeg',
-        '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.49 AM.jpeg',
-      ],
-      firstImage: '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.32 AM (1).jpeg',
-    },
-    {
-      name: 'Wing Stop Salmiya',
-      folderPath: '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya',
-      images: [
-        '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.29.56 AM (2).jpeg',
-        '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.29.58 AM.jpeg',
-        '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.30.03 AM.jpeg',
-      ],
-      firstImage: '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.29.56 AM (2).jpeg',
-    },
-    {
-      name: 'Wings Stop Assima Mall',
-      folderPath: '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall',
-      images: [
-        '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall/WhatsApp Image 2025-12-09 at 8.33.45 PM (1).jpeg',
-        '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall/WhatsApp Image 2025-12-09 at 8.33.46 PM.jpeg',
-      ],
-      firstImage: '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall/WhatsApp Image 2025-12-09 at 8.33.45 PM (1).jpeg',
-    },
-    {
-      name: 'Wings Stop Liwan',
-      folderPath: '/OurProject/Wings Stop Liwan/Wings Stop Liwan',
-      images: [
-        '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.47 PM.jpeg',
-        '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.48 PM (1).jpeg',
-        '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.48 PM.jpeg',
-        '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.49 PM (1).jpeg',
-      ],
-      firstImage: '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.47 PM.jpeg',
-    },
-    {
-      name: 'Zain Al Rai',
-      folderPath: '/OurProject/Zain Al Rai/Zain Al Rai',
-      images: [
-        '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.16 PM (2).jpeg',
-        '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.18 PM (1).jpeg',
-        '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.19 PM (1).jpeg',
-        '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.21 PM (1).jpeg',
-        '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.21 PM.jpeg',
-      ],
-      firstImage: '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.16 PM (2).jpeg',
-    },
-  ];
+  // Projects data organized by categories
+  const projectCategories = {
+    gyms: [
+      {
+        name: 'Oxygen Gym Jahra',
+        folderPath: '/OurProject/Oxygen Gym Jahra',
+        images: [
+          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0005.jpg',
+          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0008.jpg',
+          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0011.jpg',
+          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0012.jpg',
+        ],
+        firstImage: '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0005.jpg',
+      },
+      {
+        name: 'Oxygen Gym KSA',
+        folderPath: '/OurProject/Oxygen Gym KSA',
+        images: [
+          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
+          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.11 PM..jpeg',
+          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.11 PM.jpeg',
+          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.35 PM..jpeg',
+        ],
+        firstImage: '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
+      },
+      {
+        name: 'Oxygen Gym Mahboula',
+        folderPath: '/OurProject/Oxygen Gym Mahboula',
+        images: [
+          '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2025-12-09 at 8.32.33 PM.jpeg',
+          '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2025-12-09 at 8.33.30 PM.jpeg',
+          '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2026-01-02 at 3.38.27 PM (1).jpeg',
+        ],
+        firstImage: '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2025-12-09 at 8.32.33 PM.jpeg',
+      },
+      {
+        name: 'Oxygen Gym UAE',
+        folderPath: '/OurProject/Oxygen Gym U.A.E',
+        images: [
+          '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.33.39 PM.jpeg',
+          '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.33.43 PM.jpeg',
+          '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.40.01 PM.jpeg',
+        ],
+        firstImage: '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.33.39 PM.jpeg',
+      },
+      {
+        name: 'Peak Gym Qurain',
+        folderPath: '/OurProject/Peak Gym Qurain',
+        images: [
+          '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.13 PM (1).jpeg',
+          '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.13 PM.jpeg',
+          '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.14 PM (1).jpeg',
+        ],
+        firstImage: '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.13 PM (1).jpeg',
+      },
+      {
+        name: 'Plage Gym',
+        folderPath: '/OurProject/Plage Gym',
+        images: [
+          '/OurProject/Plage Gym/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
+          '/OurProject/Plage Gym/WhatsApp Image 2026-01-02 at 3.38.09 PM..jpeg',
+        ],
+        firstImage: '/OurProject/Plage Gym/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
+      },
+    ],
+    restaurants: [
+      {
+        name: 'Nandos Al Kout Mall',
+        folderPath: '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall',
+        images: [
+          '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/12.jpg',
+          '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/14.jpg',
+          '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/5.jpg',
+        ],
+        firstImage: '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/12.jpg',
+      },
+      {
+        name: 'Wing Stop Al Bida',
+        folderPath: '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida',
+        images: [
+          '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.32 AM (1).jpeg',
+          '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.34 AM.jpeg',
+          '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.37 AM.jpeg',
+          '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.41 AM.jpeg',
+          '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.49 AM.jpeg',
+        ],
+        firstImage: '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.32 AM (1).jpeg',
+      },
+      {
+        name: 'Wing Stop Salmiya',
+        folderPath: '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya',
+        images: [
+          '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.29.56 AM (2).jpeg',
+          '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.29.58 AM.jpeg',
+          '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.30.03 AM.jpeg',
+        ],
+        firstImage: '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.29.56 AM (2).jpeg',
+      },
+      {
+        name: 'Paul Le Cafe',
+        folderPath: '/OurProject/Paul Le Cafe/Paul Le Cafe',
+        images: [
+          '/OurProject/Paul Le Cafe/Paul Le Cafe/WhatsApp Image 2025-12-09 at 8.30.21 PM.jpeg',
+        ],
+        firstImage: '/OurProject/Paul Le Cafe/Paul Le Cafe/WhatsApp Image 2025-12-09 at 8.30.21 PM.jpeg',
+      },
+      {
+        name: 'Wings Stop Liwan',
+        folderPath: '/OurProject/Wings Stop Liwan/Wings Stop Liwan',
+        images: [
+          '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.47 PM.jpeg',
+          '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.48 PM (1).jpeg',
+          '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.48 PM.jpeg',
+          '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.49 PM (1).jpeg',
+        ],
+        firstImage: '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.47 PM.jpeg',
+      },
+      {
+        name: 'Wings Stop Assima Mall',
+        folderPath: '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall',
+        images: [
+          '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall/WhatsApp Image 2025-12-09 at 8.33.45 PM (1).jpeg',
+          '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall/WhatsApp Image 2025-12-09 at 8.33.46 PM.jpeg',
+        ],
+        firstImage: '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall/WhatsApp Image 2025-12-09 at 8.33.45 PM (1).jpeg',
+      },
+    ],
+    showrooms: [
+      {
+        name: 'Dar Al Saback',
+        folderPath: '/OurProject/Dar Al Saback/Dar Al Saback',
+        images: [
+          '/OurProject/Dar Al Saback/Dar Al Saback/WhatsApp Image 2025-12-09 at 8.30.23 PM (1).jpeg',
+          '/OurProject/Dar Al Saback/Dar Al Saback/WhatsApp Image 2025-12-09 at 8.30.23 PM.jpeg',
+        ],
+        firstImage: '/OurProject/Dar Al Saback/Dar Al Saback/WhatsApp Image 2025-12-09 at 8.30.23 PM (1).jpeg',
+      },
+      {
+        name: 'Beverly Hills',
+        folderPath: '/OurProject/Beverly Hills/Beverly Hills',
+        images: [
+          '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.44 PM.jpeg',
+          '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.45 PM (1).jpeg',
+          '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.45 PM.jpeg',
+        ],
+        firstImage: '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.44 PM.jpeg',
+      },
+      {
+        name: 'Audi Showroom',
+        folderPath: '/OurProject/Audi Showroom/Audi Showroom',
+        images: [
+          '/OurProject/Audi Showroom/Audi Showroom/WhatsApp Image 2025-08-23 at 19.37.39_bf3d8686.jpg',
+          '/OurProject/Audi Showroom/Audi Showroom/WhatsApp Image 2025-08-26 at 13.10.38_774bc71a.jpg',
+        ],
+        firstImage: '/OurProject/Audi Showroom/Audi Showroom/WhatsApp Image 2025-08-23 at 19.37.39_bf3d8686.jpg',
+      },
+      {
+        name: 'Inglot',
+        folderPath: '/OurProject/Inglot/Inglot',
+        images: [
+          '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.37 PM.jpeg',
+          '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.39 PM.jpeg',
+          '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.42 PM.jpeg',
+        ],
+        firstImage: '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.37 PM.jpeg',
+      },
+      {
+        name: 'Dune London',
+        folderPath: '/OurProject/Dune London/Dune London',
+        images: [
+          '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.46 PM.jpeg',
+          '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.47 PM (2).jpeg',
+          '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.47 PM.jpeg',
+        ],
+        firstImage: '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.46 PM.jpeg',
+      },
+    ],
+    banks: [
+      {
+        name: 'Warba Bank',
+        folderPath: '/OurProject/Warba Bank/Warba Bank',
+        images: [
+          '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.27 PM.jpeg',
+          '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.28 PM (1).jpeg',
+          '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.28 PM (2).jpeg',
+          '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.28 PM.jpeg',
+        ],
+        firstImage: '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.27 PM.jpeg',
+      },
+      {
+        name: 'HSBC',
+        folderPath: '/OurProject/HSBC/HSBC',
+        images: [
+          '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.24 PM (2).jpeg',
+          '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.25 PM (1).jpeg',
+          '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.25 PM.jpeg',
+        ],
+        firstImage: '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.24 PM (2).jpeg',
+      },
+    ],
+    offices: [
+      {
+        name: 'STC Office Assima Tower',
+        folderPath: '/OurProject/STC Office Assima Tower/STC Office Assima Tower',
+        images: [
+          '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.19.jpeg',
+          '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.20 (2).jpeg',
+          '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.24.jpeg',
+          '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.25 (4).jpeg',
+        ],
+        firstImage: '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.19.jpeg',
+      },
+      {
+        name: 'Zain Al Rai',
+        folderPath: '/OurProject/Zain Al Rai/Zain Al Rai',
+        images: [
+          '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.16 PM (2).jpeg',
+          '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.18 PM (1).jpeg',
+          '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.19 PM (1).jpeg',
+          '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.21 PM (1).jpeg',
+          '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.21 PM.jpeg',
+        ],
+        firstImage: '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.16 PM (2).jpeg',
+      },
+    ],
+  };
 
   return (
     <Box sx={{ flex: 1, minHeight: '100vh' }}>
@@ -377,16 +448,18 @@ export default function EgyptPage() {
                     variant="body1"
                     sx={{
                       fontSize: { 
-                        xs: '0.875rem', 
-                        sm: '1rem', 
-                        md: '1.125rem',
-                        lg: '1.25rem'
+                        xs: '1.5rem', 
+                        sm: '1.75rem', 
+                        md: '2rem',
+                        lg: '2.25rem',
+                        xl: '2.5rem'
                       },
                       color: '#ffffff',
-                      fontWeight: 500,
+                      fontWeight: 700,
                       fontFamily: 'var(--font-montserrat), var(--font-poppins), "Roboto", sans-serif',
-                      letterSpacing: { xs: '0.03em', sm: '0.05em', md: '0.08em' },
+                      letterSpacing: { xs: '0.05em', sm: '0.08em', md: '0.1em' },
                       textTransform: 'uppercase',
+                      textShadow: '0 2px 8px rgba(0,0,0,0.5), 0 0 20px rgba(0,0,0,0.3)',
                     }}
                   >
                     {t('aboutUs.egypt.countryName')}
@@ -500,8 +573,130 @@ export default function EgyptPage() {
               </Typography>
             </motion.div>
 
-            {/* Projects Gallery Component */}
-            <ProjectGallery projects={projects} />
+            {/* Gyms Section */}
+            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <Typography
+                  variant={isMobile ? 'h6' : 'h5'}
+                  sx={{
+                    fontWeight: 600,
+                    color: 'text.primary',
+                    mb: { xs: 3, sm: 4 },
+                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
+                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                    letterSpacing: { xs: '0.02em', md: '0.04em' },
+                  }}
+                >
+                  Gyms
+                </Typography>
+              </motion.div>
+              <ProjectGallery projects={projectCategories.gyms} />
+            </Box>
+
+            {/* Restaurants Section */}
+            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <Typography
+                  variant={isMobile ? 'h6' : 'h5'}
+                  sx={{
+                    fontWeight: 600,
+                    color: 'text.primary',
+                    mb: { xs: 3, sm: 4 },
+                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
+                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                    letterSpacing: { xs: '0.02em', md: '0.04em' },
+                  }}
+                >
+                  Restaurants
+                </Typography>
+              </motion.div>
+              <ProjectGallery projects={projectCategories.restaurants} />
+            </Box>
+
+            {/* Showrooms Section */}
+            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <Typography
+                  variant={isMobile ? 'h6' : 'h5'}
+                  sx={{
+                    fontWeight: 600,
+                    color: 'text.primary',
+                    mb: { xs: 3, sm: 4 },
+                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
+                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                    letterSpacing: { xs: '0.02em', md: '0.04em' },
+                  }}
+                >
+                  Showrooms
+                </Typography>
+              </motion.div>
+              <ProjectGallery projects={projectCategories.showrooms} />
+            </Box>
+
+            {/* Banks Section */}
+            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <Typography
+                  variant={isMobile ? 'h6' : 'h5'}
+                  sx={{
+                    fontWeight: 600,
+                    color: 'text.primary',
+                    mb: { xs: 3, sm: 4 },
+                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
+                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                    letterSpacing: { xs: '0.02em', md: '0.04em' },
+                  }}
+                >
+                  Banks
+                </Typography>
+              </motion.div>
+              <ProjectGallery projects={projectCategories.banks} />
+            </Box>
+
+            {/* Offices Section */}
+            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <Typography
+                  variant={isMobile ? 'h6' : 'h5'}
+                  sx={{
+                    fontWeight: 600,
+                    color: 'text.primary',
+                    mb: { xs: 3, sm: 4 },
+                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
+                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                    letterSpacing: { xs: '0.02em', md: '0.04em' },
+                  }}
+                >
+                  Offices
+                </Typography>
+              </motion.div>
+              <ProjectGallery projects={projectCategories.offices} />
+            </Box>
           </Container>
         </Box>
       </motion.div>
@@ -536,135 +731,108 @@ export default function EgyptPage() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{
-              duration: 0.6,
+              duration: 0.5,
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
           >
-            <Card
+            <Box
               sx={{
-                borderRadius: 3,
-                overflow: 'hidden',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                p: { xs: 3, sm: 4, md: 5 },
+                border: '1px solid',
+                borderColor: 'divider',
+                borderRadius: 2,
+                backgroundColor: 'background.paper',
+                transition: 'all 0.3s ease',
                 '&:hover': {
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-                  '& .showroom-image': {
-                    transform: 'scale(1.05)',
-                  },
+                  borderColor: 'primary.main',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
                 },
               }}
             >
-              <Grid container spacing={0}>
-                {/* Details Section */}
-                <Grid
-                  size={{ xs: 12, md: 12 }}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Box
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 600,
+                  color: 'text.primary',
+                  mb: 3,
+                  fontSize: { xs: '1.25rem', sm: '1.375rem', md: '1.5rem' },
+                  fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                }}
+              >
+                {t('countryContact.egypt.companyName')}
+              </Typography>
+              
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+                <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+                  <LocationOn
                     sx={{
-                      p: { xs: 2.5, sm: 3.5, md: 4, lg: 5 },
-                      width: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
+                      color: 'primary.main',
+                      fontSize: { xs: 22, sm: 24 },
+                      mt: 0.5,
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: 'text.primary',
+                      lineHeight: 1.7,
+                      fontSize: { xs: '1rem', sm: '1.0625rem', md: '1.125rem' },
+                      fontWeight: 400,
+                      fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
                     }}
                   >
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        fontWeight: 700,
-                        color: 'text.primary',
-                        mb: { xs: 1.5, sm: 2 },
-                        fontSize: { xs: '1.125rem', sm: '1.375rem', md: '1.5rem', lg: '1.75rem' },
-                        fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                      }}
-                    >
-                      {t('countryContact.egypt.companyName')}
-                    </Typography>
-                    <Box 
-                      sx={{ 
-                        display: 'flex', 
-                        alignItems: 'flex-start', 
-                        gap: { xs: 1.5, sm: 2 }, 
-                        mb: { xs: 2, sm: 2.5 },
-                        p: { xs: 2, sm: 2.5 },
-                        backgroundColor: 'primary.50',
-                        borderRadius: 2,
-                        borderLeft: '4px solid',
-                        borderColor: 'primary.main',
-                      }}
-                    >
-                      <LocationOn
-                        sx={{
-                          color: 'primary.main',
-                          fontSize: { xs: 24, sm: 28, md: 32 },
-                          mt: 0.5,
-                          flexShrink: 0,
-                        }}
-                      />
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          color: 'text.primary',
-                          lineHeight: 1.8,
-                          fontSize: { xs: '0.9375rem', sm: '1rem', md: '1.1rem' },
-                          fontWeight: 500,
-                        }}
-                      >
-                        {t('countryContact.egypt.address')}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1.25, sm: 1.5 } }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
-                        <Phone
-                          sx={{
-                            color: 'primary.main',
-                            fontSize: { xs: 18, sm: 20, md: 22 },
-                            flexShrink: 0,
-                          }}
-                        />
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            color: 'text.secondary',
-                            fontWeight: 500,
-                            fontSize: { xs: '0.875rem', sm: '0.9375rem', md: '1rem' },
-                          }}
-                        >
-                          {t('countryContact.egypt.phone')}
-                        </Typography>
-                      </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
-                        <Email
-                          sx={{
-                            color: 'primary.main',
-                            fontSize: { xs: 18, sm: 20, md: 22 },
-                            flexShrink: 0,
-                          }}
-                        />
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            color: 'text.secondary',
-                            fontWeight: 500,
-                            fontSize: { xs: '0.875rem', sm: '0.9375rem', md: '1rem' },
-                          }}
-                        >
-                          {t('countryContact.egypt.email')}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Box>
-                </Grid>
-              </Grid>
-            </Card>
+                    {t('countryContact.egypt.address')}
+                  </Typography>
+                </Box>
+                
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Phone
+                    sx={{
+                      color: 'primary.main',
+                      fontSize: { xs: 20, sm: 22 },
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: 'text.primary',
+                      fontWeight: 500,
+                      fontSize: { xs: '1rem', sm: '1.0625rem', md: '1.125rem' },
+                      fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                    }}
+                  >
+                    {t('countryContact.egypt.phone')}
+                  </Typography>
+                </Box>
+                
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Email
+                    sx={{
+                      color: 'primary.main',
+                      fontSize: { xs: 20, sm: 22 },
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: 'text.primary',
+                      fontWeight: 500,
+                      fontSize: { xs: '1rem', sm: '1.0625rem', md: '1.125rem' },
+                      fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                    }}
+                  >
+                    {t('countryContact.egypt.email')}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
           </motion.div>
         </Container>
       </Box>

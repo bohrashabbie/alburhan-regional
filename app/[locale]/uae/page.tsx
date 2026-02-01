@@ -58,6 +58,69 @@ export default function UAEPage() {
 
   // Projects data from OurProject folder
   const Projects = {
+    gyms: [
+      {
+        name: 'Oxygen Gym Jahra',
+        folderPath: '/OurProject/Oxygen Gym Jahra',
+        images: [
+          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0005.jpg',
+          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0008.jpg',
+          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0011.jpg',
+          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0012.jpg',
+        ],
+        firstImage: '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0005.jpg',
+      },
+      {
+        name: 'Oxygen Gym KSA',
+        folderPath: '/OurProject/Oxygen Gym KSA',
+        images: [
+          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
+          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.11 PM..jpeg',
+          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.11 PM.jpeg',
+          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.35 PM..jpeg',
+        ],
+        firstImage: '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
+      },
+      {
+        name: 'Oxygen Gym Mahboula',
+        folderPath: '/OurProject/Oxygen Gym Mahboula',
+        images: [
+          '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2025-12-09 at 8.32.33 PM.jpeg',
+          '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2025-12-09 at 8.33.30 PM.jpeg',
+          '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2026-01-02 at 3.38.27 PM (1).jpeg',
+        ],
+        firstImage: '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2025-12-09 at 8.32.33 PM.jpeg',
+      },
+      {
+        name: 'Oxygen Gym UAE',
+        folderPath: '/OurProject/Oxygen Gym U.A.E',
+        images: [
+          '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.33.39 PM.jpeg',
+          '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.33.43 PM.jpeg',
+          '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.40.01 PM.jpeg',
+        ],
+        firstImage: '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.33.39 PM.jpeg',
+      },
+      {
+        name: 'Peak Gym Qurain',
+        folderPath: '/OurProject/Peak Gym Qurain',
+        images: [
+          '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.13 PM (1).jpeg',
+          '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.13 PM.jpeg',
+          '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.14 PM (1).jpeg',
+        ],
+        firstImage: '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.13 PM (1).jpeg',
+      },
+      {
+        name: 'Plage Gym',
+        folderPath: '/OurProject/Plage Gym',
+        images: [
+          '/OurProject/Plage Gym/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
+          '/OurProject/Plage Gym/WhatsApp Image 2026-01-02 at 3.38.09 PM..jpeg',
+        ],
+        firstImage: '/OurProject/Plage Gym/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
+      },
+    ],
     restaurants: [
       {
         name: 'Nandos Al Kout Mall',
@@ -414,16 +477,18 @@ export default function UAEPage() {
                     variant="body1"
                     sx={{
                       fontSize: { 
-                        xs: '0.875rem', 
-                        sm: '1rem', 
-                        md: '1.125rem',
-                        lg: '1.25rem'
+                        xs: '1.5rem', 
+                        sm: '1.75rem', 
+                        md: '2rem',
+                        lg: '2.25rem',
+                        xl: '2.5rem'
                       },
                       color: '#ffffff',
-                      fontWeight: 500,
+                      fontWeight: 700,
                       fontFamily: 'var(--font-montserrat), var(--font-poppins), "Roboto", sans-serif',
-                      letterSpacing: { xs: '0.03em', sm: '0.05em', md: '0.08em' },
+                      letterSpacing: { xs: '0.05em', sm: '0.08em', md: '0.1em' },
                       textTransform: 'uppercase',
+                      textShadow: '0 2px 8px rgba(0,0,0,0.5), 0 0 20px rgba(0,0,0,0.3)',
                     }}
                   >
                     {t('aboutUs.dubai.countryName')}
@@ -567,8 +632,33 @@ export default function UAEPage() {
               </Typography>
             </motion.div>
 
-             {/* Restaurants Section */}
-             <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+            {/* Gyms Section */}
+            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <Typography
+                  variant={isMobile ? 'h6' : 'h5'}
+                  sx={{
+                    fontWeight: 600,
+                    color: 'text.primary',
+                    mb: { xs: 3, sm: 4 },
+                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
+                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                    letterSpacing: { xs: '0.02em', md: '0.04em' },
+                  }}
+                >
+                  Gyms
+                </Typography>
+              </motion.div>
+              <ProjectGallery projects={Projects.gyms} />
+            </Box>
+
+            {/* Restaurants Section */}
+            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -700,139 +790,113 @@ export default function UAEPage() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{
-              duration: 0.6,
+              duration: 0.5,
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
           >
-            <Card
+            <Box
               sx={{
-                borderRadius: 3,
-                overflow: 'hidden',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                p: { xs: 3, sm: 4, md: 5 },
+                border: '1px solid',
+                borderColor: 'divider',
+                borderRadius: 2,
+                backgroundColor: 'background.paper',
+                transition: 'all 0.3s ease',
                 '&:hover': {
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-                  '& .showroom-image': {
-                    transform: 'scale(1.05)',
-                  },
+                  borderColor: 'primary.main',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
                 },
               }}
             >
-              <Grid container spacing={0}>
-                {/* Details Section */}
-                <Grid
-                  size={{ xs: 12, md: 12 }}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Box
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 600,
+                  color: 'text.primary',
+                  mb: 3,
+                  fontSize: { xs: '1.25rem', sm: '1.375rem', md: '1.5rem' },
+                  fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                }}
+              >
+                {t('countryContact.dubai.companyName')}
+              </Typography>
+              
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+                <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+                  <LocationOn
                     sx={{
-                      p: { xs: 2.5, sm: 3.5, md: 4, lg: 5 },
-                      width: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
+                      color: 'primary.main',
+                      fontSize: { xs: 22, sm: 24 },
+                      mt: 0.5,
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: 'text.primary',
+                      lineHeight: 1.7,
+                      fontSize: { xs: '1rem', sm: '1.0625rem', md: '1.125rem' },
+                      fontWeight: 400,
+                      fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
                     }}
                   >
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        fontWeight: 700,
-                        color: 'text.primary',
-                        mb: { xs: 1.5, sm: 2 },
-                        fontSize: { xs: '1.125rem', sm: '1.375rem', md: '1.5rem', lg: '1.75rem' },
-                        fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                      }}
-                    >
-                      {t('countryContact.dubai.companyName')}
-                    </Typography>
-                    <Box 
-                      sx={{ 
-                        display: 'flex', 
-                        alignItems: 'flex-start', 
-                        gap: { xs: 1.5, sm: 2 }, 
-                        mb: { xs: 2, sm: 2.5 },
-                        p: { xs: 2, sm: 2.5 },
-                        backgroundColor: 'primary.50',
-                        borderRadius: 2,
-                        borderLeft: '4px solid',
-                        borderColor: 'primary.main',
-                      }}
-                    >
-                      <LocationOn
-                        sx={{
-                          color: 'primary.main',
-                          fontSize: { xs: 24, sm: 28, md: 32 },
-                          mt: 0.5,
-                          flexShrink: 0,
-                        }}
-                      />
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          color: 'text.primary',
-                          lineHeight: 1.8,
-                          fontSize: { xs: '0.9375rem', sm: '1rem', md: '1.1rem' },
-                          fontWeight: 500,
-                        }}
-                      >
-                        {t('countryContact.dubai.office')}<br />
-                        {t('countryContact.dubai.floor')}<br />
-                        {t('countryContact.dubai.area')}<br />
-                        {t('countryContact.dubai.city')}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1.25, sm: 1.5 } }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
-                        <Phone
-                          sx={{
-                            color: 'primary.main',
-                            fontSize: { xs: 18, sm: 20, md: 22 },
-                            flexShrink: 0,
-                          }}
-                        />
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            color: 'text.secondary',
-                            fontWeight: 500,
-                            fontSize: { xs: '0.875rem', sm: '0.9375rem', md: '1rem' },
-                          }}
-                        >
-                          {t('countryContact.dubai.phone1')}<br />
-                          {t('countryContact.dubai.phone2')}
-                        </Typography>
-                      </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
-                        <Email
-                          sx={{
-                            color: 'primary.main',
-                            fontSize: { xs: 18, sm: 20, md: 22 },
-                            flexShrink: 0,
-                          }}
-                        />
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            color: 'text.secondary',
-                            fontWeight: 500,
-                            fontSize: { xs: '0.875rem', sm: '0.9375rem', md: '1rem' },
-                          }}
-                        >
-                          {t('countryContact.dubai.email')}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Box>
-                </Grid>
-              </Grid>
-            </Card>
+                    {t('countryContact.dubai.office')}<br />
+                    {t('countryContact.dubai.floor')}<br />
+                    {t('countryContact.dubai.area')}<br />
+                    {t('countryContact.dubai.city')}
+                  </Typography>
+                </Box>
+                
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Phone
+                    sx={{
+                      color: 'primary.main',
+                      fontSize: { xs: 20, sm: 22 },
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: 'text.primary',
+                      fontWeight: 500,
+                      fontSize: { xs: '1rem', sm: '1.0625rem', md: '1.125rem' },
+                      fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                      lineHeight: 1.7,
+                    }}
+                  >
+                    {t('countryContact.dubai.phone1')}<br />
+                    {t('countryContact.dubai.phone2')}
+                  </Typography>
+                </Box>
+                
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Email
+                    sx={{
+                      color: 'primary.main',
+                      fontSize: { xs: 20, sm: 22 },
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: 'text.primary',
+                      fontWeight: 500,
+                      fontSize: { xs: '1rem', sm: '1.0625rem', md: '1.125rem' },
+                      fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                    }}
+                  >
+                    {t('countryContact.dubai.email')}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
           </motion.div>
         </Container>
       </Box>
