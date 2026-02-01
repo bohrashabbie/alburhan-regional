@@ -68,6 +68,7 @@ const SpotlightAnimation: React.FC<SpotlightAnimationProps> = ({ onAnimationComp
       subtitle: t('carousel.slide6.subtitle'),
       description: t('carousel.slide6.description'),
     },
+    
     {
       image: '/Projects/alburhan7.jpg',
       title: t('carousel.slide7.title'),
