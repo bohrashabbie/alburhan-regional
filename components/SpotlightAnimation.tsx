@@ -68,7 +68,6 @@ const SpotlightAnimation: React.FC<SpotlightAnimationProps> = ({ onAnimationComp
       subtitle: t('carousel.slide6.subtitle'),
       description: t('carousel.slide6.description'),
     },
-    
     {
       image: '/Projects/alburhan7.jpg',
       title: t('carousel.slide7.title'),
@@ -77,12 +76,12 @@ const SpotlightAnimation: React.FC<SpotlightAnimationProps> = ({ onAnimationComp
     },
   ];
 
-  // Auto-advance slides every 50 seconds
+  // Auto-advance slides every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setDirection(1);
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 40000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [slides.length]);

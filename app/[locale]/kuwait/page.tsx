@@ -66,6 +66,69 @@ export default function KuwaitPage() {
 
   // Projects data organized by categories
   const projectCategories = {
+    gyms: [
+      {
+        name: 'Oxygen Gym Jahra',
+        folderPath: '/OurProject/Oxygen Gym Jahra',
+        images: [
+          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0005.jpg',
+          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0008.jpg',
+          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0011.jpg',
+          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0012.jpg',
+        ],
+        firstImage: '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0005.jpg',
+      },
+      {
+        name: 'Oxygen Gym KSA',
+        folderPath: '/OurProject/Oxygen Gym KSA',
+        images: [
+          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
+          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.11 PM..jpeg',
+          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.11 PM.jpeg',
+          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.35 PM..jpeg',
+        ],
+        firstImage: '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
+      },
+      {
+        name: 'Oxygen Gym Mahboula',
+        folderPath: '/OurProject/Oxygen Gym Mahboula',
+        images: [
+          '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2025-12-09 at 8.32.33 PM.jpeg',
+          '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2025-12-09 at 8.33.30 PM.jpeg',
+          '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2026-01-02 at 3.38.27 PM (1).jpeg',
+        ],
+        firstImage: '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2025-12-09 at 8.32.33 PM.jpeg',
+      },
+      {
+        name: 'Oxygen Gym UAE',
+        folderPath: '/OurProject/Oxygen Gym U.A.E',
+        images: [
+          '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.33.39 PM.jpeg',
+          '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.33.43 PM.jpeg',
+          '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.40.01 PM.jpeg',
+        ],
+        firstImage: '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.33.39 PM.jpeg',
+      },
+      {
+        name: 'Peak Gym Qurain',
+        folderPath: '/OurProject/Peak Gym Qurain',
+        images: [
+          '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.13 PM (1).jpeg',
+          '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.13 PM.jpeg',
+          '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.14 PM (1).jpeg',
+        ],
+        firstImage: '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.13 PM (1).jpeg',
+      },
+      {
+        name: 'Plage Gym',
+        folderPath: '/OurProject/Plage Gym',
+        images: [
+          '/OurProject/Plage Gym/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
+          '/OurProject/Plage Gym/WhatsApp Image 2026-01-02 at 3.38.09 PM..jpeg',
+        ],
+        firstImage: '/OurProject/Plage Gym/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
+      },
+    ],
     restaurants: [
       {
         name: 'Nandos Al Kout Mall',
@@ -423,16 +486,18 @@ export default function KuwaitPage() {
                     variant="body1"
                     sx={{
                       fontSize: { 
-                        xs: '0.875rem', 
-                        sm: '1rem', 
-                        md: '1.125rem',
-                        lg: '1.25rem'
+                        xs: '1.5rem', 
+                        sm: '1.75rem', 
+                        md: '2rem',
+                        lg: '2.25rem',
+                        xl: '2.5rem'
                       },
                       color: '#ffffff',
-                      fontWeight: 500,
+                      fontWeight: 700,
                       fontFamily: 'var(--font-montserrat), var(--font-poppins), "Roboto", sans-serif',
-                      letterSpacing: { xs: '0.03em', sm: '0.05em', md: '0.08em' },
+                      letterSpacing: { xs: '0.05em', sm: '0.08em', md: '0.1em' },
                       textTransform: 'uppercase',
+                      textShadow: '0 2px 8px rgba(0,0,0,0.5), 0 0 20px rgba(0,0,0,0.3)',
                     }}
                   >
                     {t('aboutUs.kuwait.countryName')}
@@ -575,6 +640,30 @@ export default function KuwaitPage() {
                 {t('sections.ourProjects')}
               </Typography>
             </motion.div>
+            {/* Gyms Section */}
+            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <Typography
+                  variant={isMobile ? 'h6' : 'h5'}
+                  sx={{
+                    fontWeight: 600,
+                    color: 'text.primary',
+                    mb: { xs: 3, sm: 4 },
+                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
+                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                    letterSpacing: { xs: '0.02em', md: '0.04em' },
+                  }}
+                >
+                  Gyms
+                </Typography>
+              </motion.div>
+              <ProjectGallery projects={projectCategories.gyms} />
+            </Box>
 
             {/* Restaurants Section */}
             <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
@@ -783,8 +872,44 @@ export default function KuwaitPage() {
                             <LocationOn
                               sx={{
                                 color: 'primary.main',
-                                fontSize: { xs: 24, sm: 28, md: 32 },
+                                fontSize: { xs: 28, sm: 32, md: 36, lg: 40 },
                                 mt: 0.5,
+                                flexShrink: 0,
+                              }}
+                            />
+                            <Box sx={{ flex: 1 }}>
+                              <Typography
+                                variant="body1"
+                                sx={{
+                                  color: 'text.primary',
+                                  lineHeight: 1.9,
+                                  fontSize: { xs: '1.125rem', sm: '1.25rem', md: '1.375rem', lg: '1.5rem' },
+                                  fontWeight: 600,
+                                  fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                                  whiteSpace: 'pre-line',
+                                }}
+                              >
+                                {t(`countryContact.kuwait.${branch.key}.address`)}
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Box 
+                            sx={{ 
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              gap: { xs: 1.5, sm: 2 },
+                              mt: { xs: 1.5, sm: 2 },
+                              p: { xs: 1.5, sm: 2 },
+                              backgroundColor: 'background.paper',
+                              borderRadius: 2,
+                              border: '1px solid',
+                              borderColor: 'divider',
+                            }}
+                          >
+                            <Phone
+                              sx={{
+                                color: 'primary.main',
+                                fontSize: { xs: 24, sm: 26, md: 28 },
                                 flexShrink: 0,
                               }}
                             />
@@ -792,28 +917,10 @@ export default function KuwaitPage() {
                               variant="body1"
                               sx={{
                                 color: 'text.primary',
-                                lineHeight: 1.8,
-                                fontSize: { xs: '0.9375rem', sm: '1rem', md: '1.1rem' },
-                                fontWeight: 500,
-                              }}
-                            >
-                              {t(`countryContact.kuwait.${branch.key}.address`)}
-                            </Typography>
-                          </Box>
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
-                            <Phone
-                              sx={{
-                                color: 'primary.main',
-                                fontSize: { xs: 18, sm: 20, md: 22 },
-                                flexShrink: 0,
-                              }}
-                            />
-                            <Typography
-                              variant="body1"
-                              sx={{
-                                color: 'text.secondary',
-                                fontWeight: 500,
-                                fontSize: { xs: '0.875rem', sm: '0.9375rem', md: '1rem' },
+                                fontWeight: 600,
+                                fontSize: { xs: '1.125rem', sm: '1.25rem', md: '1.375rem', lg: '1.5rem' },
+                                fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                                letterSpacing: '0.02em',
                               }}
                             >
                               {t(`countryContact.kuwait.${branch.key}.phone`)}

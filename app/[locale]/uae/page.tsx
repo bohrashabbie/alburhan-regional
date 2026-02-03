@@ -790,113 +790,173 @@ export default function UAEPage() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{
-              duration: 0.5,
+              duration: 0.6,
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
           >
-            <Box
+            <Card
               sx={{
-                p: { xs: 3, sm: 4, md: 5 },
-                border: '1px solid',
-                borderColor: 'divider',
-                borderRadius: 2,
-                backgroundColor: 'background.paper',
-                transition: 'all 0.3s ease',
+                borderRadius: 3,
+                overflow: 'hidden',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 '&:hover': {
-                  borderColor: 'primary.main',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+                  '& .showroom-image': {
+                    transform: 'scale(1.05)',
+                  },
                 },
               }}
             >
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: 600,
-                  color: 'text.primary',
-                  mb: 3,
-                  fontSize: { xs: '1.25rem', sm: '1.375rem', md: '1.5rem' },
-                  fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                }}
-              >
-                {t('countryContact.dubai.companyName')}
-              </Typography>
-              
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-                <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
-                  <LocationOn
+              <Grid container spacing={0}>
+                {/* Details Section */}
+                <Grid
+                  size={{ xs: 12, md: 12 }}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Box
                     sx={{
-                      color: 'primary.main',
-                      fontSize: { xs: 22, sm: 24 },
-                      mt: 0.5,
-                      flexShrink: 0,
-                    }}
-                  />
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: 'text.primary',
-                      lineHeight: 1.7,
-                      fontSize: { xs: '1rem', sm: '1.0625rem', md: '1.125rem' },
-                      fontWeight: 400,
-                      fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                      p: { xs: 2.5, sm: 3.5, md: 4, lg: 5 },
+                      width: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
                     }}
                   >
-                    {t('countryContact.dubai.office')}<br />
-                    {t('countryContact.dubai.floor')}<br />
-                    {t('countryContact.dubai.area')}<br />
-                    {t('countryContact.dubai.city')}
-                  </Typography>
-                </Box>
-                
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Phone
-                    sx={{
-                      color: 'primary.main',
-                      fontSize: { xs: 20, sm: 22 },
-                      flexShrink: 0,
-                    }}
-                  />
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: 'text.primary',
-                      fontWeight: 500,
-                      fontSize: { xs: '1rem', sm: '1.0625rem', md: '1.125rem' },
-                      fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                      lineHeight: 1.7,
-                    }}
-                  >
-                    {t('countryContact.dubai.phone1')}<br />
-                    {t('countryContact.dubai.phone2')}
-                  </Typography>
-                </Box>
-                
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Email
-                    sx={{
-                      color: 'primary.main',
-                      fontSize: { xs: 20, sm: 22 },
-                      flexShrink: 0,
-                    }}
-                  />
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: 'text.primary',
-                      fontWeight: 500,
-                      fontSize: { xs: '1rem', sm: '1.0625rem', md: '1.125rem' },
-                      fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                    }}
-                  >
-                    {t('countryContact.dubai.email')}
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        fontWeight: 700,
+                        color: 'text.primary',
+                        mb: { xs: 1.5, sm: 2 },
+                        fontSize: { xs: '1.125rem', sm: '1.375rem', md: '1.5rem', lg: '1.75rem' },
+                        fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                      }}
+                    >
+                      {t('countryContact.dubai.companyName')}
+                    </Typography>
+                    <Box 
+                      sx={{ 
+                        display: 'flex', 
+                        alignItems: 'flex-start', 
+                        gap: { xs: 1.5, sm: 2 }, 
+                        mb: { xs: 2, sm: 2.5 },
+                        p: { xs: 2, sm: 2.5 },
+                        backgroundColor: 'primary.50',
+                        borderRadius: 2,
+                        borderLeft: '4px solid',
+                        borderColor: 'primary.main',
+                      }}
+                    >
+                      <LocationOn
+                        sx={{
+                          color: 'primary.main',
+                          fontSize: { xs: 28, sm: 32, md: 36, lg: 40 },
+                          mt: 0.5,
+                          flexShrink: 0,
+                        }}
+                      />
+                      <Box sx={{ flex: 1 }}>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            color: 'text.primary',
+                            lineHeight: 1.9,
+                            fontSize: { xs: '1.125rem', sm: '1.25rem', md: '1.375rem', lg: '1.5rem' },
+                            fontWeight: 600,
+                            fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                            whiteSpace: 'pre-line',
+                          }}
+                        >
+                          {t('countryContact.dubai.office')}<br />
+                          {t('countryContact.dubai.floor')}<br />
+                          {t('countryContact.dubai.area')}<br />
+                          {t('countryContact.dubai.city')}
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1.5, sm: 2 } }}>
+                      <Box 
+                        sx={{ 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          gap: { xs: 1.5, sm: 2 },
+                          p: { xs: 1.5, sm: 2 },
+                          backgroundColor: 'background.paper',
+                          borderRadius: 2,
+                          border: '1px solid',
+                          borderColor: 'divider',
+                        }}
+                      >
+                        <Phone
+                          sx={{
+                            color: 'primary.main',
+                            fontSize: { xs: 24, sm: 26, md: 28 },
+                            flexShrink: 0,
+                          }}
+                        />
+                        <Box>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              color: 'text.primary',
+                              fontWeight: 600,
+                              fontSize: { xs: '1.125rem', sm: '1.25rem', md: '1.375rem', lg: '1.5rem' },
+                              fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                              letterSpacing: '0.02em',
+                              lineHeight: 1.8,
+                              whiteSpace: 'pre-line',
+                            }}
+                          >
+                            {t('countryContact.dubai.phone1')}<br />
+                            {t('countryContact.dubai.phone2')}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      <Box 
+                        sx={{ 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          gap: { xs: 1.5, sm: 2 },
+                          p: { xs: 1.5, sm: 2 },
+                          backgroundColor: 'background.paper',
+                          borderRadius: 2,
+                          border: '1px solid',
+                          borderColor: 'divider',
+                        }}
+                      >
+                        <Email
+                          sx={{
+                            color: 'primary.main',
+                            fontSize: { xs: 24, sm: 26, md: 28 },
+                            flexShrink: 0,
+                          }}
+                        />
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            color: 'text.primary',
+                            fontWeight: 600,
+                            fontSize: { xs: '1.125rem', sm: '1.25rem', md: '1.375rem', lg: '1.5rem' },
+                            fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                            letterSpacing: '0.02em',
+                          }}
+                        >
+                          {t('countryContact.dubai.email')}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Card>
           </motion.div>
         </Container>
       </Box>
