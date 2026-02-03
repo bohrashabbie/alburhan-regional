@@ -657,7 +657,7 @@ export default function UAEPage() {
               <ProjectGallery projects={Projects.gyms} />
             </Box>
 
-            {/* Restaurants Section */}
+            {/* Office Section */}
             <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
@@ -676,10 +676,10 @@ export default function UAEPage() {
                     letterSpacing: { xs: '0.02em', md: '0.04em' },
                   }}
                 >
-                  Restaurants
+                  Office
                 </Typography>
               </motion.div>
-              <ProjectGallery projects={Projects.restaurants} />
+              <ProjectGallery projects={Projects.offices} />
             </Box>
 
             {/* Showrooms Section */}
@@ -707,6 +707,31 @@ export default function UAEPage() {
               <ProjectGallery projects={Projects.showrooms} />
             </Box>
 
+            {/* Restaurant Section */}
+            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <Typography
+                  variant={isMobile ? 'h6' : 'h5'}
+                  sx={{
+                    fontWeight: 600,
+                    color: 'text.primary',
+                    mb: { xs: 3, sm: 4 },
+                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
+                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                    letterSpacing: { xs: '0.02em', md: '0.04em' },
+                  }}
+                >
+                  Restaurant
+                </Typography>
+              </motion.div>
+              <ProjectGallery projects={Projects.restaurants} />
+            </Box>
+
             {/* Banks Section */}
             <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
               <motion.div
@@ -731,231 +756,83 @@ export default function UAEPage() {
               </motion.div>
               <ProjectGallery projects={Projects.banks} />
             </Box>
-
-            {/* Offices Section */}
-            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                <Typography
-                  variant={isMobile ? 'h6' : 'h5'}
-                  sx={{
-                    fontWeight: 600,
-                    color: 'text.primary',
-                    mb: { xs: 3, sm: 4 },
-                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
-                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                    letterSpacing: { xs: '0.02em', md: '0.04em' },
-                  }}
-                >
-                  Offices
-                </Typography>
-              </motion.div>
-              <ProjectGallery projects={Projects.offices} />
-            </Box>
           </Container>
         </Box>
       </motion.div>
 
-      {/* Showrooms Section */}
-      <Box sx={{ py: { xs: 6, md: 8, lg: 10 }, backgroundColor: 'background.paper' }}>
+      {/* Our Location Section */}
+      <Box sx={{ py: { xs: 4, md: 5 }, backgroundColor: 'grey.50', position: 'relative' }}>
         <Container maxWidth="lg">
-          <motion.div
-            initial={{ opacity: 0, y: -30, scale: 0.95 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.8,
-              ease: [0.34, 1.56, 0.64, 1],
-            }}
-          >
-            <Typography
-              variant={isMobile ? 'h5' : 'h4'}
-              sx={{
-                fontWeight: 600,
-                color: 'text.primary',
-                textAlign: 'center',
-                mb: { xs: 3, md: 4 },
-                fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem', lg: '2.25rem', xl: '2.5rem' },
-                fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                letterSpacing: { xs: '0.02em', md: '0.04em' },
-                lineHeight: 1.4,
-              }}
-            >
-              {t('contact.ourLocation')}
-            </Typography>
+          <motion.div initial={{ opacity: 0, y: -16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}>
+            <Box sx={{ textAlign: 'center', mb: 3 }}>
+              <Typography sx={{ fontWeight: 700, color: 'primary.main', fontSize: '1.35rem', fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', letterSpacing: '0.04em' }}>
+                {t('contact.ourLocation')}
+              </Typography>
+              <Box sx={{ width: 48, height: 2, borderRadius: 1, backgroundColor: 'primary.main', mx: 'auto', mt: 1.25, opacity: 0.85 }} />
+            </Box>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.6,
-              ease: [0.25, 0.46, 0.45, 0.94],
-            }}
-          >
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}>
             <Card
+              elevation={0}
               sx={{
-                borderRadius: 3,
-                overflow: 'hidden',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                '&:hover': {
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-                  '& .showroom-image': {
-                    transform: 'scale(1.05)',
-                  },
-                },
+                maxWidth: 720,
+                mx: 'auto',
+                borderRadius: 2,
+                border: '1px solid',
+                borderColor: 'divider',
+                boxShadow: 'none',
+                overflow: 'visible',
+                transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
+                '&:hover': { boxShadow: '0 4px 20px rgba(0,0,0,0.06)', borderColor: 'primary.light' },
               }}
             >
-              <Grid container spacing={0}>
-                {/* Details Section */}
-                <Grid
-                  size={{ xs: 12, md: 12 }}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Box
-                    sx={{
-                      p: { xs: 2.5, sm: 3.5, md: 4, lg: 5 },
-                      width: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        fontWeight: 700,
-                        color: 'text.primary',
-                        mb: { xs: 1.5, sm: 2 },
-                        fontSize: { xs: '1.125rem', sm: '1.375rem', md: '1.5rem', lg: '1.75rem' },
-                        fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                      }}
-                    >
+              <Box sx={{ p: 2.5, display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: { xs: 2, md: 3 } }}>
+                <Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mb: 1.5 }}>
+                    <Box sx={{ width: 36, height: 36, borderRadius: '10px', backgroundColor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <LocationOn sx={{ color: 'white', fontSize: 20 }} />
+                    </Box>
+                    <Typography sx={{ fontWeight: 700, color: 'text.primary', fontSize: '1.05rem', fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', letterSpacing: '0.02em' }}>
                       {t('countryContact.dubai.companyName')}
                     </Typography>
-                    <Box 
-                      sx={{ 
-                        display: 'flex', 
-                        alignItems: 'flex-start', 
-                        gap: { xs: 1.5, sm: 2 }, 
-                        mb: { xs: 2, sm: 2.5 },
-                        p: { xs: 2, sm: 2.5 },
-                        backgroundColor: 'primary.50',
-                        borderRadius: 2,
-                        borderLeft: '4px solid',
-                        borderColor: 'primary.main',
-                      }}
-                    >
-                      <LocationOn
-                        sx={{
-                          color: 'primary.main',
-                          fontSize: { xs: 28, sm: 32, md: 36, lg: 40 },
-                          mt: 0.5,
-                          flexShrink: 0,
-                        }}
-                      />
-                      <Box sx={{ flex: 1 }}>
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            color: 'text.primary',
-                            lineHeight: 1.9,
-                            fontSize: { xs: '1.125rem', sm: '1.25rem', md: '1.375rem', lg: '1.5rem' },
-                            fontWeight: 600,
-                            fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                            whiteSpace: 'pre-line',
-                          }}
-                        >
-                          {t('countryContact.dubai.office')}<br />
-                          {t('countryContact.dubai.floor')}<br />
-                          {t('countryContact.dubai.area')}<br />
-                          {t('countryContact.dubai.city')}
-                        </Typography>
-                      </Box>
-                    </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1.5, sm: 2 } }}>
-                      <Box 
-                        sx={{ 
-                          display: 'flex', 
-                          alignItems: 'center', 
-                          gap: { xs: 1.5, sm: 2 },
-                          p: { xs: 1.5, sm: 2 },
-                          backgroundColor: 'background.paper',
-                          borderRadius: 2,
-                          border: '1px solid',
-                          borderColor: 'divider',
-                        }}
-                      >
-                        <Phone
-                          sx={{
-                            color: 'primary.main',
-                            fontSize: { xs: 24, sm: 26, md: 28 },
-                            flexShrink: 0,
-                          }}
-                        />
-                        <Box>
-                          <Typography
-                            variant="body1"
-                            sx={{
-                              color: 'text.primary',
-                              fontWeight: 600,
-                              fontSize: { xs: '1.125rem', sm: '1.25rem', md: '1.375rem', lg: '1.5rem' },
-                              fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                              letterSpacing: '0.02em',
-                              lineHeight: 1.8,
-                              whiteSpace: 'pre-line',
-                            }}
-                          >
-                            {t('countryContact.dubai.phone1')}<br />
-                            {t('countryContact.dubai.phone2')}
-                          </Typography>
-                        </Box>
-                      </Box>
-                      <Box 
-                        sx={{ 
-                          display: 'flex', 
-                          alignItems: 'center', 
-                          gap: { xs: 1.5, sm: 2 },
-                          p: { xs: 1.5, sm: 2 },
-                          backgroundColor: 'background.paper',
-                          borderRadius: 2,
-                          border: '1px solid',
-                          borderColor: 'divider',
-                        }}
-                      >
-                        <Email
-                          sx={{
-                            color: 'primary.main',
-                            fontSize: { xs: 24, sm: 26, md: 28 },
-                            flexShrink: 0,
-                          }}
-                        />
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            color: 'text.primary',
-                            fontWeight: 600,
-                            fontSize: { xs: '1.125rem', sm: '1.25rem', md: '1.375rem', lg: '1.5rem' },
-                            fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                            letterSpacing: '0.02em',
-                          }}
-                        >
-                          {t('countryContact.dubai.email')}
-                        </Typography>
-                      </Box>
+                  </Box>
+                  <Typography sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.08em', mb: 0.5 }}>
+                    {t('contact.address')}
+                  </Typography>
+                  <Typography sx={{ color: 'text.primary', lineHeight: 1.65, fontSize: '0.9375rem', fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', whiteSpace: 'pre-line' }}>
+                    {t('countryContact.dubai.office')}<br />
+                    {t('countryContact.dubai.floor')}<br />
+                    {t('countryContact.dubai.area')}<br />
+                    {t('countryContact.dubai.city')}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, pt: { xs: 1.5, md: 0 }, borderTop: { xs: '1px solid', md: 'none' }, borderLeft: { md: '1px solid' }, borderColor: 'divider', pl: { md: 3 } }}>
+                  <Box>
+                    <Typography sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.08em', mb: 0.5 }}>
+                      {t('contact.phoneNumbers')}
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, flexWrap: 'wrap' }}>
+                      <Phone sx={{ color: 'primary.main', fontSize: 18 }} />
+                      <Typography sx={{ color: 'text.primary', fontWeight: 500, fontSize: '0.9375rem', fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', whiteSpace: 'pre-line' }}>
+                        {t('countryContact.dubai.phone1')}<br />
+                        {t('countryContact.dubai.phone2')}
+                      </Typography>
                     </Box>
                   </Box>
-                </Grid>
-              </Grid>
+                  <Box>
+                    <Typography sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.08em', mb: 0.5 }}>
+                      {t('contact.email')}
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                      <Email sx={{ color: 'primary.main', fontSize: 18 }} />
+                      <Typography sx={{ color: 'text.primary', fontWeight: 500, fontSize: '0.9375rem', fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif' }}>
+                        {t('countryContact.dubai.email')}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
             </Card>
           </motion.div>
         </Container>

@@ -665,7 +665,7 @@ export default function KuwaitPage() {
               <ProjectGallery projects={projectCategories.gyms} />
             </Box>
 
-            {/* Restaurants Section */}
+            {/* office Section */}
             <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
@@ -684,10 +684,10 @@ export default function KuwaitPage() {
                     letterSpacing: { xs: '0.02em', md: '0.04em' },
                   }}
                 >
-                  Restaurants
+                  Office
                 </Typography>
               </motion.div>
-              <ProjectGallery projects={projectCategories.restaurants} />
+              <ProjectGallery projects={projectCategories.offices} />
             </Box>
 
             {/* Showrooms Section */}
@@ -715,6 +715,31 @@ export default function KuwaitPage() {
               <ProjectGallery projects={projectCategories.showrooms} />
             </Box>
 
+            {/* Restaurant Section */}
+            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <Typography
+                  variant={isMobile ? 'h6' : 'h5'}
+                  sx={{
+                    fontWeight: 600,
+                    color: 'text.primary',
+                    mb: { xs: 3, sm: 4 },
+                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
+                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                    letterSpacing: { xs: '0.02em', md: '0.04em' },
+                  }}
+                >
+                  Restaurant
+                </Typography>
+              </motion.div>
+              <ProjectGallery projects={projectCategories.restaurants} />
+            </Box>
+
             {/* Banks Section */}
             <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
               <motion.div
@@ -739,200 +764,84 @@ export default function KuwaitPage() {
               </motion.div>
               <ProjectGallery projects={projectCategories.banks} />
             </Box>
-
-            {/* Offices Section */}
-            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                <Typography
-                  variant={isMobile ? 'h6' : 'h5'}
-                  sx={{
-                    fontWeight: 600,
-                    color: 'text.primary',
-                    mb: { xs: 3, sm: 4 },
-                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
-                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                    letterSpacing: { xs: '0.02em', md: '0.04em' },
-                  }}
-                >
-                  Offices
-                </Typography>
-              </motion.div>
-              <ProjectGallery projects={projectCategories.offices} />
-            </Box>
           </Container>
         </Box>
       </motion.div>
 
-      {/* Showrooms Section */}
-      <Box sx={{ py: { xs: 6, md: 8, lg: 10 }, backgroundColor: 'background.paper' }}>
+      {/* Our Locations Section */}
+      <Box
+        sx={{
+          py: { xs: 4, md: 5 },
+          backgroundColor: 'grey.50',
+          position: 'relative',
+        }}
+      >
         <Container maxWidth="lg">
-          <motion.div
-            initial={{ opacity: 0, y: -30, scale: 0.95 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.8,
-              ease: [0.34, 1.56, 0.64, 1],
-            }}
-          >
-            <Typography
-              variant={isMobile ? 'h5' : 'h4'}
-              sx={{
-                fontWeight: 600,
-                color: 'text.primary',
-                textAlign: 'center',
-                mb: { xs: 3, md: 4 },
-                fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem', lg: '2.25rem', xl: '2.5rem' },
-                fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                letterSpacing: { xs: '0.02em', md: '0.04em' },
-                lineHeight: 1.4,
-              }}
-            >
-              {t('contact.ourLocations')}
-            </Typography>
+          <motion.div initial={{ opacity: 0, y: -16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}>
+            <Box sx={{ textAlign: 'center', mb: 3 }}>
+              <Typography sx={{ fontWeight: 700, color: 'primary.main', fontSize: '1.35rem', fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', letterSpacing: '0.04em' }}>
+                {t('contact.ourLocations')}
+              </Typography>
+              <Box sx={{ width: 48, height: 2, borderRadius: 1, backgroundColor: 'primary.main', mx: 'auto', mt: 1.25, opacity: 0.85 }} />
+            </Box>
           </motion.div>
 
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 4, md: 5 } }}>
-            {branches.map((branch, index) => {
-              const isEven = index % 2 === 0;
-              return (
-                <motion.div
-                  key={branch.key}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    duration: 0.6,
-                    delay: index * 0.1,
-                    ease: [0.25, 0.46, 0.45, 0.94],
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 2, maxWidth: 960, mx: 'auto' }}>
+            {branches.map((branch, index) => (
+              <motion.div
+                key={branch.key}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                <Card
+                  elevation={0}
+                  sx={{
+                    height: '100%',
+                    borderRadius: 2,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    boxShadow: 'none',
+                    overflow: 'visible',
+                    transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
+                    '&:hover': { boxShadow: '0 4px 20px rgba(0,0,0,0.06)', borderColor: 'primary.light' },
                   }}
                 >
-                  <Card
-                    sx={{
-                      borderRadius: 3,
-                      overflow: 'hidden',
-                      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      '&:hover': {
-                        boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-                        '& .showroom-image': {
-                          transform: 'scale(1.05)',
-                        },
-                      },
-                    }}
-                  >
-                    <Grid container spacing={0}>
-                      {/* Details Section */}
-                      <Grid
-                        size={{ xs: 12, md: 12 }}
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            p: { xs: 2.5, sm: 3.5, md: 4, lg: 5 },
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <Typography
-                            variant="h5"
-                            sx={{
-                              fontWeight: 700,
-                              color: 'text.primary',
-                              mb: { xs: 1.5, sm: 2 },
-                              fontSize: { xs: '1.125rem', sm: '1.375rem', md: '1.5rem', lg: '1.75rem' },
-                              fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                            }}
-                          >
-                            {t(`countryContact.kuwait.${branch.key}.name`)}
+                  <Box sx={{ p: 2.5, height: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
+                      <Box sx={{ width: 36, height: 36, borderRadius: '10px', backgroundColor: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <LocationOn sx={{ color: 'white', fontSize: 20 }} />
+                      </Box>
+                      <Typography sx={{ fontWeight: 700, color: 'text.primary', fontSize: '1.05rem', fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', letterSpacing: '0.02em' }}>
+                        {t(`countryContact.kuwait.${branch.key}.name`)}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, flex: 1 }}>
+                      <Box>
+                        <Typography sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.08em', mb: 0.5 }}>
+                          {t('contact.address')}
+                        </Typography>
+                        <Typography sx={{ color: 'text.primary', lineHeight: 1.65, fontSize: '0.9375rem', fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', whiteSpace: 'pre-line' }}>
+                          {t(`countryContact.kuwait.${branch.key}.address`)}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ pt: 0.5, borderTop: '1px solid', borderColor: 'divider' }}>
+                        <Typography sx={{ fontSize: '0.7rem', fontWeight: 600, color: 'text.secondary', textTransform: 'uppercase', letterSpacing: '0.08em', mb: 0.5 }}>
+                          {t('contact.phoneNumbers')}
+                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                          <Phone sx={{ color: 'primary.main', fontSize: 18 }} />
+                          <Typography sx={{ color: 'text.primary', fontWeight: 500, fontSize: '0.9375rem', fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif' }}>
+                            {t(`countryContact.kuwait.${branch.key}.phone`)}
                           </Typography>
-                          <Box 
-                            sx={{ 
-                              display: 'flex', 
-                              alignItems: 'flex-start', 
-                              gap: { xs: 1.5, sm: 2 }, 
-                              mb: { xs: 2, sm: 2.5 },
-                              p: { xs: 2, sm: 2.5 },
-                              backgroundColor: 'primary.50',
-                              borderRadius: 2,
-                              borderLeft: '4px solid',
-                              borderColor: 'primary.main',
-                            }}
-                          >
-                            <LocationOn
-                              sx={{
-                                color: 'primary.main',
-                                fontSize: { xs: 28, sm: 32, md: 36, lg: 40 },
-                                mt: 0.5,
-                                flexShrink: 0,
-                              }}
-                            />
-                            <Box sx={{ flex: 1 }}>
-                              <Typography
-                                variant="body1"
-                                sx={{
-                                  color: 'text.primary',
-                                  lineHeight: 1.9,
-                                  fontSize: { xs: '1.125rem', sm: '1.25rem', md: '1.375rem', lg: '1.5rem' },
-                                  fontWeight: 600,
-                                  fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                                  whiteSpace: 'pre-line',
-                                }}
-                              >
-                                {t(`countryContact.kuwait.${branch.key}.address`)}
-                              </Typography>
-                            </Box>
-                          </Box>
-                          <Box 
-                            sx={{ 
-                              display: 'flex', 
-                              alignItems: 'center', 
-                              gap: { xs: 1.5, sm: 2 },
-                              mt: { xs: 1.5, sm: 2 },
-                              p: { xs: 1.5, sm: 2 },
-                              backgroundColor: 'background.paper',
-                              borderRadius: 2,
-                              border: '1px solid',
-                              borderColor: 'divider',
-                            }}
-                          >
-                            <Phone
-                              sx={{
-                                color: 'primary.main',
-                                fontSize: { xs: 24, sm: 26, md: 28 },
-                                flexShrink: 0,
-                              }}
-                            />
-                            <Typography
-                              variant="body1"
-                              sx={{
-                                color: 'text.primary',
-                                fontWeight: 600,
-                                fontSize: { xs: '1.125rem', sm: '1.25rem', md: '1.375rem', lg: '1.5rem' },
-                                fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                                letterSpacing: '0.02em',
-                              }}
-                            >
-                              {t(`countryContact.kuwait.${branch.key}.phone`)}
-                            </Typography>
-                          </Box>
                         </Box>
-                      </Grid>
-                    </Grid>
-                  </Card>
-                </motion.div>
-              );
-            })}
+                      </Box>
+                    </Box>
+                  </Box>
+                </Card>
+              </motion.div>
+            ))}
           </Box>
         </Container>
       </Box>
