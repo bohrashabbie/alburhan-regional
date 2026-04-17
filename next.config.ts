@@ -4,10 +4,8 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 const nextConfig: NextConfig = {
-  // Vercel supports full Next.js features including server-side rendering
-  // Remove static export for Vercel deployment
+  output: 'standalone',
   
-  // Enable image optimization (Vercel supports Next.js Image Optimization API)
   images: {
     unoptimized: false,
     remotePatterns: [
@@ -20,6 +18,12 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
         pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: '13.60.4.75',
+        port: '8002',
+        pathname: '/uploads/**',
       },
     ],
   },
