@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Box,
   Typography,
@@ -11,6 +11,8 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import { useActiveBanners } from '../hooks/useApi';
+import { getImageUrl } from '../lib/api';
 
 interface SpotlightAnimationProps {
   onAnimationComplete?: () => void;
@@ -31,7 +33,11 @@ const SpotlightAnimation: React.FC<SpotlightAnimationProps> = ({ onAnimationComp
   const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
   const t = useTranslations();
 
-  const slides: SlideData[] = [
+  // Fetch banners from API
+  const { data: apiBanners, loading: bannersLoading } = useActiveBanners();
+
+  // Static fallback slides
+  const staticSlides: SlideData[] = [
     {
       image: '/Projects/alburhan1.jpg',
       title: t('carousel.slide1.title'),
@@ -75,6 +81,19 @@ const SpotlightAnimation: React.FC<SpotlightAnimationProps> = ({ onAnimationComp
       description: t('carousel.slide7.description'),
     },
   ];
+
+  // Use API banners if available, otherwise fall back to static slides
+  const slides: SlideData[] = useMemo(() => {
+    if (apiBanners && apiBanners.length > 0) {
+      return apiBanners.map((banner) => ({
+        image: getImageUrl(banner.bannerurl) || '/Projects/alburhan1.jpg',
+        title: banner.bannername || '',
+        subtitle: banner.info1 || '',
+        description: banner.bannerdescription || '',
+      }));
+    }
+    return staticSlides;
+  }, [apiBanners, t]);
 
   // Auto-advance slides every 50 seconds
   useEffect(() => {

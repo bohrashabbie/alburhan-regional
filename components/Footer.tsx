@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Box,
   Container,
@@ -31,18 +31,57 @@ import {
 } from '../utils/animations';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
+import { useBranches } from '../hooks/useApi';
+import { useSiteContent } from '../context/SiteContentContext';
 
 const Footer: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const t = useTranslations();
+  const { content } = useSiteContent();
 
-  const socialLinks = [
-    { icon: <Facebook />, href: '#', label: 'Facebook' },
-    { icon: <Twitter />, href: '#', label: 'Twitter' },
-    { icon: <Instagram />, href: '#', label: 'Instagram' },
-    { icon: <LinkedIn />, href: '#', label: 'LinkedIn' },
-  ];
+  // Fetch branches from API
+  const { data: apiBranches } = useBranches();
+
+  const branchData = useMemo(() => {
+    if (!apiBranches || apiBranches.length === 0) return null;
+    const result: { [key: string]: { email?: string; phone1?: string; phone2?: string; address?: string } } = {};
+    apiBranches.forEach((b) => {
+      const name = (b.branchname || '').toLowerCase();
+      const entry = {
+        email: b.email || undefined,
+        phone1: b.contact1 || undefined,
+        phone2: b.contact2 || undefined,
+        address: b.branchaddress || undefined,
+      };
+      if (name.includes('dubai') || name.includes('uae') || name.includes('emirates')) result['dubai'] = entry;
+      else if (name.includes('china')) result['china'] = entry;
+      else if (name.includes('kuwait')) result['kuwait'] = entry;
+      else if (name.includes('egypt')) result['egypt'] = entry;
+    });
+    return Object.keys(result).length > 0 ? result : null;
+  }, [apiBranches]);
+
+  // Get social links from CMS or fallback
+  const socialLinks = useMemo(() => {
+    if (content?.social_links && content.social_links.length > 0) {
+      return content.social_links
+        .filter((item: any) => item.isactive)
+        .sort((a: any, b: any) => (a.sequencenumber ?? 0) - (b.sequencenumber ?? 0))
+        .map((item: any) => ({
+          icon: <Facebook />, // Map platform to icon
+          href: item.url,
+          label: item.platform,
+        }));
+    }
+    // Fallback
+    return [
+      { icon: <Facebook />, href: '#', label: 'Facebook' },
+      { icon: <Twitter />, href: '#', label: 'Twitter' },
+      { icon: <Instagram />, href: '#', label: 'Instagram' },
+      { icon: <LinkedIn />, href: '#', label: 'LinkedIn' },
+    ];
+  }, [content]);
 
   const contactInfo = [
     { icon: <Email />, text: t('contact.emailValue') },
@@ -248,7 +287,7 @@ const Footer: React.FC = () => {
                           <Phone />
                         </Box>
                         <Typography variant="body2" sx={{ color: 'text.primary' }}>
-                          {t('countryContact.dubai.phone1')}
+                          {branchData?.dubai?.phone1 || t('countryContact.dubai.phone1')}
                         </Typography>
                       </Box>
                       <Box
@@ -263,7 +302,7 @@ const Footer: React.FC = () => {
                           <Phone />
                         </Box>
                         <Typography variant="body2" sx={{ color: 'text.primary' }}>
-                          {t('countryContact.dubai.phone2')}
+                          {branchData?.dubai?.phone2 || t('countryContact.dubai.phone2')}
                         </Typography>
                       </Box>
                       <Box
@@ -277,7 +316,7 @@ const Footer: React.FC = () => {
                           <Email />
                         </Box>
                         <Typography variant="body2" sx={{ color: 'text.primary' }}>
-                          {t('countryContact.dubai.email')}
+                          {branchData?.dubai?.email || t('countryContact.dubai.email')}
                         </Typography>
                       </Box>
                     </Box>
@@ -351,7 +390,7 @@ const Footer: React.FC = () => {
                           <Phone />
                         </Box>
                         <Typography variant="body2" sx={{ color: 'white' }}>
-                          {t('countryContact.china.phone')}
+                          {branchData?.china?.phone1 || t('countryContact.china.phone')}
                         </Typography>
                       </Box>
                       <Box
@@ -366,7 +405,7 @@ const Footer: React.FC = () => {
                           <Email />
                         </Box>
                         <Typography variant="body2" sx={{ color: 'white' }}>
-                          {t('countryContact.china.email')}
+                          {branchData?.china?.email || t('countryContact.china.email')}
                         </Typography>
                       </Box>
                       <Box

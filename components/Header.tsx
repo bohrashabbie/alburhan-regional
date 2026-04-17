@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -41,6 +41,7 @@ import {
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import LanguageSwitcher from './LanguageSwitcher';
+import { useSiteContent } from '../context/SiteContentContext';
 
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -51,6 +52,29 @@ const Header: React.FC = () => {
   const locale = useLocale();
   const isRTL = locale === 'ar';
   const t = useTranslations('header');
+  const { content } = useSiteContent();
+
+  // Get navigation from CMS or fallback to translations
+  const navigationItems = useMemo(() => {
+    if (content?.navigation_items && content.navigation_items.length > 0) {
+      return content.navigation_items
+        .filter((item: any) => item.isactive)
+        .sort((a: any, b: any) => (a.sequencenumber ?? 0) - (b.sequencenumber ?? 0))
+        .map((item: any) => ({
+          label: locale === 'ar' ? item.labelar : item.labelen,
+          href: item.href,
+          icon: <Home />,
+        }));
+    }
+    // Fallback to translations
+    return [
+      { label: t('home'), href: '/', icon: <Home /> },
+      { label: t('aboutUs'), href: '/about', icon: <Info /> },
+      { label: t('ourProducts'), href: '/products', icon: <ShoppingBag /> },
+      { label: t('ourProjects'), href: '/#projects', icon: <Work /> },
+      { label: t('contact'), href: '/contact', icon: <ContactMail /> },
+    ];
+  }, [content, locale, t]);
 
   // Handle scroll effect
   React.useEffect(() => {
@@ -74,14 +98,6 @@ const Header: React.FC = () => {
   const handleMobileMenuToggle = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
-
-  const navigationItems = [
-    { label: t('home'), href: '/', icon: <Home /> },
-    { label: t('aboutUs'), href: '/about', icon: <Info /> },
-    { label: t('ourProducts'), href: '/products', icon: <ShoppingBag /> },
-    { label: t('ourProjects'), href: '/#projects', icon: <Work /> },
-    { label: t('contact'), href: '/contact', icon: <ContactMail /> },
-  ];
 
   const DesktopNavigation = () => (
     <motion.div

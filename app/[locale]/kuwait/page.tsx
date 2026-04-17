@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { 
   Box, 
   Container, 
@@ -13,7 +13,8 @@ import {
   Button,
   Divider,
   Card,
-  CardContent
+  CardContent,
+  CircularProgress,
 } from '@mui/material';
 import { LocationOn, Phone, Email, ArrowBack, Send } from '@mui/icons-material';
 import { motion } from 'framer-motion';
@@ -22,6 +23,8 @@ import { useTranslations, useLocale } from 'next-intl';
 import { fadeInUp } from '../../../utils/animations';
 import { Link } from '@/i18n/routing';
 import ProjectGallery from '../../../components/ProjectGallery';
+import { useProjectsWithDetails } from '../../../hooks/useApi';
+import { getImageUrl } from '../../../lib/api';
 
 export default function KuwaitPage() {
   const t = useTranslations();
@@ -64,7 +67,31 @@ export default function KuwaitPage() {
     { key: 'branch4', num: '4' },
   ];
 
-  // Projects data organized by categories
+  // Fetch projects from API
+  const { data: apiProjects, loading: projectsLoading } = useProjectsWithDetails();
+
+  const apiProjectsByCategory = useMemo(() => {
+    if (!apiProjects || apiProjects.length === 0) return null;
+    const grouped: { [categoryName: string]: { name: string; folderPath: string; images: string[]; firstImage: string }[] } = {};
+    apiProjects.forEach((project) => {
+      const catName = project.category?.category_name || 'Uncategorized';
+      if (!grouped[catName]) grouped[catName] = [];
+      const projectImages = project.images
+        .map((img) => getImageUrl(img.projectimageurl))
+        .filter((url): url is string => url !== null);
+      if (projectImages.length > 0) {
+        grouped[catName].push({
+          name: project.projectname,
+          folderPath: '',
+          images: projectImages,
+          firstImage: projectImages[0],
+        });
+      }
+    });
+    return Object.keys(grouped).length > 0 ? grouped : null;
+  }, [apiProjects]);
+
+  // Static fallback projects data organized by categories
   const projectCategories = {
     gyms: [
       {
@@ -640,130 +667,81 @@ export default function KuwaitPage() {
                 {t('sections.ourProjects')}
               </Typography>
             </motion.div>
-            {/* Gyms Section */}
-            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                <Typography
-                  variant={isMobile ? 'h6' : 'h5'}
-                  sx={{
-                    fontWeight: 600,
-                    color: 'text.primary',
-                    mb: { xs: 3, sm: 4 },
-                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
-                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                    letterSpacing: { xs: '0.02em', md: '0.04em' },
-                  }}
-                >
-                  Gyms
-                </Typography>
-              </motion.div>
-              <ProjectGallery projects={projectCategories.gyms} />
-            </Box>
-
-            {/* office Section */}
-            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                <Typography
-                  variant={isMobile ? 'h6' : 'h5'}
-                  sx={{
-                    fontWeight: 600,
-                    color: 'text.primary',
-                    mb: { xs: 3, sm: 4 },
-                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
-                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                    letterSpacing: { xs: '0.02em', md: '0.04em' },
-                  }}
-                >
-                  Office
-                </Typography>
-              </motion.div>
-              <ProjectGallery projects={projectCategories.offices} />
-            </Box>
-
-            {/* Showrooms Section */}
-            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                <Typography
-                  variant={isMobile ? 'h6' : 'h5'}
-                  sx={{
-                    fontWeight: 600,
-                    color: 'text.primary',
-                    mb: { xs: 3, sm: 4 },
-                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
-                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                    letterSpacing: { xs: '0.02em', md: '0.04em' },
-                  }}
-                >
-                  Showrooms
-                </Typography>
-              </motion.div>
-              <ProjectGallery projects={projectCategories.showrooms} />
-            </Box>
-
-            {/* Restaurant Section */}
-            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                <Typography
-                  variant={isMobile ? 'h6' : 'h5'}
-                  sx={{
-                    fontWeight: 600,
-                    color: 'text.primary',
-                    mb: { xs: 3, sm: 4 },
-                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
-                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                    letterSpacing: { xs: '0.02em', md: '0.04em' },
-                  }}
-                >
-                  Restaurant
-                </Typography>
-              </motion.div>
-              <ProjectGallery projects={projectCategories.restaurants} />
-            </Box>
-
-            {/* Banks Section */}
-            <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                <Typography
-                  variant={isMobile ? 'h6' : 'h5'}
-                  sx={{
-                    fontWeight: 600,
-                    color: 'text.primary',
-                    mb: { xs: 3, sm: 4 },
-                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
-                    fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-                    letterSpacing: { xs: '0.02em', md: '0.04em' },
-                  }}
-                >
-                  Banks
-                </Typography>
-              </motion.div>
-              <ProjectGallery projects={projectCategories.banks} />
-            </Box>
+            {/* Dynamic API Projects or Static Fallback */}
+            {projectsLoading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+                <CircularProgress color="primary" />
+              </Box>
+            ) : apiProjectsByCategory ? (
+              Object.entries(apiProjectsByCategory).map(([categoryName, projects]) => (
+                <Box key={categoryName} sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+                  <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <Typography
+                      variant={isMobile ? 'h6' : 'h5'}
+                      sx={{
+                        fontWeight: 600,
+                        color: 'text.primary',
+                        mb: { xs: 3, sm: 4 },
+                        fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
+                        fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
+                        letterSpacing: { xs: '0.02em', md: '0.04em' },
+                      }}
+                    >
+                      {categoryName}
+                    </Typography>
+                  </motion.div>
+                  <ProjectGallery projects={projects} />
+                </Box>
+              ))
+            ) : (
+              <>
+                <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+                  <motion.div initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+                    <Typography variant={isMobile ? 'h6' : 'h5'} sx={{ fontWeight: 600, color: 'text.primary', mb: { xs: 3, sm: 4 }, fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' }, fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', letterSpacing: { xs: '0.02em', md: '0.04em' } }}>
+                      Gyms
+                    </Typography>
+                  </motion.div>
+                  <ProjectGallery projects={projectCategories.gyms} />
+                </Box>
+                <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+                  <motion.div initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+                    <Typography variant={isMobile ? 'h6' : 'h5'} sx={{ fontWeight: 600, color: 'text.primary', mb: { xs: 3, sm: 4 }, fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' }, fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', letterSpacing: { xs: '0.02em', md: '0.04em' } }}>
+                      Office
+                    </Typography>
+                  </motion.div>
+                  <ProjectGallery projects={projectCategories.offices} />
+                </Box>
+                <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+                  <motion.div initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+                    <Typography variant={isMobile ? 'h6' : 'h5'} sx={{ fontWeight: 600, color: 'text.primary', mb: { xs: 3, sm: 4 }, fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' }, fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', letterSpacing: { xs: '0.02em', md: '0.04em' } }}>
+                      Showrooms
+                    </Typography>
+                  </motion.div>
+                  <ProjectGallery projects={projectCategories.showrooms} />
+                </Box>
+                <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+                  <motion.div initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+                    <Typography variant={isMobile ? 'h6' : 'h5'} sx={{ fontWeight: 600, color: 'text.primary', mb: { xs: 3, sm: 4 }, fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' }, fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', letterSpacing: { xs: '0.02em', md: '0.04em' } }}>
+                      Restaurant
+                    </Typography>
+                  </motion.div>
+                  <ProjectGallery projects={projectCategories.restaurants} />
+                </Box>
+                <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
+                  <motion.div initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+                    <Typography variant={isMobile ? 'h6' : 'h5'} sx={{ fontWeight: 600, color: 'text.primary', mb: { xs: 3, sm: 4 }, fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' }, fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', letterSpacing: { xs: '0.02em', md: '0.04em' } }}>
+                      Banks
+                    </Typography>
+                  </motion.div>
+                  <ProjectGallery projects={projectCategories.banks} />
+                </Box>
+              </>
+            )}
           </Container>
         </Box>
       </motion.div>

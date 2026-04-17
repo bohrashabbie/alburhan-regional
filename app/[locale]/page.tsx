@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   Box,
   Container,
@@ -44,6 +44,8 @@ import Image from 'next/image';
 import { CN, KW, AE, EG } from 'country-flag-icons/react/3x2';
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/routing';
+import { useCountries } from '../../hooks/useApi';
+import { getImageUrl } from '../../lib/api';
 
 export default function Home() {
   const t = useTranslations();
@@ -53,6 +55,28 @@ export default function Home() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
+
+  // Fetch countries from API
+  const { data: apiCountries } = useCountries();
+
+  // Map API country images to static country keys
+  const apiCountryImages = useMemo(() => {
+    if (!apiCountries || apiCountries.length === 0) return null;
+    const mapping: { [key: string]: string } = {};
+    apiCountries.forEach((c) => {
+      const name = (c.countrynameen || '').toLowerCase();
+      if (c.countryurl) {
+        const imgUrl = getImageUrl(c.countryurl);
+        if (imgUrl) {
+          if (name.includes('china')) mapping['china'] = imgUrl;
+          else if (name.includes('kuwait')) mapping['kuwait'] = imgUrl;
+          else if (name.includes('uae') || name.includes('emirates') || name.includes('dubai')) mapping['dubai'] = imgUrl;
+          else if (name.includes('egypt')) mapping['egypt'] = imgUrl;
+        }
+      }
+    });
+    return Object.keys(mapping).length > 0 ? mapping : null;
+  }, [apiCountries]);
 
   // Helper function to make AL-Burhan and country names bold
   const renderBoldText = (text: string) => {
@@ -649,6 +673,7 @@ export default function Home() {
                       },
                     ].map((country, index) => {
                       const FlagComponent = country.flag;
+                      const countryImage = (apiCountryImages && apiCountryImages[country.key]) || country.image;
                       // Map country keys to route paths
                       const countryRoutes: { [key: string]: string } = {
                         'china': '/china',
@@ -736,7 +761,7 @@ export default function Home() {
                               style={{ width: '100%', height: '100%', position: 'relative' }}
                           >
                             <Image
-                                src={country.image}
+                                src={countryImage}
                                 alt={`${country.firmName} ${country.countryName}`}
                               fill
                               style={{

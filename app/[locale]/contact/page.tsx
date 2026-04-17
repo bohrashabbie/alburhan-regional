@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Box,
   Container,
@@ -17,6 +17,8 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { fadeInUp, staggerContainer, staggerItem } from '../../../utils/animations';
 import Image from 'next/image';
+import { useCountries } from '../../../hooks/useApi';
+import { getImageUrl } from '../../../lib/api';
 
 export default function ContactPage() {
   const t = useTranslations();
@@ -24,6 +26,26 @@ export default function ContactPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const isRTL = locale === 'ar';
+
+  // Fetch countries from API
+  const { data: apiCountries } = useCountries();
+
+  // Map API countries to get names for current locale
+  const apiCountryNames = useMemo(() => {
+    if (!apiCountries || apiCountries.length === 0) return null;
+    const mapping: { [key: string]: string } = {};
+    apiCountries.forEach((c) => {
+      const nameEn = (c.countrynameen || '').toLowerCase();
+      const displayName = locale === 'ar' ? c.countrynamear : c.countrynameen;
+      if (displayName) {
+        if (nameEn.includes('kuwait')) mapping['kuwait'] = displayName;
+        else if (nameEn.includes('egypt')) mapping['egypt'] = displayName;
+        else if (nameEn.includes('china')) mapping['china'] = displayName;
+        else if (nameEn.includes('uae') || nameEn.includes('emirates') || nameEn.includes('dubai')) mapping['uae'] = displayName;
+      }
+    });
+    return Object.keys(mapping).length > 0 ? mapping : null;
+  }, [apiCountries, locale]);
 
   const countries = [
     {
@@ -178,7 +200,7 @@ export default function ContactPage() {
                               transition: 'color 0.3s ease',
                             }}
                           >
-                            {country.name}
+                            {(apiCountryNames && apiCountryNames[country.key]) || country.name}
                           </Typography>
 
                           {/* View Details Text */}
