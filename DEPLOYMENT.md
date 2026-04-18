@@ -1,5 +1,90 @@
 # Deployment Guide
 
+## Docker Deployment (Recommended for self-hosted / VPS)
+
+The project ships with a production-ready multi-stage `Dockerfile` and a
+`docker-compose.yml` that runs the Next.js standalone server on port 3000.
+
+### 1. Prerequisites on the server
+
+- Docker Engine 24+ and Docker Compose v2
+- Port 3000 free (or change the host mapping in `docker-compose.yml`)
+
+### 2. First-time deploy
+
+```bash
+# 1. Clone the repo
+git clone <this-repo-url> alburhan-regional
+cd alburhan-regional
+
+# 2. Create the env file (edit values if your CMS host differs)
+cp .env.production.example .env
+
+# 3. Build and start
+docker compose up -d --build
+
+# 4. Tail the logs until you see "Ready"
+docker compose logs -f web
+```
+
+The site is now live at `http://<server-ip>:3000`.
+
+### 3. Updating the site (zero-downtime-ish)
+
+```bash
+git pull
+docker compose up -d --build
+docker image prune -f
+```
+
+Compose replaces the container only after the new image is healthy.
+
+### 4. Running behind Nginx / a reverse proxy
+
+Point your public domain (e.g. `alburhan.com`) to the server and proxy
+`/` to `http://127.0.0.1:3000`. Make sure to forward the `Host` and
+`X-Forwarded-*` headers so Next.js generates correct absolute URLs.
+
+Sample Nginx block:
+
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name alburhan.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+### 5. Environment variables
+
+| Name                    | Purpose                                           | Default                    |
+| ----------------------- | ------------------------------------------------- | -------------------------- |
+| `NEXT_PUBLIC_CMS_URL`   | Base URL of the FastAPI CMS; baked into bundle   | `http://13.60.4.75:8002`   |
+| `PORT`                  | Port the Node server listens on inside container | `3000`                     |
+
+> `NEXT_PUBLIC_*` values are resolved at **build time**, so a rebuild is
+> required whenever you change the CMS URL (`docker compose up -d --build`).
+
+### 6. Useful commands
+
+```bash
+docker compose ps                  # status
+docker compose logs -f web         # follow logs
+docker compose restart web         # restart
+docker compose down                # stop and remove
+docker compose exec web sh         # shell inside container
+```
+
+---
+
 ## Vercel Deployment (Recommended)
 
 ### Quick Deployment Steps

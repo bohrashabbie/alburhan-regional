@@ -1,48 +1,14 @@
 'use client';
 
 import React from 'react';
-import { Box } from '@mui/material';
-import { useLocale } from 'next-intl';
-import Header from './Header';
-import Footer from './Footer';
+import AppShell from './AppShell';
 
-interface AppProps {
-  children: React.ReactNode;
-}
-
-const App: React.FC<AppProps> = ({ children }) => {
-  const locale = useLocale();
-  const isRTL = locale === 'ar';
-
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
-        backgroundColor: 'background.default',
-        direction: isRTL ? 'rtl' : 'ltr',
-      }}
-    >
-      {/* Header */}
-      <Header />
-
-      {/* Main Content */}
-      <Box
-        component="main"
-        sx={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        {children}
-      </Box>
-
-      {/* Footer */}
-      <Footer />
-    </Box>
-  );
-};
+/**
+ * Thin backwards-compat wrapper. The real shell lives in `AppShell.tsx`.
+ * Kept so any legacy direct import of `components/App` keeps working.
+ */
+const App: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <AppShell>{children}</AppShell>
+);
 
 export default App;

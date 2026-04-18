@@ -1,41 +1,36 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  Card,
-  CardMedia,
-  CardContent,
-  useTheme,
-  useMediaQuery,
-  Chip,
-} from '@mui/material';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
-import { fadeInUp, staggerContainer, staggerItem } from '../../../utils/animations';
-import { useProjectCategories } from '../../../context/SiteContentContext';
-import { getImageUrl } from '../../../lib/api';
+import { Link } from '@/i18n/routing';
+import { ArrowUpRight, Search as SearchIcon } from 'lucide-react';
+
+import { useProjectCategories } from '@/context/SiteContentContext';
+import { getImageUrl } from '@/lib/api';
+import { PageHero } from '@/components/sections/PageHero';
+import { ScrollReveal } from '@/components/motion/ScrollReveal';
+import { GradientText } from '@/components/fx/GradientText';
+import { GlassCard } from '@/components/fx/GlassCard';
+import { cn } from '@/lib/utils';
 
 export default function ProjectsPage() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const t = useTranslations();
   const locale = useLocale();
   const isRTL = locale === 'ar';
 
   const categories = useProjectCategories();
-
-  // Localized text helpers
   const pick = (en?: string | null, ar?: string | null) =>
     (locale === 'ar' ? ar || en : en || ar) || '';
 
-  // Flatten projects with their first image + category name for easy rendering
-  const projectTiles = useMemo(() => {
+  const [activeCat, setActiveCat] = React.useState<number | 'all'>('all');
+  const [query, setQuery] = React.useState('');
+
+  const allTiles = useMemo(() => {
     const tiles: Array<{
       id: number;
+      categoryId: number;
       name: string;
       description: string;
       categoryName: string;
@@ -48,6 +43,7 @@ export default function ProjectsPage() {
         const firstImage = proj.images?.[0]?.image_url || cat.cover_image_url;
         tiles.push({
           id: proj.id,
+          categoryId: cat.id,
           name: pick(proj.name_en, proj.name_ar),
           description: pick(proj.description_en, proj.description_ar),
           categoryName,
@@ -59,163 +55,154 @@ export default function ProjectsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categories, locale]);
 
-  const hasData = projectTiles.length > 0;
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return allTiles.filter((t) => {
+      if (activeCat !== 'all' && t.categoryId !== activeCat) return false;
+      if (!q) return true;
+      return (
+        t.name.toLowerCase().includes(q) ||
+        t.description.toLowerCase().includes(q) ||
+        t.categoryName.toLowerCase().includes(q)
+      );
+    });
+  }, [allTiles, activeCat, query]);
 
   return (
-    <Box sx={{ flex: 1, minHeight: '100vh', backgroundColor: 'background.default' }}>
-      {/* Hero */}
-      <Box
-        sx={{
-          background: `linear-gradient(135deg, ${(theme.palette.primary as any)[50]} 0%, ${(theme.palette.secondary as any)[50]} 100%)`,
-          py: { xs: 6, md: 8 },
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        <Container maxWidth="xl">
-          <motion.div variants={fadeInUp} initial="initial" animate="animate">
-            <Typography
-              variant={isMobile ? 'h4' : 'h3'}
-              component="h1"
-              sx={{
-                fontWeight: 700,
-                color: 'text.primary',
-                mb: 2,
-                textAlign: 'center',
-                fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.5rem', lg: '3rem' },
-                fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif',
-              }}
-            >
-              {t('header.ourProjects')}
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                color: 'text.secondary',
-                textAlign: 'center',
-                maxWidth: 800,
-                mx: 'auto',
-                fontSize: { xs: '1rem', md: '1.125rem' },
-                lineHeight: 1.7,
-                direction: isRTL ? 'rtl' : 'ltr',
-              }}
-            >
-              {locale === 'ar'
-                ? 'استعرض مجموعة مختارة من المشاريع التي أنجزناها عبر قطاعات مختلفة.'
-                : 'Explore a selection of projects we have delivered across sectors.'}
-            </Typography>
-          </motion.div>
-        </Container>
-      </Box>
+    <>
+      <PageHero
+        eyebrow={isRTL ? 'اختيار القصص' : 'Selected work'}
+        title={t('header.ourProjects')}
+        description={
+          isRTL
+            ? 'معرض مختار من أبرز تنفيذاتنا عبر الصالات التجارية، الأبراج السكنية، والمعارض الفاخرة.'
+            : 'A curated portfolio across hospitality, retail, and residential landmarks.'
+        }
+      />
 
-      {/* Projects grid */}
-      <Container maxWidth="xl" sx={{ py: { xs: 6, md: 8 } }}>
-        {!hasData ? (
-          <Box sx={{ textAlign: 'center', py: 8 }}>
-            <Typography variant="h6" color="text.secondary">
-              {locale === 'ar'
-                ? 'لم تتم إضافة مشاريع بعد.'
-                : 'No projects have been added yet.'}
-            </Typography>
-          </Box>
-        ) : (
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true, amount: 0.1 }}
-          >
-            <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
-              {projectTiles.map((tile) => (
-                <Grid size={{ xs: 12, sm: 6, md: 4 }} key={tile.id}>
-                  <motion.div variants={staggerItem} style={{ height: '100%' }}>
-                    <Card
-                      sx={{
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        borderRadius: 3,
-                        overflow: 'hidden',
-                        boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
-                        transition: 'all 0.3s ease',
-                        '&:hover': {
-                          transform: 'translateY(-6px)',
-                          boxShadow: '0 14px 32px rgba(0,0,0,0.14)',
-                        },
-                      }}
+      <section className="relative pb-24">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Filter bar */}
+          <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            {/* Category pills */}
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setActiveCat('all')}
+                data-cursor-label="All"
+                className={cn(
+                  'rounded-full border px-4 py-1.5 text-xs uppercase tracking-[0.2em] transition-all duration-300',
+                  activeCat === 'all'
+                    ? 'border-[color:var(--brand-gold)] bg-[rgba(201,169,79,0.12)] text-[color:var(--brand-gold-bright)]'
+                    : 'border-[color:var(--glass-border)] text-[color:var(--fg-muted)] hover:border-[color:var(--brand-gold)] hover:text-[color:var(--fg-default)]',
+                )}
+              >
+                {isRTL ? 'الكل' : 'All'}
+              </button>
+              {categories.map((c) => {
+                const active = activeCat === c.id;
+                return (
+                  <button
+                    key={c.id}
+                    onClick={() => setActiveCat(c.id)}
+                    data-cursor-label={pick(c.name_en, c.name_ar)}
+                    className={cn(
+                      'rounded-full border px-4 py-1.5 text-xs uppercase tracking-[0.2em] transition-all duration-300',
+                      active
+                        ? 'border-[color:var(--brand-gold)] bg-[rgba(201,169,79,0.12)] text-[color:var(--brand-gold-bright)]'
+                        : 'border-[color:var(--glass-border)] text-[color:var(--fg-muted)] hover:border-[color:var(--brand-gold)] hover:text-[color:var(--fg-default)]',
+                    )}
+                  >
+                    {pick(c.name_en, c.name_ar)}
+                  </button>
+                );
+              })}
+            </div>
+
+            <label className="flex items-center gap-2 rounded-full border border-[color:var(--glass-border)] bg-white/[0.02] px-3 py-1.5 text-sm focus-within:border-[color:var(--brand-gold)]">
+              <SearchIcon className="size-4 text-[color:var(--brand-gold)]" />
+              <input
+                type="search"
+                placeholder={isRTL ? 'ابحث...' : 'Search projects'}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-44 bg-transparent text-sm placeholder:text-[color:var(--fg-subtle)] focus:outline-none md:w-56"
+              />
+            </label>
+          </div>
+
+          {/* Grid */}
+          {filtered.length ? (
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {filtered.map((tile, i) => (
+                <ScrollReveal key={tile.id} delay={(i % 6) * 0.06}>
+                  <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 220, damping: 20 }}>
+                    <Link
+                      href={`/projects?cat=${tile.categoryId}#p-${tile.id}` as any}
+                      className="group block"
+                      data-cursor-label="View"
                     >
-                      {tile.imageUrl ? (
-                        <CardMedia
-                          component="img"
-                          image={tile.imageUrl}
-                          alt={tile.name}
-                          sx={{
-                            height: { xs: 200, md: 240 },
-                            objectFit: 'cover',
+                      <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-[color:var(--glass-border)]">
+                        {tile.imageUrl ? (
+                          <Image
+                            src={tile.imageUrl}
+                            alt={tile.name}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                            className="size-full object-cover transition-transform duration-[1.2s] group-hover:scale-[1.08]"
+                            unoptimized
+                          />
+                        ) : (
+                          <div className="size-full bg-[color:var(--bg-elevated)]" />
+                        )}
+                        <div
+                          aria-hidden
+                          className="absolute inset-0"
+                          style={{
+                            background:
+                              'linear-gradient(180deg, rgba(7,7,11,0.1) 0%, rgba(7,7,11,0.6) 55%, rgba(7,7,11,0.95) 100%)',
                           }}
                         />
-                      ) : (
-                        <Box
-                          sx={{
-                            height: { xs: 200, md: 240 },
-                            backgroundColor: 'background.paper',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'text.disabled',
+                        <div
+                          aria-hidden
+                          className="absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                          style={{
+                            boxShadow:
+                              'inset 0 0 0 1px rgba(201,169,79,0.45), 0 0 36px rgba(194,50,74,0.3)',
                           }}
-                        >
-                          <Typography variant="body2">No image</Typography>
-                        </Box>
-                      )}
-                      <CardContent sx={{ flex: 1, direction: isRTL ? 'rtl' : 'ltr' }}>
-                        {tile.categoryName && (
-                          <Chip
-                            label={tile.categoryName}
-                            size="small"
-                            sx={{
-                              mb: 1,
-                              backgroundColor: 'primary.50',
-                              color: 'primary.main',
-                              fontWeight: 600,
-                            }}
-                          />
-                        )}
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            fontWeight: 700,
-                            color: 'text.primary',
-                            mb: 1,
-                            lineHeight: 1.3,
-                          }}
-                        >
-                          {tile.name}
-                        </Typography>
-                        {tile.description && (
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            sx={{
-                              display: '-webkit-box',
-                              WebkitLineClamp: 3,
-                              WebkitBoxOrient: 'vertical',
-                              overflow: 'hidden',
-                              lineHeight: 1.6,
-                            }}
-                          >
-                            {tile.description}
-                          </Typography>
-                        )}
-                      </CardContent>
-                    </Card>
+                        />
+                        <div className="absolute inset-x-5 bottom-5 z-10 flex items-end justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[color:var(--brand-gold)]">
+                              {tile.categoryName}
+                            </p>
+                            <h3 className="mt-1.5 truncate font-display text-lg font-semibold text-white md:text-xl">
+                              {tile.name}
+                            </h3>
+                          </div>
+                          <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-[color:var(--brand-gold)]/60 text-[color:var(--brand-gold)] transition-all group-hover:rotate-45 group-hover:bg-[rgba(194,50,74,0.35)] group-hover:text-white">
+                            <ArrowUpRight className="size-4" />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
                   </motion.div>
-                </Grid>
+                </ScrollReveal>
               ))}
-            </Grid>
-          </motion.div>
-        )}
-      </Container>
-    </Box>
+            </div>
+          ) : (
+            <GlassCard className="p-16 text-center">
+              <h3 className="font-display text-2xl">
+                <GradientText>
+                  {isRTL ? 'لا توجد نتائج' : 'No projects found'}
+                </GradientText>
+              </h3>
+              <p className="mt-3 text-sm text-[color:var(--fg-muted)]">
+                {isRTL ? 'جرب عبارة بحث أخرى.' : 'Try a different search or category.'}
+              </p>
+            </GlassCard>
+          )}
+        </div>
+      </section>
+    </>
   );
 }

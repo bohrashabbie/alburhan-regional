@@ -1,386 +1,388 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import {
-  AppBar,
-  Toolbar,
-  Typography,
-  IconButton,
-  Menu,
-  MenuItem,
-  Box,
-  Container,
-  Button,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+} from 'framer-motion';
 import {
-  Menu as MenuIcon,
-  Close as CloseIcon,
   Home,
   Info,
-  ContactMail,
-  Business,
-  ShoppingBag,
-  Work,
-} from '@mui/icons-material';
-import { motion, AnimatePresence } from 'framer-motion';
+  Briefcase,
+  Wrench,
+  Package,
+  Phone,
+  Menu as MenuIcon,
+  X as CloseIcon,
+  Search,
+  Globe,
+} from 'lucide-react';
 import Image from 'next/image';
-import {
-  fadeInLeft,
-  fadeInRight,
-  slideInFromTop,
-  staggerContainer,
-  staggerItem,
-  hoverScale,
-} from '../utils/animations';
 import { useTranslations, useLocale } from 'next-intl';
-import { Link } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/routing';
+
+import { cn } from '@/lib/utils';
+import { useSiteContent } from '@/context/SiteContentContext';
+import { getImageUrl } from '@/lib/api';
 import LanguageSwitcher from './LanguageSwitcher';
-import { useSiteContent } from '../context/SiteContentContext';
-import { getImageUrl } from '../lib/api';
+import { MagneticButton } from './fx/MagneticButton';
+import { NeonButton } from './fx/NeonButton';
+
+type NavItem = {
+  label: string;
+  href: string;
+  icon: React.ReactNode;
+};
+
+/**
+ * Normalize CMS-stored hashes (/#projects) to the new dedicated routes.
+ */
+const normalizeHref = (href: string): string => {
+  if (!href) return '/';
+  const h = href.trim();
+  if (h === '/#projects' || h === '#projects') return '/projects';
+  if (h === '/#services' || h === '#services') return '/services';
+  if (h === '/#products' || h === '#products') return '/products';
+  return h;
+};
+
+const iconForHref = (href: string): React.ReactNode => {
+  if (href === '/') return <Home className="size-4" />;
+  if (href.includes('about')) return <Info className="size-4" />;
+  if (href.includes('product')) return <Package className="size-4" />;
+  if (href.includes('project') || href.includes('work')) return <Briefcase className="size-4" />;
+  if (href.includes('service')) return <Wrench className="size-4" />;
+  if (href.includes('contact')) return <Phone className="size-4" />;
+  return <Globe className="size-4" />;
+};
 
 const Header: React.FC = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [scrolled, setScrolled] = useState(false);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [scrolled, setScrolled] = React.useState(false);
   const locale = useLocale();
   const isRTL = locale === 'ar';
   const t = useTranslations('header');
+  const pathname = usePathname();
   const { content, setting } = useSiteContent();
+  const { scrollY } = useScroll();
 
-  // Resolve site logo from CMS (settings.logo_url), fall back to bundled asset.
-  const logoSrc = useMemo(() => {
-    return (
+  useMotionValueEvent(scrollY, 'change', (v) => {
+    setScrolled(v > 12);
+  });
+
+  // Lock scroll when the mobile drawer is open.
+  React.useEffect(() => {
+    if (typeof document === 'undefined') return;
+    document.documentElement.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => {
+      document.documentElement.style.overflow = '';
+    };
+  }, [mobileOpen]);
+
+  const logoSrc = React.useMemo(
+    () =>
       getImageUrl(setting('logo_url', locale === 'ar' ? 'ar' : 'en')) ||
-      '/logo/AL BURHAN GROUP .png'
-    );
-  }, [setting, locale]);
+      '/logo/AL BURHAN GROUP .png',
+    [setting, locale],
+  );
 
-  const iconForHref = (href: string) => {
-    if (href === '/' || href.endsWith('#home')) return <Home />;
-    if (href.includes('about')) return <Info />;
-    if (href.includes('product')) return <ShoppingBag />;
-    if (href.includes('project') || href.includes('work')) return <Work />;
-    if (href.includes('service')) return <Business />;
-    if (href.includes('contact')) return <ContactMail />;
-    return <Home />;
-  };
-
-  // Get navigation from CMS or fallback to translations
-  const navigationItems = useMemo(() => {
+  const navigationItems: NavItem[] = React.useMemo(() => {
     if (content?.navigation && content.navigation.length > 0) {
-      return content.navigation.map((item) => ({
-        label: (locale === 'ar' ? item.label_ar : item.label_en) || item.label_en,
-        href: item.href,
-        icon: iconForHref(item.href),
-      }));
+      return content.navigation.map((item) => {
+        const href = normalizeHref(item.href);
+        return {
+          label: (locale === 'ar' ? item.label_ar : item.label_en) || item.label_en,
+          href,
+          icon: iconForHref(href),
+        };
+      });
     }
     return [
-      { label: t('home'), href: '/', icon: <Home /> },
-      { label: t('aboutUs'), href: '/about', icon: <Info /> },
-      { label: t('ourProducts'), href: '/products', icon: <ShoppingBag /> },
-      { label: t('ourProjects'), href: '/#projects', icon: <Work /> },
-      { label: t('contact'), href: '/contact', icon: <ContactMail /> },
+      { label: t('home'), href: '/', icon: <Home className="size-4" /> },
+      { label: t('aboutUs'), href: '/about', icon: <Info className="size-4" /> },
+      { label: t('ourProducts'), href: '/products', icon: <Package className="size-4" /> },
+      { label: t('ourProjects'), href: '/projects', icon: <Briefcase className="size-4" /> },
+      { label: t('services'), href: '/services', icon: <Wrench className="size-4" /> },
+      { label: t('contact'), href: '/contact', icon: <Phone className="size-4" /> },
     ];
   }, [content, locale, t]);
 
-  // Handle scroll effect
-  React.useEffect(() => {
-    const handleScroll = () => {
-      const isScrolled = window.scrollY > 10;
-      setScrolled(isScrolled);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/';
+    return pathname.startsWith(href);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
+  const openPalette = () => {
+    // Dispatch a synthetic Cmd+K so the CommandPalette picks it up.
+    window.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true }),
+    );
   };
-
-  const handleMobileMenuToggle = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
-
-  const DesktopNavigation = () => (
-    <motion.div
-      variants={staggerContainer}
-      initial="initial"
-      animate="animate"
-      style={{ display: 'flex', alignItems: 'center', gap: 16 }}
-    >
-      {navigationItems.map((item, index) => (
-        <motion.div
-          key={item.label}
-          variants={staggerItem}
-          whileHover="hover"
-        >
-          <Button
-            component={Link}
-            href={item.href}
-            sx={{
-              color: 'text.primary',
-              fontWeight: 500,
-              textTransform: 'none',
-              fontSize: '1rem',
-              transition: 'all 0.3s ease',
-              position: 'relative',
-              '&::after': {
-                content: '""',
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: '2px',
-                backgroundColor: 'primary.main',
-                transform: 'scaleX(0)',
-                transition: 'transform 0.3s ease',
-              },
-              '&:hover': {
-                backgroundColor: 'primary.50',
-                color: 'primary.600',
-                transform: 'translateY(-2px)',
-                '&::after': {
-                  transform: 'scaleX(1)',
-                },
-              },
-            }}
-          >
-            {item.label}
-          </Button>
-        </motion.div>
-      ))}
-    </motion.div>
-  );
-
-  const MobileNavigation = () => (
-    <AnimatePresence>
-      {mobileMenuOpen && (
-        <Drawer
-          anchor="right"
-          open={mobileMenuOpen}
-          onClose={handleMobileMenuToggle}
-          sx={{
-            '& .MuiDrawer-paper': {
-              width: 280,
-              backgroundColor: 'background.paper',
-            },
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 50 }}
-            transition={{ duration: 0.3 }}
-            style={{ padding: 16 }}
-          >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-                Menu
-              </Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <LanguageSwitcher />
-                <IconButton onClick={handleMobileMenuToggle}>
-                  <CloseIcon />
-                </IconButton>
-              </Box>
-            </Box>
-            <motion.div
-              variants={staggerContainer}
-              initial="initial"
-              animate="animate"
-            >
-              <List>
-                {navigationItems.map((item, index) => (
-                  <motion.div
-                    key={item.label}
-                    variants={staggerItem}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <ListItem
-                      component={Link}
-                      href={item.href}
-                      onClick={handleMobileMenuToggle}
-                      sx={{
-                        borderRadius: 1,
-                        mb: 0.5,
-                        cursor: 'pointer',
-                        textDecoration: 'none',
-                        '&:hover': {
-                          backgroundColor: 'primary.50',
-                        },
-                      }}
-                    >
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
-                        {item.icon}
-                        <ListItemText
-                          primary={item.label}
-                          sx={{
-                            '& .MuiListItemText-primary': {
-                              fontWeight: 500,
-                            },
-                          }}
-                        />
-                      </Box>
-                    </ListItem>
-                  </motion.div>
-                ))}
-              </List>
-            </motion.div>
-          </motion.div>
-        </Drawer>
-      )}
-    </AnimatePresence>
-  );
 
   return (
     <>
-        <AppBar
-          position="sticky"
-          elevation={scrolled ? 4 : 0}
-          sx={{
-            backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.95)' : 'background.paper',
-            borderBottom: 1,
-            borderColor: 'divider',
-            backdropFilter: 'blur(10px)',
-            zIndex: 1300,
-            top: 0,
-            transition: 'all 0.3s ease',
+      <motion.header
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
+        className={cn(
+          'sticky top-0 z-[800] w-full transition-all duration-500',
+          scrolled
+            ? 'bg-[rgba(7,7,11,0.72)] backdrop-blur-xl backdrop-saturate-150 border-b border-[color:var(--glass-border)] shadow-[0_8px_32px_rgba(0,0,0,0.35)]'
+            : 'bg-transparent',
+        )}
+        style={{ direction: 'ltr' }}
+      >
+        {/* Top neon hairline */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-px opacity-70"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent 5%, rgba(201,169,79,0.55) 50%, transparent 95%)',
           }}
-          component={motion.div}
-          variants={slideInFromTop}
-          initial="initial"
-          animate="animate"
-        >
-          <Container maxWidth="xl">
-            <Toolbar
-              sx={{
-                minHeight: { xs: 56, md: 64 },
-                px: { xs: 1, sm: 2 },
-                direction: isRTL ? 'ltr' : 'ltr',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+        />
+
+        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:h-20 lg:px-8">
+          {/* Logo */}
+          <Link
+            href="/"
+            className="group relative flex shrink-0 items-center"
+            data-cursor-label="Home"
+          >
+            <div className="relative h-10 w-36 overflow-hidden sm:h-12 sm:w-44 lg:h-14 lg:w-52">
+              <Image
+                src={logoSrc}
+                alt="AL-Burhan Group"
+                fill
+                style={{ objectFit: 'contain', objectPosition: 'left center' }}
+                priority
+                unoptimized
+                className="transition-transform duration-500 group-hover:scale-[1.04]"
+              />
+            </div>
+            <motion.span
+              aria-hidden
+              className="pointer-events-none absolute -inset-1 rounded-lg opacity-0 blur-xl group-hover:opacity-100"
+              style={{
+                background:
+                  'radial-gradient(closest-side, rgba(201,169,79,0.35), transparent 70%)',
+                transition: 'opacity 400ms ease',
               }}
+            />
+          </Link>
+
+          {/* Desktop nav */}
+          <nav
+            className="hidden items-center gap-1 lg:flex"
+            dir={isRTL ? 'rtl' : 'ltr'}
+          >
+            {navigationItems.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <Link
+                  key={`${item.label}-${item.href}`}
+                  href={item.href as any}
+                  data-cursor-label={item.label}
+                  className={cn(
+                    'group relative px-4 py-2 text-sm font-medium tracking-wide transition-colors duration-300',
+                    active
+                      ? 'text-[color:var(--brand-gold-bright)]'
+                      : 'text-[color:var(--fg-default)]/85 hover:text-[color:var(--brand-gold-bright)]',
+                  )}
+                >
+                  <span className="relative z-10">{item.label}</span>
+                  <motion.span
+                    aria-hidden
+                    layoutId={active ? 'nav-underline' : undefined}
+                    className={cn(
+                      'absolute left-2 right-2 bottom-0 h-px origin-center',
+                      active ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
+                    )}
+                    style={{
+                      background:
+                        'linear-gradient(90deg, transparent, var(--brand-gold), transparent)',
+                      boxShadow: '0 0 10px rgba(201,169,79,0.6)',
+                      transition: 'opacity 300ms ease',
+                    }}
+                  />
+                  <span
+                    aria-hidden
+                    className="absolute inset-0 -z-10 rounded-lg bg-[rgba(201,169,79,0.06)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  />
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Right cluster */}
+          <div className="flex items-center gap-2">
+            {/* Cmd-K trigger (desktop only) */}
+            <button
+              type="button"
+              onClick={openPalette}
+              aria-label="Search"
+              data-cursor-label="Search"
+              className={cn(
+                'hidden items-center gap-2 rounded-full border border-[color:var(--glass-border)] px-3 py-1.5 text-xs uppercase tracking-[0.2em] text-[color:var(--fg-muted)] transition-colors duration-300 md:inline-flex',
+                'hover:border-[color:var(--brand-gold)] hover:text-[color:var(--brand-gold-bright)]',
+              )}
             >
-              {/* Logo */}
-              <motion.div
-                variants={fadeInLeft}
-                initial="initial"
-                animate="animate"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Box
-                  component="a"
-                  href="/"
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    textDecoration: 'none',
-                    flexGrow: { xs: 0, md: 0 },
-                    mr: { md: 4 },
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                  }}
-                >
-                  <Box
-                    sx={{
-                      position: 'relative',
-                      width: { xs: 180, md: 240 },
-                      height: { xs: 70, md: 90 },
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
+              <Search className="size-3.5" />
+              <span>Search</span>
+              <kbd className="hidden rounded border border-[color:var(--glass-border)] px-1.5 py-0.5 text-[10px] font-medium tracking-normal md:inline-block">
+                ⌘K
+              </kbd>
+            </button>
+
+            <LanguageSwitcher />
+
+            {/* Contact CTA (desktop) */}
+            <div className="hidden lg:block">
+              <MagneticButton>
+                <NeonButton asChild size="sm" variant="outline">
+                  <Link href="/contact" data-cursor-label="Contact">
+                    <Phone className="size-4" />
+                    <span>{t('contact')}</span>
+                  </Link>
+                </NeonButton>
+              </MagneticButton>
+            </div>
+
+            {/* Mobile toggle */}
+            <button
+              type="button"
+              onClick={() => setMobileOpen((o) => !o)}
+              aria-label="Toggle menu"
+              data-cursor-label="Menu"
+              className={cn(
+                'inline-flex size-10 items-center justify-center rounded-full border border-[color:var(--glass-border)] lg:hidden',
+                'text-[color:var(--fg-default)] transition-colors duration-300 hover:border-[color:var(--brand-gold)] hover:text-[color:var(--brand-gold-bright)]',
+              )}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {mobileOpen ? (
+                  <motion.span
+                    key="x"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
                   >
-                    <Image
-                      src={logoSrc}
-                      alt="AL-Burhan Group Logo"
-                      fill
-                      style={{
-                        objectFit: 'contain',
-                        objectPosition: 'left center',
-                      }}
-                      priority
-                      unoptimized
-                    />
-                  </Box>
-                </Box>
-              </motion.div>
-
-              {/* Desktop Navigation */}
-              <Box 
-                sx={{ 
-                  display: { xs: 'none', md: 'flex' }, 
-                  flex: 1, 
-                  justifyContent: 'center',
-                  mx: 4,
-                }}
-              >
-                <DesktopNavigation />
-              </Box>
-
-              {/* Right Side: Language Switcher and Menu Button */}
-              <Box 
-                sx={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: { xs: 0.5, sm: 1 },
-                  ml: 'auto',
-                }}
-              >
-                {/* Language Switcher */}
-                <Box 
-                  sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                  }}
-                >
-                  <LanguageSwitcher />
-                </Box>
-
-                {/* Mobile Menu Button */}
-                <motion.div
-                  variants={fadeInRight}
-                  initial="initial"
-                  animate="animate"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <IconButton
-                    edge="end"
-                    color="inherit"
-                    aria-label="menu"
-                    onClick={handleMobileMenuToggle}
-                    sx={{
-                      display: { xs: 'block', md: 'none' },
-                      color: 'text.primary',
-                      ml: { xs: 0.5, sm: 1 },
-                    }}
+                    <CloseIcon className="size-5" />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="m"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
                   >
-                    <MenuIcon />
-                  </IconButton>
-                </motion.div>
-              </Box>
-            </Toolbar>
-          </Container>
-        </AppBar>
+                    <MenuIcon className="size-5" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+          </div>
+        </div>
+      </motion.header>
 
-      {/* Mobile Navigation Drawer */}
-      <MobileNavigation />
+      {/* Mobile drawer */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            key="mobile-drawer"
+            className="fixed inset-0 z-[850] lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <button
+              aria-label="Close menu"
+              onClick={() => setMobileOpen(false)}
+              className="absolute inset-0 bg-[rgba(3,3,6,0.75)] backdrop-blur-md"
+            />
+            <motion.aside
+              role="dialog"
+              aria-label="Mobile navigation"
+              initial={{ x: isRTL ? '-100%' : '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: isRTL ? '-100%' : '100%' }}
+              transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
+              className={cn(
+                'absolute top-0 bottom-0 flex h-full w-[min(86vw,380px)] flex-col gap-6 overflow-y-auto p-6',
+                isRTL ? 'left-0 border-r' : 'right-0 border-l',
+                'border-[color:var(--glass-border)] bg-[color:var(--bg-raised)] shadow-[0_0_60px_rgba(0,0,0,0.5)]',
+              )}
+              dir={isRTL ? 'rtl' : 'ltr'}
+            >
+              <div className="flex items-center justify-between">
+                <div className="relative h-9 w-32">
+                  <Image src={logoSrc} alt="AL-Burhan Group" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} unoptimized />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setMobileOpen(false)}
+                  aria-label="Close"
+                  className="size-9 rounded-full border border-[color:var(--glass-border)] text-[color:var(--fg-default)] transition-colors hover:border-[color:var(--brand-gold)] hover:text-[color:var(--brand-gold-bright)]"
+                >
+                  <CloseIcon className="m-auto size-4" />
+                </button>
+              </div>
+
+              <nav className="flex flex-1 flex-col gap-1">
+                {navigationItems.map((item, i) => {
+                  const active = isActive(item.href);
+                  return (
+                    <motion.div
+                      key={`${item.label}-${item.href}`}
+                      initial={{ opacity: 0, x: isRTL ? -16 : 16 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.05 * i + 0.1, duration: 0.35 }}
+                    >
+                      <Link
+                        href={item.href as any}
+                        onClick={() => setMobileOpen(false)}
+                        className={cn(
+                          'group flex items-center gap-3 rounded-xl px-3 py-3 text-base transition-colors duration-200',
+                          active
+                            ? 'bg-[rgba(194,50,74,0.18)] text-[color:var(--brand-gold-bright)]'
+                            : 'text-[color:var(--fg-default)] hover:bg-white/[0.03] hover:text-[color:var(--brand-gold-bright)]',
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            'flex size-9 items-center justify-center rounded-lg border',
+                            active
+                              ? 'border-[color:var(--brand-gold)] text-[color:var(--brand-gold)]'
+                              : 'border-[color:var(--glass-border)] text-[color:var(--fg-muted)] group-hover:border-[color:var(--brand-gold)] group-hover:text-[color:var(--brand-gold)]',
+                          )}
+                        >
+                          {item.icon}
+                        </span>
+                        <span className="font-medium tracking-wide">{item.label}</span>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </nav>
+
+              <div className="mt-auto border-t border-[color:var(--glass-border)] pt-6">
+                <NeonButton asChild className="w-full" size="lg">
+                  <Link href="/contact" onClick={() => setMobileOpen(false)}>
+                    <Phone className="size-4" />
+                    {t('contact')}
+                  </Link>
+                </NeonButton>
+              </div>
+            </motion.aside>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
