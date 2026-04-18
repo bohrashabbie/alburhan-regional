@@ -21,7 +21,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { fadeInUp } from '../../../utils/animations';
 import { Link } from '@/i18n/routing';
 import ProjectGallery from '../../../components/ProjectGallery';
-import { useProjectsWithDetails } from '../../../hooks/useApi';
+import { useProjectCategories, useSiteContent } from '../../../context/SiteContentContext';
 import { getImageUrl } from '../../../lib/api';
 
 export default function EgyptPage() {
@@ -30,29 +30,40 @@ export default function EgyptPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  // Fetch projects from API
-  const { data: apiProjects, loading: projectsLoading } = useProjectsWithDetails();
+  const { countryBySlug } = useSiteContent();
+  const country = countryBySlug('egypt');
+  const countryImage = getImageUrl(country?.country_image_url) || '/Company Countries/egypt city.jpg';
+  const countryLogo = getImageUrl(country?.logo_url) || '/logo/AL BURHAN EGYPT.png';
+
+  // Project categories (with their projects + images) come from the CMS.
+  const cmsCategories = useProjectCategories();
+  const projectsLoading = false;
 
   const apiProjectsByCategory = useMemo(() => {
-    if (!apiProjects || apiProjects.length === 0) return null;
-    const grouped: { [categoryName: string]: { name: string; folderPath: string; images: string[]; firstImage: string }[] } = {};
-    apiProjects.forEach((project) => {
-      const catName = project.category?.category_name || 'Uncategorized';
-      if (!grouped[catName]) grouped[catName] = [];
-      const projectImages = project.images
-        .map((img) => getImageUrl(img.projectimageurl))
-        .filter((url): url is string => url !== null);
-      if (projectImages.length > 0) {
-        grouped[catName].push({
-          name: project.projectname,
-          folderPath: '',
-          images: projectImages,
-          firstImage: projectImages[0],
-        });
-      }
+    if (!cmsCategories || cmsCategories.length === 0) return null;
+    const grouped: {
+      [categoryName: string]: { name: string; folderPath: string; images: string[]; firstImage: string }[];
+    } = {};
+    cmsCategories.forEach((cat) => {
+      const catName = cat.name_en || 'Uncategorized';
+      grouped[catName] = (cat.projects || [])
+        .map((project) => {
+          const imgs = (project.images || [])
+            .map((img) => getImageUrl(img.image_url))
+            .filter((u): u is string => !!u);
+          return imgs.length === 0
+            ? null
+            : {
+                name: project.name_en,
+                folderPath: '',
+                images: imgs,
+                firstImage: imgs[0],
+              };
+        })
+        .filter((p): p is { name: string; folderPath: string; images: string[]; firstImage: string } => !!p);
     });
     return Object.keys(grouped).length > 0 ? grouped : null;
-  }, [apiProjects]);
+  }, [cmsCategories]);
 
   // Static fallback projects data organized by categories
   const projectCategories = {
@@ -301,9 +312,10 @@ export default function EgyptPage() {
         >
           {/* Country Image */}
           <Image
-            src="/Company Countries/egypt city.jpg"
+            src={countryImage}
             alt="Egypt"
             fill
+            unoptimized
             style={{
               objectFit: 'cover',
             }}
@@ -338,9 +350,10 @@ export default function EgyptPage() {
               }}
             >
               <Image
-                src="/logo/AL BURHAN EGYPT.png"
+                src={countryLogo}
                 alt="Al Burhan Egypt Logo"
                 fill
+                unoptimized
                 style={{
                   objectFit: 'contain',
                 }}

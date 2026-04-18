@@ -42,6 +42,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useSiteContent } from '../context/SiteContentContext';
+import { getImageUrl } from '../lib/api';
 
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -52,21 +53,35 @@ const Header: React.FC = () => {
   const locale = useLocale();
   const isRTL = locale === 'ar';
   const t = useTranslations('header');
-  const { content } = useSiteContent();
+  const { content, setting } = useSiteContent();
+
+  // Resolve site logo from CMS (settings.logo_url), fall back to bundled asset.
+  const logoSrc = useMemo(() => {
+    return (
+      getImageUrl(setting('logo_url', locale === 'ar' ? 'ar' : 'en')) ||
+      '/logo/AL BURHAN GROUP .png'
+    );
+  }, [setting, locale]);
+
+  const iconForHref = (href: string) => {
+    if (href === '/' || href.endsWith('#home')) return <Home />;
+    if (href.includes('about')) return <Info />;
+    if (href.includes('product')) return <ShoppingBag />;
+    if (href.includes('project') || href.includes('work')) return <Work />;
+    if (href.includes('service')) return <Business />;
+    if (href.includes('contact')) return <ContactMail />;
+    return <Home />;
+  };
 
   // Get navigation from CMS or fallback to translations
   const navigationItems = useMemo(() => {
-    if (content?.navigation_items && content.navigation_items.length > 0) {
-      return content.navigation_items
-        .filter((item: any) => item.isactive)
-        .sort((a: any, b: any) => (a.sequencenumber ?? 0) - (b.sequencenumber ?? 0))
-        .map((item: any) => ({
-          label: locale === 'ar' ? item.labelar : item.labelen,
-          href: item.href,
-          icon: <Home />,
-        }));
+    if (content?.navigation && content.navigation.length > 0) {
+      return content.navigation.map((item) => ({
+        label: (locale === 'ar' ? item.label_ar : item.label_en) || item.label_en,
+        href: item.href,
+        icon: iconForHref(item.href),
+      }));
     }
-    // Fallback to translations
     return [
       { label: t('home'), href: '/', icon: <Home /> },
       { label: t('aboutUs'), href: '/about', icon: <Info /> },
@@ -292,7 +307,7 @@ const Header: React.FC = () => {
                     }}
                   >
                     <Image
-                      src="/logo/AL BURHAN GROUP .png"
+                      src={logoSrc}
                       alt="AL-Burhan Group Logo"
                       fill
                       style={{
@@ -300,6 +315,7 @@ const Header: React.FC = () => {
                         objectPosition: 'left center',
                       }}
                       priority
+                      unoptimized
                     />
                   </Box>
                 </Box>

@@ -22,7 +22,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { fadeInUp } from '../../../utils/animations';
 import { Link } from '@/i18n/routing';
 import ProjectGallery from '../../../components/ProjectGallery';
-import { useProjectsWithDetails } from '../../../hooks/useApi';
+import { useProjectCategories, useSiteContent } from '../../../context/SiteContentContext';
 import { getImageUrl } from '../../../lib/api';
 
 export default function UAEPage() {
@@ -30,6 +30,11 @@ export default function UAEPage() {
   const locale = useLocale();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const { countryBySlug } = useSiteContent();
+  const country = countryBySlug('uae');
+  const countryImage = getImageUrl(country?.country_image_url) || '/Company Countries/dubai city.jpg';
+  const countryLogo = getImageUrl(country?.logo_url) || '/logo/AL BURHAN UAE.png';
 
   // Contact form state
   const [formData, setFormData] = React.useState({
@@ -59,35 +64,35 @@ export default function UAEPage() {
     });
   };
 
-  // Fetch projects from API
-  const { data: apiProjects, loading: projectsLoading } = useProjectsWithDetails();
+  // Project categories (with their projects + images) come from the CMS.
+  const cmsCategories = useProjectCategories();
+  const projectsLoading = false;
 
-  // Convert API projects into ProjectGallery format, grouped by category
   const apiProjectsByCategory = useMemo(() => {
-    if (!apiProjects || apiProjects.length === 0) return null;
-
-    const grouped: { [categoryName: string]: { name: string; folderPath: string; images: string[]; firstImage: string }[] } = {};
-
-    apiProjects.forEach((project) => {
-      const catName = project.category?.category_name || 'Uncategorized';
-      if (!grouped[catName]) grouped[catName] = [];
-
-      const projectImages = project.images
-        .map((img) => getImageUrl(img.projectimageurl))
-        .filter((url): url is string => url !== null);
-
-      if (projectImages.length > 0) {
-        grouped[catName].push({
-          name: project.projectname,
-          folderPath: '',
-          images: projectImages,
-          firstImage: projectImages[0],
-        });
-      }
+    if (!cmsCategories || cmsCategories.length === 0) return null;
+    const grouped: {
+      [categoryName: string]: { name: string; folderPath: string; images: string[]; firstImage: string }[];
+    } = {};
+    cmsCategories.forEach((cat) => {
+      const catName = cat.name_en || 'Uncategorized';
+      grouped[catName] = (cat.projects || [])
+        .map((project) => {
+          const imgs = (project.images || [])
+            .map((img) => getImageUrl(img.image_url))
+            .filter((u): u is string => !!u);
+          return imgs.length === 0
+            ? null
+            : {
+                name: project.name_en,
+                folderPath: '',
+                images: imgs,
+                firstImage: imgs[0],
+              };
+        })
+        .filter((p): p is { name: string; folderPath: string; images: string[]; firstImage: string } => !!p);
     });
-
     return Object.keys(grouped).length > 0 ? grouped : null;
-  }, [apiProjects]);
+  }, [cmsCategories]);
 
   // Static fallback projects data from OurProject folder
   const Projects = {
@@ -336,9 +341,10 @@ export default function UAEPage() {
         >
           {/* Country Image */}
           <Image
-            src="/Company Countries/dubai city.jpg"
+            src={countryImage}
             alt="UAE"
             fill
+            unoptimized
             style={{
               objectFit: 'cover',
             }}
@@ -373,9 +379,10 @@ export default function UAEPage() {
               }}
             >
               <Image
-                src="/logo/AL BURHAN UAE.png"
+                src={countryLogo}
                 alt="Al Burhan UAE Logo"
                 fill
+                unoptimized
                 style={{
                   objectFit: 'contain',
                 }}

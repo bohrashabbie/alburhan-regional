@@ -34,10 +34,26 @@ import { fadeInUp, staggerContainer, staggerItem } from '../../../utils/animatio
 import { useTranslations, useLocale } from 'next-intl';
 import { AE, CN, EG, KW } from 'country-flag-icons/react/3x2';
 import Image from 'next/image';
+import { useServices } from '../../../context/SiteContentContext';
+import { getImageUrl } from '../../../lib/api';
 
 export default function About() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  // Service tile images come from CMS Services, in sort order.
+  // Fall back to the legacy static images if the CMS entry is missing.
+  const cmsServices = useServices();
+  const serviceFallbacks = [
+    '/Our Service/designing.png',
+    '/Our Service/supply.png',
+    '/Our Service/installation.png',
+    '/Our Service/after sales service.png',
+  ];
+  const serviceImage = (index: number): string => {
+    const svc = cmsServices[index];
+    return getImageUrl(svc?.image_url) || serviceFallbacks[index];
+  };
   const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
   const t = useTranslations('aboutPage');
   const locale = useLocale();
@@ -374,9 +390,10 @@ export default function About() {
                     }}
                   >
                     <Image
-                      src="/Our Service/designing.png"
+                      src={serviceImage(0)}
                       alt={t('whatWeOffer.lightingDesign.title')}
                       fill
+                      unoptimized
                       style={{
                         objectFit: 'cover',
                       }}
@@ -448,9 +465,10 @@ export default function About() {
                     }}
                   >
                     <Image
-                      src="/Our Service/supply.png"
+                      src={serviceImage(1)}
                       alt={t('whatWeOffer.lightingSupply.title')}
                       fill
+                      unoptimized
                       style={{
                         objectFit: 'cover',
                       }}
@@ -522,9 +540,10 @@ export default function About() {
                     }}
                   >
                     <Image
-                      src="/Our Service/installation.png"
+                      src={serviceImage(2)}
                       alt={t('whatWeOffer.supplyInstall.title')}
                       fill
+                      unoptimized
                       style={{
                         objectFit: 'cover',
                       }}
@@ -596,9 +615,10 @@ export default function About() {
                     }}
                   >
                     <Image
-                      src="/Our Service/after sales service.png"
+                      src={serviceImage(3)}
                       alt={t('whatWeOffer.afterSales.title')}
                       fill
+                      unoptimized
                       style={{
                         objectFit: 'cover',
                       }}

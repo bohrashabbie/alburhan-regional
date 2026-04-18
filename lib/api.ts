@@ -1,189 +1,237 @@
+// ============================================================================
+// API client for the AL-Burhan CMS (FastAPI).
+//
+// Base URLs are taken from env so they can be overridden per-environment:
+//   NEXT_PUBLIC_CMS_URL  -> e.g. http://13.60.4.75:8002
+//
+// Defaults to the production CMS host requested by the team.
+// ============================================================================
 import type {
-  ApiResponse,
   Banner,
-  Branch,
+  Brand,
+  CarouselSlide,
+  ContactInfo,
   Country,
-  Project,
+  FooterLink,
+  NavigationItem,
+  PageContent,
+  Product,
   ProjectCategory,
-  ProjectImage,
+  Sector,
+  Service,
+  SiteContent,
+  SiteSetting,
+  SocialLink,
+  StaticPage,
+  TeamMember,
 } from './types';
 
-const API_URL = 'http://13.60.4.75:8002/api';
-const API_BASE = 'http://13.60.4.75:8002';
+export const CMS_BASE =
+  process.env.NEXT_PUBLIC_CMS_URL?.replace(/\/$/, '') || 'http://13.60.4.75:8002';
+export const CMS_API = `${CMS_BASE}/api`;
+
+// ---------------------------------------------------------------------------
+// Image URL helper
+// ---------------------------------------------------------------------------
 
 /**
- * Prepend the API base URL to a relative image path.
- * Returns null if the path is null/undefined/empty.
+ * Convert a CMS-stored image path into a fully qualified URL.
+ *  - `null` / empty input  → returns `null`
+ *  - already-absolute URL → returned untouched
+ *  - relative path        → prefixed with the CMS base URL
+ *
+ * Image rows in the DB store paths like `/uploads/Brands/brand1.png` and the
+ * CMS serves the `uploads` folder via `app.mount("/uploads", ...)`.
  */
-export function getImageUrl(relativePath: string | null | undefined): string | null {
-  if (!relativePath) return null;
-  if (relativePath.startsWith('http://') || relativePath.startsWith('https://')) {
-    return relativePath;
-  }
-  return `${API_BASE}${relativePath.startsWith('/') ? '' : '/'}${relativePath}`;
+export function getImageUrl(path: string | null | undefined): string | null {
+  if (!path) return null;
+  const p = path.trim();
+  if (!p) return null;
+  if (p.startsWith('http://') || p.startsWith('https://')) return p;
+  return `${CMS_BASE}${p.startsWith('/') ? '' : '/'}${p}`;
 }
 
-/**
- * Generic fetch wrapper that handles the standard API response format.
- */
-async function fetchApi<T>(endpoint: string): Promise<ApiResponse<T>> {
+// ---------------------------------------------------------------------------
+// Generic fetch wrapper (always cache-busted, server- and client-safe)
+// ---------------------------------------------------------------------------
+
+async function cmsFetch<T>(path: string, init?: RequestInit): Promise<T | null> {
   try {
-    const res = await fetch(`${API_URL}${endpoint}`);
-    const data: ApiResponse<T> = await res.json();
-    return data;
-  } catch (error) {
-    return {
-      result: null,
-      statusCode: 500,
-      success: false,
-      error: error instanceof Error ? error.message : 'Network error',
-    };
+    const url = `${CMS_API}${path}`;
+    const res = await fetch(url, {
+      cache: 'no-store',
+      headers: {
+        Accept: 'application/json',
+        ...(init?.headers || {}),
+      },
+      ...init,
+    });
+    if (!res.ok) {
+      console.error(`[CMS] ${res.status} ${res.statusText} ← ${url}`);
+      return null;
+    }
+    return (await res.json()) as T;
+  } catch (err) {
+    console.error('[CMS] fetch failed:', err);
+    return null;
   }
 }
 
-// ─── Banners ────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
+// Aggregated site content (preferred entry point)
+// ---------------------------------------------------------------------------
 
-export async function getBanners(): Promise<Banner[]> {
-  const data = await fetchApi<Banner[]>('/banners/');
-  return data.success && data.result ? data.result : [];
+export async function getSiteContent(): Promise<SiteContent | null> {
+  return cmsFetch<SiteContent>('/public/site-content');
 }
 
-export async function getBannerById(id: number): Promise<Banner | null> {
-  const data = await fetchApi<Banner>(`/banners/${id}`);
-  return data.success ? data.result : null;
+// ---------------------------------------------------------------------------
+// Individual public endpoints (use when you need only a slice)
+// ---------------------------------------------------------------------------
+
+export async function getSettings(): Promise<SiteSetting[]> {
+  return (await cmsFetch<SiteSetting[]>('/public/settings')) || [];
 }
 
-// ─── Branches ───────────────────────────────────────────────────────────────
-
-export async function getBranches(): Promise<Branch[]> {
-  const data = await fetchApi<Branch[]>('/branches/');
-  return data.success && data.result ? data.result : [];
+export async function getNavigation(): Promise<NavigationItem[]> {
+  return (await cmsFetch<NavigationItem[]>('/public/navigation')) || [];
 }
 
-export async function getBranchById(id: number): Promise<Branch | null> {
-  const data = await fetchApi<Branch>(`/branches/${id}`);
-  return data.success ? data.result : null;
+export async function getCarouselSlides(): Promise<CarouselSlide[]> {
+  return (await cmsFetch<CarouselSlide[]>('/public/carousel')) || [];
 }
 
-export async function getBranchesByCountry(countryId: number): Promise<Branch[]> {
-  const branches = await getBranches();
-  return branches.filter((b) => b.countryid === countryId);
+export async function getPageContents(pageKey?: string): Promise<PageContent[]> {
+  const qs = pageKey ? `?page_key=${encodeURIComponent(pageKey)}` : '';
+  return (await cmsFetch<PageContent[]>(`/public/page-contents${qs}`)) || [];
 }
 
-// ─── Countries ──────────────────────────────────────────────────────────────
+export async function getServices(): Promise<Service[]> {
+  return (await cmsFetch<Service[]>('/public/services')) || [];
+}
+
+export async function getSectors(): Promise<Sector[]> {
+  return (await cmsFetch<Sector[]>('/public/sectors')) || [];
+}
+
+export async function getTeamMembers(): Promise<TeamMember[]> {
+  return (await cmsFetch<TeamMember[]>('/public/team')) || [];
+}
 
 export async function getCountries(): Promise<Country[]> {
-  const data = await fetchApi<Country[]>('/countries/');
-  return data.success && data.result ? data.result : [];
+  return (await cmsFetch<Country[]>('/public/countries')) || [];
 }
 
-export async function getCountryById(id: number): Promise<Country | null> {
-  const data = await fetchApi<Country>(`/countries/${id}`);
-  return data.success ? data.result : null;
+export async function getCountryBySlug(slug: string): Promise<Country | null> {
+  return cmsFetch<Country>(`/public/countries/${encodeURIComponent(slug)}`);
 }
 
-// ─── Projects ───────────────────────────────────────────────────────────────
-
-export async function getProjects(): Promise<Project[]> {
-  const data = await fetchApi<Project[]>('/projects/');
-  return data.success && data.result ? data.result : [];
+export async function getContactInfo(countryId?: number): Promise<ContactInfo[]> {
+  const qs = countryId ? `?country_id=${countryId}` : '';
+  return (await cmsFetch<ContactInfo[]>(`/public/contact-info${qs}`)) || [];
 }
 
-export async function getProjectById(id: number): Promise<Project | null> {
-  const data = await fetchApi<Project>(`/projects/${id}`);
-  return data.success ? data.result : null;
+export async function getSocialLinks(): Promise<SocialLink[]> {
+  return (await cmsFetch<SocialLink[]>('/public/social-links')) || [];
 }
 
-export async function getProjectsByCategory(categoryId: number): Promise<Project[]> {
-  const projects = await getProjects();
-  return projects.filter((p) => p.categoryid === categoryId);
+export async function getBrands(): Promise<Brand[]> {
+  return (await cmsFetch<Brand[]>('/public/brands')) || [];
 }
 
-// ─── Project Categories ─────────────────────────────────────────────────────
+export async function getProducts(): Promise<Product[]> {
+  return (await cmsFetch<Product[]>('/public/products')) || [];
+}
+
+export async function getBanners(countryId?: number): Promise<Banner[]> {
+  const qs = countryId ? `?country_id=${countryId}` : '';
+  return (await cmsFetch<Banner[]>(`/public/banners${qs}`)) || [];
+}
 
 export async function getProjectCategories(): Promise<ProjectCategory[]> {
-  const data = await fetchApi<ProjectCategory[]>('/project-categories/');
-  return data.success && data.result ? data.result : [];
+  return (await cmsFetch<ProjectCategory[]>('/public/project-categories')) || [];
 }
 
-export async function getProjectCategoryById(id: number): Promise<ProjectCategory | null> {
-  const data = await fetchApi<ProjectCategory>(`/project-categories/${id}`);
-  return data.success ? data.result : null;
+export async function getFooterLinks(): Promise<FooterLink[]> {
+  return (await cmsFetch<FooterLink[]>('/public/footer-links')) || [];
 }
 
-// ─── Project Images ─────────────────────────────────────────────────────────
-
-export async function getProjectImages(): Promise<ProjectImage[]> {
-  const data = await fetchApi<ProjectImage[]>('/project-images/');
-  return data.success && data.result ? data.result : [];
+export async function getStaticPage(slug: string): Promise<StaticPage | null> {
+  return cmsFetch<StaticPage>(`/public/pages/${encodeURIComponent(slug)}`);
 }
 
-export async function getProjectImageById(id: number): Promise<ProjectImage | null> {
-  const data = await fetchApi<ProjectImage>(`/project-images/${id}`);
-  return data.success ? data.result : null;
+// ---------------------------------------------------------------------------
+// Lookup helpers
+// ---------------------------------------------------------------------------
+
+export function findSetting(
+  settings: SiteSetting[] | undefined,
+  key: string,
+): SiteSetting | undefined {
+  return settings?.find((s) => s.key === key);
 }
 
-export async function getProjectImagesByProject(projectId: number): Promise<ProjectImage[]> {
-  const images = await getProjectImages();
-  return images
-    .filter((img) => img.projectid === projectId && img.isactive)
-    .sort((a, b) => (a.sequencenumber ?? 0) - (b.sequencenumber ?? 0));
+export function getSettingValue(
+  settings: SiteSetting[] | undefined,
+  key: string,
+  locale: 'en' | 'ar' = 'en',
+): string | null {
+  const s = findSetting(settings, key);
+  if (!s) return null;
+  return (locale === 'ar' ? s.value_ar : s.value_en) || s.value_en || null;
 }
 
-// ─── Aggregated helpers ─────────────────────────────────────────────────────
-
-/**
- * Get all projects with their category info and images attached.
- */
-export async function getProjectsWithDetails(): Promise<
-  (Project & { category: ProjectCategory | undefined; images: ProjectImage[] })[]
-> {
-  const [projects, categories, images] = await Promise.all([
-    getProjects(),
-    getProjectCategories(),
-    getProjectImages(),
-  ]);
-
-  return projects.map((project) => ({
-    ...project,
-    category: categories.find((c) => c.id === project.categoryid),
-    images: images
-      .filter((img) => img.projectid === project.id && img.isactive)
-      .sort((a, b) => (a.sequencenumber ?? 0) - (b.sequencenumber ?? 0)),
-  }));
+export function getPageImage(
+  pages: PageContent[] | undefined,
+  pageKey: string,
+  sectionKey: string,
+): string | null {
+  const item = pages?.find((p) => p.page_key === pageKey && p.section_key === sectionKey);
+  return item?.image_url || null;
 }
 
-/**
- * Get active banners for a specific country, sorted by sequence.
- */
-export async function getBannersByCountry(countryId: number): Promise<Banner[]> {
-  const banners = await getBanners();
-  return banners
-    .filter((b) => b.countryid === countryId && b.isactive)
-    .sort((a, b) => (a.sequencenumber ?? 0) - (b.sequencenumber ?? 0));
+export function getCountryBySlugFrom(
+  countries: Country[] | undefined,
+  slug: string,
+): Country | undefined {
+  return countries?.find((c) => c.slug === slug);
 }
 
-/**
- * Get all active banners sorted by sequence.
- */
-export async function getActiveBanners(): Promise<Banner[]> {
-  const banners = await getBanners();
-  return banners
-    .filter((b) => b.isactive)
-    .sort((a, b) => (a.sequencenumber ?? 0) - (b.sequencenumber ?? 0));
+export function getBannersForCountry(
+  banners: Banner[] | undefined,
+  countryId: number,
+): Banner[] {
+  return (banners || [])
+    .filter((b) => b.country_id === countryId && b.is_active)
+    .sort((a, b) => a.sort_order - b.sort_order);
 }
 
-// ─── Site Content ─────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
+// Contact form submission
+// ---------------------------------------------------------------------------
 
-export async function getSiteContent() {
+export interface ContactFormData {
+  name: string;
+  email: string;
+  phone?: string;
+  subject?: string;
+  message: string;
+  country_id?: number;
+}
+
+export async function submitContactForm(payload: ContactFormData) {
   try {
-    const res = await fetch(`${API_URL}/public/site-content`, {
-      cache: 'no-store',
+    const res = await fetch(`${CMS_API}/public/contact`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
     });
-    if (!res.ok) return null;
-    return await res.json();
-  } catch (error) {
-    console.error('Failed to fetch site content:', error);
-    return null;
+    if (!res.ok) return { success: false as const, error: res.statusText };
+    return { success: true as const, data: await res.json() };
+  } catch (err) {
+    return {
+      success: false as const,
+      error: err instanceof Error ? err.message : 'Network error',
+    };
   }
 }

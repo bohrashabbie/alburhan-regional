@@ -22,7 +22,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { fadeInUp } from '../../../utils/animations';
 import { Link } from '@/i18n/routing';
 import ProjectGallery from '../../../components/ProjectGallery';
-import { useProjectsWithDetails } from '../../../hooks/useApi';
+import { useProjectCategories, useSiteContent } from '../../../context/SiteContentContext';
 import { getImageUrl } from '../../../lib/api';
 
 export default function ChinaPage() {
@@ -30,6 +30,11 @@ export default function ChinaPage() {
   const locale = useLocale();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const { countryBySlug } = useSiteContent();
+  const country = countryBySlug('china');
+  const countryImage = getImageUrl(country?.country_image_url) || '/Company Countries/china city.jpg';
+  const countryLogo = getImageUrl(country?.logo_url) || '/logo/AL BURHAN CHINA.png';
 
   // Contact form state
   const [formData, setFormData] = React.useState({
@@ -59,29 +64,35 @@ export default function ChinaPage() {
     });
   };
 
-  // Fetch projects from API
-  const { data: apiProjects, loading: projectsLoading } = useProjectsWithDetails();
+  // Project categories (with their projects + images) come from the CMS.
+  const cmsCategories = useProjectCategories();
+  const projectsLoading = false;
 
   const apiProjectsByCategory = useMemo(() => {
-    if (!apiProjects || apiProjects.length === 0) return null;
-    const grouped: { [categoryName: string]: { name: string; folderPath: string; images: string[]; firstImage: string }[] } = {};
-    apiProjects.forEach((project) => {
-      const catName = project.category?.category_name || 'Uncategorized';
-      if (!grouped[catName]) grouped[catName] = [];
-      const projectImages = project.images
-        .map((img) => getImageUrl(img.projectimageurl))
-        .filter((url): url is string => url !== null);
-      if (projectImages.length > 0) {
-        grouped[catName].push({
-          name: project.projectname,
-          folderPath: '',
-          images: projectImages,
-          firstImage: projectImages[0],
-        });
-      }
+    if (!cmsCategories || cmsCategories.length === 0) return null;
+    const grouped: {
+      [categoryName: string]: { name: string; folderPath: string; images: string[]; firstImage: string }[];
+    } = {};
+    cmsCategories.forEach((cat) => {
+      const catName = cat.name_en || 'Uncategorized';
+      grouped[catName] = (cat.projects || [])
+        .map((project) => {
+          const imgs = (project.images || [])
+            .map((img) => getImageUrl(img.image_url))
+            .filter((u): u is string => !!u);
+          return imgs.length === 0
+            ? null
+            : {
+                name: project.name_en,
+                folderPath: '',
+                images: imgs,
+                firstImage: imgs[0],
+              };
+        })
+        .filter((p): p is { name: string; folderPath: string; images: string[]; firstImage: string } => !!p);
     });
     return Object.keys(grouped).length > 0 ? grouped : null;
-  }, [apiProjects]);
+  }, [cmsCategories]);
 
   // Static fallback projects data from OurProject folder
   const projectCategories = {
@@ -330,9 +341,10 @@ export default function ChinaPage() {
         >
           {/* Country Image */}
           <Image
-            src="/Company Countries/china city.jpg"
+            src={countryImage}
             alt="China"
             fill
+            unoptimized
             style={{
               objectFit: 'cover',
             }}
@@ -367,9 +379,10 @@ export default function ChinaPage() {
               }}
             >
               <Image
-                src="/logo/AL BURHAN CHINA.png"
+                src={countryLogo}
                 alt="Al Burhan China Logo"
                 fill
+                unoptimized
                 style={{
                   objectFit: 'contain',
                 }}

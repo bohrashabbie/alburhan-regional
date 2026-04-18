@@ -31,57 +31,68 @@ import {
 } from '../utils/animations';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
-import { useBranches } from '../hooks/useApi';
-import { useSiteContent } from '../context/SiteContentContext';
+import {
+  useContactInfo,
+  useCountries,
+  useSocialLinks,
+} from '../context/SiteContentContext';
 
 const Footer: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const t = useTranslations();
-  const { content } = useSiteContent();
 
-  // Fetch branches from API
-  const { data: apiBranches } = useBranches();
+  // Pull branches/contact data and social links from CMS context.
+  const allContacts = useContactInfo();
+  const countries = useCountries();
+  const socialLinksRaw = useSocialLinks();
 
   const branchData = useMemo(() => {
-    if (!apiBranches || apiBranches.length === 0) return null;
-    const result: { [key: string]: { email?: string; phone1?: string; phone2?: string; address?: string } } = {};
-    apiBranches.forEach((b) => {
-      const name = (b.branchname || '').toLowerCase();
-      const entry = {
-        email: b.email || undefined,
-        phone1: b.contact1 || undefined,
-        phone2: b.contact2 || undefined,
-        address: b.branchaddress || undefined,
+    const findCountry = (slug: string) => countries.find((c) => c.slug === slug);
+    const lookup = (slug: string) => {
+      const country = findCountry(slug);
+      if (!country) return undefined;
+      const ci = allContacts.find((c) => c.country_id === country.id);
+      if (!ci) return undefined;
+      return {
+        email: ci.email || undefined,
+        phone1: ci.phone1 || undefined,
+        phone2: ci.phone2 || undefined,
+        address: ci.address_en || undefined,
       };
-      if (name.includes('dubai') || name.includes('uae') || name.includes('emirates')) result['dubai'] = entry;
-      else if (name.includes('china')) result['china'] = entry;
-      else if (name.includes('kuwait')) result['kuwait'] = entry;
-      else if (name.includes('egypt')) result['egypt'] = entry;
-    });
-    return Object.keys(result).length > 0 ? result : null;
-  }, [apiBranches]);
+    };
+    return {
+      dubai: lookup('uae'),
+      kuwait: lookup('kuwait'),
+      china: lookup('china'),
+      egypt: lookup('egypt'),
+    } as Record<string, { email?: string; phone1?: string; phone2?: string; address?: string } | undefined>;
+  }, [allContacts, countries]);
 
-  // Get social links from CMS or fallback
+  const platformIcon = (platform: string) => {
+    const p = platform.toLowerCase();
+    if (p.includes('face')) return <Facebook />;
+    if (p.includes('twit') || p === 'x') return <Twitter />;
+    if (p.includes('insta')) return <Instagram />;
+    if (p.includes('linke')) return <LinkedIn />;
+    return <Facebook />;
+  };
+
   const socialLinks = useMemo(() => {
-    if (content?.social_links && content.social_links.length > 0) {
-      return content.social_links
-        .filter((item: any) => item.isactive)
-        .sort((a: any, b: any) => (a.sequencenumber ?? 0) - (b.sequencenumber ?? 0))
-        .map((item: any) => ({
-          icon: <Facebook />, // Map platform to icon
-          href: item.url,
-          label: item.platform,
-        }));
+    if (socialLinksRaw.length > 0) {
+      return socialLinksRaw.map((s) => ({
+        icon: platformIcon(s.platform),
+        href: s.url,
+        label: s.platform,
+      }));
     }
-    // Fallback
     return [
       { icon: <Facebook />, href: '#', label: 'Facebook' },
       { icon: <Twitter />, href: '#', label: 'Twitter' },
       { icon: <Instagram />, href: '#', label: 'Instagram' },
       { icon: <LinkedIn />, href: '#', label: 'LinkedIn' },
     ];
-  }, [content]);
+  }, [socialLinksRaw]);
 
   const contactInfo = [
     { icon: <Email />, text: t('contact.emailValue') },

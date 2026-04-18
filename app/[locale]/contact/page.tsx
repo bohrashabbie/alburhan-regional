@@ -35,8 +35,8 @@ export default function ContactPage() {
     if (!apiCountries || apiCountries.length === 0) return null;
     const mapping: { [key: string]: string } = {};
     apiCountries.forEach((c) => {
-      const nameEn = (c.countrynameen || '').toLowerCase();
-      const displayName = locale === 'ar' ? c.countrynamear : c.countrynameen;
+      const nameEn = (c.name_en || '').toLowerCase();
+      const displayName = locale === 'ar' ? c.name_ar : c.name_en;
       if (displayName) {
         if (nameEn.includes('kuwait')) mapping['kuwait'] = displayName;
         else if (nameEn.includes('egypt')) mapping['egypt'] = displayName;

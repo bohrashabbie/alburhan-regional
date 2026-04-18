@@ -1,0 +1,14 @@
+Wire frontend images to CMS/S3 and tighten image pipeline
+
+- Home page: group logo, featured project image, and owner photo now load
+  from CMS settings/projects/team data (with static fallbacks)
+- Country pages (Kuwait/UAE/China/Egypt): hero image and corner logo read
+  from Country.country_image_url and Country.logo_url by slug
+- About page: the 4 "What we offer" tiles now source images from CMS Services
+  in sort_order
+- Contact page: align to current Country schema (name_en/name_ar)
+- next.config.ts: disable Next image optimizer for remote assets (S3 is already
+  web-ready; avoids TimeoutError floods from the eu-north-1 bucket) and
+  declare allowed image qualities [75, 90, 100]
+- .gitignore: expand editor/OS/cache patterns, ignore archives and local
+  uploads directories to prevent large-file pushes

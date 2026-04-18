@@ -44,7 +44,12 @@ import Image from 'next/image';
 import { CN, KW, AE, EG } from 'country-flag-icons/react/3x2';
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/routing';
-import { useCountries } from '../../hooks/useApi';
+import {
+  useCountries,
+  useProjectCategories,
+  useTeam,
+  useSiteContent,
+} from '../../context/SiteContentContext';
 import { getImageUrl } from '../../lib/api';
 
 export default function Home() {
@@ -56,24 +61,43 @@ export default function Home() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
 
-  // Fetch countries from API
-  const { data: apiCountries } = useCountries();
+  // Country card images come from CMS Country.country_image_url, addressed by slug.
+  const apiCountries = useCountries();
 
-  // Map API country images to static country keys
+  // Other CMS data used on the home page
+  const { setting } = useSiteContent();
+  const cmsProjects = useProjectCategories();
+  const team = useTeam();
+
+  const groupLogo =
+    getImageUrl(setting('logo_url')) ||
+    getImageUrl(setting('site_logo')) ||
+    '/logo/AL BURHAN GROUP .png';
+
+  const featuredProjectImage = useMemo<string>(() => {
+    for (const cat of cmsProjects) {
+      for (const p of cat.projects || []) {
+        const img = p.images?.[0]?.image_url;
+        const resolved = getImageUrl(img);
+        if (resolved) return resolved;
+      }
+    }
+    return '/Projects/Project 1.jpg';
+  }, [cmsProjects]);
+
+  const ownerImage =
+    getImageUrl(team?.[0]?.image_url) || '/Owners/owner_shabbir.jpeg';
   const apiCountryImages = useMemo(() => {
     if (!apiCountries || apiCountries.length === 0) return null;
     const mapping: { [key: string]: string } = {};
     apiCountries.forEach((c) => {
-      const name = (c.countrynameen || '').toLowerCase();
-      if (c.countryurl) {
-        const imgUrl = getImageUrl(c.countryurl);
-        if (imgUrl) {
-          if (name.includes('china')) mapping['china'] = imgUrl;
-          else if (name.includes('kuwait')) mapping['kuwait'] = imgUrl;
-          else if (name.includes('uae') || name.includes('emirates') || name.includes('dubai')) mapping['dubai'] = imgUrl;
-          else if (name.includes('egypt')) mapping['egypt'] = imgUrl;
-        }
-      }
+      const url = getImageUrl(c.country_image_url);
+      if (!url) return;
+      const slug = c.slug;
+      if (slug === 'china') mapping['china'] = url;
+      else if (slug === 'kuwait') mapping['kuwait'] = url;
+      else if (slug === 'uae') mapping['dubai'] = url;
+      else if (slug === 'egypt') mapping['egypt'] = url;
     });
     return Object.keys(mapping).length > 0 ? mapping : null;
   }, [apiCountries]);
@@ -298,9 +322,10 @@ export default function Home() {
                       }}
                     >
                       <Image
-                          src="/logo/AL BURHAN GROUP .png"
+                          src={groupLogo}
                           alt="AL-Burhan Group Logo"
                         fill
+                        unoptimized
                         style={{
                             objectFit: 'contain',
                           }}
@@ -541,9 +566,10 @@ export default function Home() {
                         style={{ width: '100%', height: '100%', position: 'relative' }}
                       >
                         <Image
-                          src="/Projects/Project 1.jpg"
+                          src={featuredProjectImage}
                           alt="AL-Burhan Project"
                           fill
+                          unoptimized
                           style={{
                             objectFit: 'cover',
                           }}
@@ -604,9 +630,10 @@ export default function Home() {
                           }}
                         >
                           <Image
-                            src="/logo/AL BURHAN GROUP .png"
+                            src={groupLogo}
                             alt="Al Burhan Group Logo"
                             fill
+                            unoptimized
                             style={{
                               objectFit: 'contain',
                             }}
@@ -1281,9 +1308,10 @@ export default function Home() {
                               }}
                             >
                               <Image
-                        src="/Owners/owner_shabbir.jpeg"
+                        src={ownerImage}
                         alt="Owner"
                                 fill
+                                unoptimized
                                 style={{
                                   objectFit: 'cover',
                                 }}

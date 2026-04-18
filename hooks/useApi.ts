@@ -1,117 +1,161 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   getBanners,
-  getActiveBanners,
-  getBannersByCountry,
-  getBranches,
-  getBranchesByCountry,
+  getBrands,
+  getCarouselSlides,
   getCountries,
-  getProjects,
-  getProjectsByCategory,
+  getCountryBySlug,
+  getFooterLinks,
+  getNavigation,
+  getPageContents,
+  getProducts,
   getProjectCategories,
-  getProjectImages,
-  getProjectImagesByProject,
-  getProjectsWithDetails,
+  getServices,
+  getSettings,
+  getSocialLinks,
+  getTeamMembers,
 } from '../lib/api';
 import type {
   Banner,
-  Branch,
+  Brand,
+  CarouselSlide,
   Country,
-  Project,
+  FooterLink,
+  NavigationItem,
+  PageContent,
+  Product,
   ProjectCategory,
-  ProjectImage,
+  Service,
+  SiteSetting,
+  SocialLink,
+  TeamMember,
 } from '../lib/types';
+
+// ---------------------------------------------------------------------------
+// Generic data hook with focus-based revalidation
+// ---------------------------------------------------------------------------
 
 interface UseApiState<T> {
   data: T;
   loading: boolean;
   error: string | null;
+  refresh: () => void;
 }
 
 function useApiCall<T>(fetcher: () => Promise<T>, defaultValue: T): UseApiState<T> {
-  const [state, setState] = useState<UseApiState<T>>({
+  const [state, setState] = useState<{ data: T; loading: boolean; error: string | null }>({
     data: defaultValue,
     loading: true,
     error: null,
   });
 
-  useEffect(() => {
-    let cancelled = false;
+  const fetcherRef = useRef(fetcher);
+  fetcherRef.current = fetcher;
 
-    const load = async () => {
-      try {
-        const result = await fetcher();
-        if (!cancelled) {
-          setState({ data: result, loading: false, error: null });
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setState({
-            data: defaultValue,
-            loading: false,
-            error: err instanceof Error ? err.message : 'Failed to fetch data',
-          });
-        }
-      }
-    };
-
-    load();
-    return () => {
-      cancelled = true;
-    };
+  const load = useCallback(async () => {
+    try {
+      setState((prev) => ({ ...prev, loading: true }));
+      const result = await fetcherRef.current();
+      setState({ data: result, loading: false, error: null });
+    } catch (err) {
+      setState({
+        data: defaultValue,
+        loading: false,
+        error: err instanceof Error ? err.message : 'Failed to fetch data',
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return state;
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') load();
+    };
+    window.addEventListener('visibilitychange', onVisible);
+    return () => window.removeEventListener('visibilitychange', onVisible);
+  }, [load]);
+
+  return { ...state, refresh: load };
 }
 
-// ─── Hook exports ───────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
+// Hook exports — each maps directly to one CMS endpoint
+// ---------------------------------------------------------------------------
 
-export function useBanners() {
-  return useApiCall(() => getBanners(), []);
+export function useSettings() {
+  return useApiCall<SiteSetting[]>(getSettings, []);
 }
 
-export function useActiveBanners() {
-  return useApiCall(() => getActiveBanners(), []);
+export function useNavigation() {
+  return useApiCall<NavigationItem[]>(getNavigation, []);
 }
 
-export function useBannersByCountry(countryId: number) {
-  return useApiCall(() => getBannersByCountry(countryId), []);
+export function useCarouselSlides() {
+  return useApiCall<CarouselSlide[]>(getCarouselSlides, []);
 }
 
-export function useBranches() {
-  return useApiCall(() => getBranches(), []);
+export function usePageContents(pageKey?: string) {
+  const fetcher = useCallback(() => getPageContents(pageKey), [pageKey]);
+  return useApiCall<PageContent[]>(fetcher, []);
 }
 
-export function useBranchesByCountry(countryId: number) {
-  return useApiCall(() => getBranchesByCountry(countryId), []);
+export function useServices() {
+  return useApiCall<Service[]>(getServices, []);
+}
+
+export function useTeamMembers() {
+  return useApiCall<TeamMember[]>(getTeamMembers, []);
 }
 
 export function useCountries() {
-  return useApiCall(() => getCountries(), []);
+  return useApiCall<Country[]>(getCountries, []);
 }
 
-export function useProjects() {
-  return useApiCall(() => getProjects(), []);
+export function useCountry(slug: string) {
+  const fetcher = useCallback(() => getCountryBySlug(slug), [slug]);
+  return useApiCall<Country | null>(fetcher, null);
 }
 
-export function useProjectsByCategory(categoryId: number) {
-  return useApiCall(() => getProjectsByCategory(categoryId), []);
+export function useSocialLinks() {
+  return useApiCall<SocialLink[]>(getSocialLinks, []);
+}
+
+export function useBrands() {
+  return useApiCall<Brand[]>(getBrands, []);
+}
+
+export function useProducts() {
+  return useApiCall<Product[]>(getProducts, []);
+}
+
+export function useBanners(countryId?: number) {
+  const fetcher = useCallback(() => getBanners(countryId), [countryId]);
+  return useApiCall<Banner[]>(fetcher, []);
 }
 
 export function useProjectCategories() {
-  return useApiCall(() => getProjectCategories(), []);
+  return useApiCall<ProjectCategory[]>(getProjectCategories, []);
 }
 
-export function useProjectImages() {
-  return useApiCall(() => getProjectImages(), []);
+export function useFooterLinks() {
+  return useApiCall<FooterLink[]>(getFooterLinks, []);
 }
 
-export function useProjectImagesByProject(projectId: number) {
-  return useApiCall(() => getProjectImagesByProject(projectId), []);
-}
+// ---------------------------------------------------------------------------
+// Convenience selectors
+// ---------------------------------------------------------------------------
 
-export function useProjectsWithDetails() {
-  return useApiCall(() => getProjectsWithDetails(), []);
+export function useSettingValue(key: string, locale: 'en' | 'ar' = 'en'): string | null {
+  const { data } = useSettings();
+  return useMemo(() => {
+    const s = data.find((item) => item.key === key);
+    if (!s) return null;
+    return (locale === 'ar' ? s.value_ar : s.value_en) || s.value_en || null;
+  }, [data, key, locale]);
 }

@@ -10,8 +10,8 @@ import {
 } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
-import { useActiveBanners } from '../hooks/useApi';
+import { useTranslations, useLocale } from 'next-intl';
+import { useCarousel } from '../context/SiteContentContext';
 import { getImageUrl } from '../lib/api';
 
 interface SpotlightAnimationProps {
@@ -32,9 +32,10 @@ const SpotlightAnimation: React.FC<SpotlightAnimationProps> = ({ onAnimationComp
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
   const t = useTranslations();
+  const locale = useLocale();
 
-  // Fetch banners from API
-  const { data: apiBanners, loading: bannersLoading } = useActiveBanners();
+  // Carousel slides come from the CMS (DB row stores image_url + i18n text).
+  const cmsSlides = useCarousel();
 
   // Static fallback slides
   const staticSlides: SlideData[] = [
@@ -82,18 +83,18 @@ const SpotlightAnimation: React.FC<SpotlightAnimationProps> = ({ onAnimationComp
     },
   ];
 
-  // Use API banners if available, otherwise fall back to static slides
   const slides: SlideData[] = useMemo(() => {
-    if (apiBanners && apiBanners.length > 0) {
-      return apiBanners.map((banner) => ({
-        image: getImageUrl(banner.bannerurl) || '/Projects/alburhan1.jpg',
-        title: banner.bannername || '',
-        subtitle: banner.info1 || '',
-        description: banner.bannerdescription || '',
+    if (cmsSlides && cmsSlides.length > 0) {
+      return cmsSlides.map((s) => ({
+        image: getImageUrl(s.image_url) || '/Projects/alburhan1.jpg',
+        title: (locale === 'ar' ? s.title_ar : s.title_en) || s.title_en || '',
+        subtitle: (locale === 'ar' ? s.subtitle_ar : s.subtitle_en) || s.subtitle_en || '',
+        description:
+          (locale === 'ar' ? s.description_ar : s.description_en) || s.description_en || '',
       }));
     }
     return staticSlides;
-  }, [apiBanners, t]);
+  }, [cmsSlides, locale, t]);
 
   // Auto-advance slides every 50 seconds
   useEffect(() => {
@@ -261,6 +262,7 @@ const SpotlightAnimation: React.FC<SpotlightAnimationProps> = ({ onAnimationComp
               }}
               sizes="100vw"
               quality={90}
+              unoptimized
             />
             
             {/* Subtle overlay for better text visibility */}
