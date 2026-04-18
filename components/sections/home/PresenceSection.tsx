@@ -127,7 +127,7 @@ export function PresenceSection() {
                     </div>
 
                     {/* Top corner pin */}
-                    <div className="absolute left-5 top-5 flex items-center gap-1.5 rounded-full border border-[color:var(--glass-border)] bg-[rgba(7,7,11,0.65)] px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white/85 backdrop-blur">
+                    <div className="absolute left-5 top-5 flex items-center gap-1.5 rounded-full border border-[color:var(--glass-border)] bg-[rgba(7,7,11,0.85)] px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white/85">
                       <MapPin className="size-3 text-[color:var(--brand-gold)]" />
                       <span>{slug.toUpperCase()}</span>
                     </div>

@@ -17,7 +17,6 @@ import {
   IconX,
   IconYouTube,
 } from './icons/SocialIcons';
-import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/routing';
@@ -270,14 +269,12 @@ const Footer: React.FC = () => {
 
             <div className="mt-6 flex flex-wrap gap-2">
               {socials.map((s, i) => (
-                <motion.a
+                <a
                   key={`${s.label}-${i}`}
                   href={s.href || '#'}
                   target={s.href && s.href !== '#' ? '_blank' : undefined}
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  whileHover={{ y: -3 }}
-                  transition={{ type: 'spring', stiffness: 320, damping: 18 }}
                   className={cn(
                     'grid size-10 place-items-center rounded-full',
                     'border border-[color:var(--glass-border)] text-[color:var(--fg-default)]',
@@ -286,7 +283,7 @@ const Footer: React.FC = () => {
                   )}
                 >
                   {s.icon}
-                </motion.a>
+                </a>
               ))}
             </div>
           </div>

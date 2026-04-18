@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { useLocale, useTranslations } from 'next-intl';
 import { Sparkles } from 'lucide-react';
 
@@ -101,12 +100,8 @@ export function BrandsSection() {
       {/* header */}
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <ScrollReveal className="mb-12 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-[color:var(--glass-border)] bg-white/[0.03] px-3 py-1 backdrop-blur"
+          <div
+            className="inline-flex items-center gap-2 rounded-full border border-[color:var(--glass-border)] bg-[rgba(20,19,30,0.6)] px-3 py-1"
           >
             <Sparkles className="size-3.5 text-[color:var(--brand-gold)]" />
             <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[color:var(--brand-gold)]">
@@ -115,7 +110,7 @@ export function BrandsSection() {
             <span className="ml-2 rounded-full bg-[color:var(--brand-gold)]/10 px-2 py-0.5 text-[10px] font-semibold text-[color:var(--brand-gold-bright)]">
               {valid.length}+
             </span>
-          </motion.div>
+          </div>
 
           <h2 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
             <GradientText>{t('sections.ourBrand')}</GradientText>

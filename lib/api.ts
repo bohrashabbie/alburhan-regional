@@ -62,11 +62,18 @@ export function getImageUrl(path: string | null | undefined): string | null {
 // Generic fetch wrapper (always cache-busted, server- and client-safe)
 // ---------------------------------------------------------------------------
 
+/**
+ * Revalidation interval in seconds.
+ * Content is served from cache instantly, then refreshed in the background
+ * every REVALIDATE_SECONDS. Change to 0 for real-time (no caching).
+ */
+const REVALIDATE_SECONDS = 30;
+
 async function cmsFetch<T>(path: string, init?: RequestInit): Promise<T | null> {
   try {
     const url = `${CMS_API}${path}`;
     const res = await fetch(url, {
-      cache: 'no-store',
+      next: { revalidate: REVALIDATE_SECONDS },
       headers: {
         Accept: 'application/json',
         ...(init?.headers || {}),

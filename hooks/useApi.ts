@@ -44,6 +44,9 @@ interface UseApiState<T> {
   refresh: () => void;
 }
 
+/** Minimum ms between visibility-triggered refetches */
+const REFETCH_COOLDOWN = 30_000; // 30 seconds
+
 function useApiCall<T>(fetcher: () => Promise<T>, defaultValue: T): UseApiState<T> {
   const [state, setState] = useState<{ data: T; loading: boolean; error: string | null }>({
     data: defaultValue,
@@ -53,12 +56,14 @@ function useApiCall<T>(fetcher: () => Promise<T>, defaultValue: T): UseApiState<
 
   const fetcherRef = useRef(fetcher);
   fetcherRef.current = fetcher;
+  const lastFetchRef = useRef(0);
 
   const load = useCallback(async () => {
     try {
       setState((prev) => ({ ...prev, loading: true }));
       const result = await fetcherRef.current();
       setState({ data: result, loading: false, error: null });
+      lastFetchRef.current = Date.now();
     } catch (err) {
       setState({
         data: defaultValue,
@@ -69,13 +74,20 @@ function useApiCall<T>(fetcher: () => Promise<T>, defaultValue: T): UseApiState<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Initial fetch
   useEffect(() => {
     load();
   }, [load]);
 
+  // Re-fetch when tab becomes visible, but only if cooldown has passed
   useEffect(() => {
     const onVisible = () => {
-      if (document.visibilityState === 'visible') load();
+      if (
+        document.visibilityState === 'visible' &&
+        Date.now() - lastFetchRef.current > REFETCH_COOLDOWN
+      ) {
+        load();
+      }
     };
     window.addEventListener('visibilitychange', onVisible);
     return () => window.removeEventListener('visibilitychange', onVisible);

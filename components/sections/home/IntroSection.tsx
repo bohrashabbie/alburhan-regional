@@ -86,7 +86,7 @@ export function IntroSection() {
                 unoptimized
               />
               {/* Floating chip */}
-              <div className="absolute bottom-6 left-6 right-6 z-10 flex items-center justify-between rounded-2xl border border-[color:var(--glass-border)] bg-[rgba(7,7,11,0.75)] px-4 py-3 backdrop-blur">
+              <div className="absolute bottom-6 left-6 right-6 z-10 flex items-center justify-between rounded-2xl border border-[color:var(--glass-border)] bg-[rgba(7,7,11,0.9)] px-4 py-3">
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-[color:var(--brand-gold)]">
                     Since 2005

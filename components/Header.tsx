@@ -2,12 +2,6 @@
 
 import React from 'react';
 import {
-  AnimatePresence,
-  motion,
-  useMotionValueEvent,
-  useScroll,
-} from 'framer-motion';
-import {
   Home,
   Info,
   Briefcase,
@@ -66,11 +60,11 @@ const Header: React.FC = () => {
   const t = useTranslations('header');
   const pathname = usePathname();
   const { content, setting } = useSiteContent();
-  const { scrollY } = useScroll();
-
-  useMotionValueEvent(scrollY, 'change', (v) => {
-    setScrolled(v > 12);
-  });
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   // Lock scroll when the mobile drawer is open.
   React.useEffect(() => {
@@ -123,14 +117,12 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <motion.header
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
+      <header
         className={cn(
+          'animate-[fade-in_0.5s_ease-out_both]',
           'sticky top-0 z-[800] w-full transition-all duration-500',
           scrolled
-            ? 'bg-[rgba(7,7,11,0.72)] backdrop-blur-xl backdrop-saturate-150 border-b border-[color:var(--glass-border)] shadow-[0_8px_32px_rgba(0,0,0,0.35)]'
+            ? 'bg-[rgba(7,7,11,0.95)] border-b border-[color:var(--glass-border)] shadow-[0_8px_32px_rgba(0,0,0,0.35)]'
             : 'bg-transparent',
         )}
         style={{ direction: 'ltr' }}
@@ -163,7 +155,7 @@ const Header: React.FC = () => {
                 className="transition-transform duration-500 group-hover:scale-[1.04]"
               />
             </div>
-            <motion.span
+            <span
               aria-hidden
               className="pointer-events-none absolute -inset-1 rounded-lg opacity-0 blur-xl group-hover:opacity-100"
               style={{
@@ -194,18 +186,16 @@ const Header: React.FC = () => {
                   )}
                 >
                   <span className="relative z-10">{item.label}</span>
-                  <motion.span
+                  <span
                     aria-hidden
-                    layoutId={active ? 'nav-underline' : undefined}
                     className={cn(
-                      'absolute left-2 right-2 bottom-0 h-px origin-center',
+                      'absolute left-2 right-2 bottom-0 h-px origin-center transition-opacity duration-300',
                       active ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
                     )}
                     style={{
                       background:
                         'linear-gradient(90deg, transparent, var(--brand-gold), transparent)',
                       boxShadow: '0 0 10px rgba(201,169,79,0.6)',
-                      transition: 'opacity 300ms ease',
                     }}
                   />
                   <span
@@ -262,59 +252,31 @@ const Header: React.FC = () => {
                 'text-[color:var(--fg-default)] transition-colors duration-300 hover:border-[color:var(--brand-gold)] hover:text-[color:var(--brand-gold-bright)]',
               )}
             >
-              <AnimatePresence mode="wait" initial={false}>
-                {mobileOpen ? (
-                  <motion.span
-                    key="x"
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <CloseIcon className="size-5" />
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    key="m"
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <MenuIcon className="size-5" />
-                  </motion.span>
-                )}
-              </AnimatePresence>
+              {mobileOpen ? (
+                <CloseIcon className="size-5" />
+              ) : (
+                <MenuIcon className="size-5" />
+              )}
             </button>
           </div>
         </div>
-      </motion.header>
+      </header>
 
       {/* Mobile drawer */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            key="mobile-drawer"
+      {mobileOpen && (
+          <div
             className="fixed inset-0 z-[850] lg:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
           >
             <button
               aria-label="Close menu"
               onClick={() => setMobileOpen(false)}
-              className="absolute inset-0 bg-[rgba(3,3,6,0.75)] backdrop-blur-md"
+              className="absolute inset-0 bg-[rgba(3,3,6,0.75)]"
             />
-            <motion.aside
+            <aside
               role="dialog"
               aria-label="Mobile navigation"
-              initial={{ x: isRTL ? '-100%' : '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: isRTL ? '-100%' : '100%' }}
-              transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
               className={cn(
-                'absolute top-0 bottom-0 flex h-full w-[min(86vw,380px)] flex-col gap-6 overflow-y-auto p-6',
+                'absolute top-0 bottom-0 flex h-full w-[min(86vw,380px)] flex-col gap-6 overflow-y-auto p-6 transition-transform duration-300 ease-out',
                 isRTL ? 'left-0 border-r' : 'right-0 border-l',
                 'border-[color:var(--glass-border)] bg-[color:var(--bg-raised)] shadow-[0_0_60px_rgba(0,0,0,0.5)]',
               )}
@@ -338,12 +300,7 @@ const Header: React.FC = () => {
                 {navigationItems.map((item, i) => {
                   const active = isActive(item.href);
                   return (
-                    <motion.div
-                      key={`${item.label}-${item.href}`}
-                      initial={{ opacity: 0, x: isRTL ? -16 : 16 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.05 * i + 0.1, duration: 0.35 }}
-                    >
+                    <div key={`${item.label}-${item.href}`}>
                       <Link
                         href={item.href as any}
                         onClick={() => setMobileOpen(false)}
@@ -366,7 +323,7 @@ const Header: React.FC = () => {
                         </span>
                         <span className="font-medium tracking-wide">{item.label}</span>
                       </Link>
-                    </motion.div>
+                    </div>
                   );
                 })}
               </nav>
@@ -379,10 +336,9 @@ const Header: React.FC = () => {
                   </Link>
                 </NeonButton>
               </div>
-            </motion.aside>
-          </motion.div>
+            </aside>
+          </div>
         )}
-      </AnimatePresence>
     </>
   );
 };

@@ -1,47 +1,41 @@
 'use client';
 
-import * as React from 'react';
-import dynamic from 'next/dynamic';
-import { useCanUseRichMotion } from '@/utils/motion';
-
-const Scene = dynamic(() => import('./HeroScene3D'), {
-  ssr: false,
-  loading: () => null,
-});
+import Image from 'next/image';
+import { useServices, useProducts, useProjectCategories } from '@/context/SiteContentContext';
+import { getImageUrl } from '@/lib/api';
 
 /**
- * Feature-flagged 3D hero visual. Falls back to a pure CSS glowing
- * gradient on mobile + reduced-motion so the initial JS stays light.
+ * Hero image collage — pulls real images from the CMS (services, products,
+ * project categories). Falls back to a gradient if no images are available.
  */
 export function Hero3D({ className }: { className?: string }) {
-  const rich = useCanUseRichMotion();
+  const services = useServices();
+  const products = useProducts();
+  const categories = useProjectCategories();
 
-  if (!rich) {
+  // Collect up to 4 CMS images
+  const pool = [
+    ...services.map((s) => ({ url: s.image_url, label: s.title_en })),
+    ...categories.map((c) => ({ url: c.cover_image_url, label: c.name_en })),
+    ...products.map((p) => ({ url: p.image_url, label: p.name_en })),
+  ]
+    .map((item) => ({ src: getImageUrl(item.url), label: item.label || '' }))
+    .filter((item): item is { src: string; label: string } => Boolean(item.src));
+
+  const imgs = pool.slice(0, 4);
+
+  // Fallback if no CMS images yet
+  if (imgs.length === 0) {
     return (
       <div className={className}>
         <div className="relative h-full w-full">
           <div
             aria-hidden
-            className="absolute inset-0 rounded-full blur-3xl"
+            className="absolute inset-0 rounded-3xl"
             style={{
               background:
-                'radial-gradient(closest-side, rgba(194,50,74,0.75), transparent 70%)',
-            }}
-          />
-          <div
-            aria-hidden
-            className="absolute inset-8 rounded-full blur-2xl"
-            style={{
-              background:
-                'radial-gradient(closest-side, rgba(201,169,79,0.55), transparent 65%)',
-            }}
-          />
-          <div
-            aria-hidden
-            className="absolute inset-16 rounded-full border border-[color:var(--brand-gold)]/40"
-            style={{
-              boxShadow:
-                '0 0 40px rgba(201,169,79,0.35), inset 0 0 30px rgba(194,50,74,0.35)',
+                'radial-gradient(closest-side, rgba(194,50,74,0.45), transparent 70%)',
+              filter: 'blur(50px)',
             }}
           />
         </div>
@@ -51,7 +45,41 @@ export function Hero3D({ className }: { className?: string }) {
 
   return (
     <div className={className}>
-      <Scene />
+      <div className="relative grid h-full w-full grid-cols-2 gap-3 p-2">
+        {/* Ambient glow behind the grid */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -inset-8 -z-10 rounded-3xl"
+          style={{
+            background:
+              'radial-gradient(closest-side, rgba(194,50,74,0.35), transparent 70%)',
+            filter: 'blur(40px)',
+          }}
+        />
+
+        {imgs.map((img, i) => (
+          <div
+            key={i}
+            className={`relative overflow-hidden rounded-2xl border border-[color:var(--glass-border)] ${
+              i === 0 ? 'row-span-2' : ''
+            }`}
+          >
+            <Image
+              src={img.src}
+              alt={img.label}
+              fill
+              sizes="(max-width: 768px) 50vw, 260px"
+              className="object-cover"
+              unoptimized
+            />
+            {/* Subtle dark overlay */}
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-gradient-to-t from-[rgba(7,7,11,0.6)] to-transparent"
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
