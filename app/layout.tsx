@@ -1,6 +1,7 @@
 import { getLocale } from 'next-intl/server';
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Montserrat, Poppins, Roboto, Open_Sans } from "next/font/google";
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -57,7 +58,9 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} ${poppins.variable} ${roboto.variable} ${openSans.variable} antialiased`}
         style={{ direction: dir }}
       >
-        {children}
+        <AppRouterCacheProvider options={{ key: 'mui', prepend: true }}>
+          {children}
+        </AppRouterCacheProvider>
       </body>
     </html>
   );

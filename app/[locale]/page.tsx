@@ -85,8 +85,20 @@ export default function Home() {
     return '/Projects/Project 1.jpg';
   }, [cmsProjects]);
 
-  const ownerImage =
-    getImageUrl(team?.[0]?.image_url) || '/Owners/owner_shabbir.jpeg';
+  // Match team members to "Founder" vs "Co-founder" slots by designation first
+  // (robust to sort_order tweaks in admin), fall back to array order.
+  const coFounderMember =
+    team.find((m) => /co[-\s]?founder/i.test(m.designation_en || '')) || team[1];
+  const founderMember =
+    team.find(
+      (m) =>
+        m !== coFounderMember && /founder/i.test(m.designation_en || ''),
+    ) || team[0];
+
+  const founderImage =
+    getImageUrl(founderMember?.image_url) || '/Owners/Owner1.jpeg';
+  const coFounderImage =
+    getImageUrl(coFounderMember?.image_url) || '/Owners/owner_shabbir.jpeg';
   const apiCountryImages = useMemo(() => {
     if (!apiCountries || apiCountries.length === 0) return null;
     const mapping: { [key: string]: string } = {};
@@ -1101,12 +1113,10 @@ export default function Home() {
                                   transform: 'translateX(-50%)',
                                   width: { xs: '55%', sm: '50%', md: '45%' },
                                   height: { xs: '80%', sm: '82%', md: '85%' },
-                                  backgroundImage: 'url("/Owners/Owner1.jpeg")',
+                                  backgroundImage: `url("${founderImage}")`,
                                   backgroundSize: 'cover',
-                                  backgroundPosition: 'center',
+                                  backgroundPosition: 'center top',
                                   backgroundRepeat: 'no-repeat',
-                                  filter: 'brightness(0) saturate(100%) contrast(0%) opacity(0.3)',
-                                  mixBlendMode: 'multiply',
                                   zIndex: 1,
                                 }}
                               />
@@ -1308,8 +1318,8 @@ export default function Home() {
                               }}
                             >
                               <Image
-                        src={ownerImage}
-                        alt="Owner"
+                        src={coFounderImage}
+                        alt={coFounderMember?.name_en || 'Co-founder'}
                                 fill
                                 unoptimized
                                 style={{
@@ -1600,7 +1610,7 @@ export default function Home() {
         whileInView="animate"
         viewport={{ once: true, amount: 0.1 }}
       >
-        <Box sx={{ py: { xs: 6, sm: 7, md: 8, lg: 10 }, backgroundColor: 'background.default', position: 'relative' }}>
+        <Box id="products" sx={{ py: { xs: 6, sm: 7, md: 8, lg: 10 }, backgroundColor: 'background.default', position: 'relative', scrollMarginTop: '80px' }}>
           <Container maxWidth="xl">
             <motion.div
               variants={staggerContainer}

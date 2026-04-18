@@ -12,7 +12,6 @@ import {
   Grid,
   Card,
   CardContent,
-  CircularProgress,
 } from '@mui/material';
 import { ArrowBack, LocationOn, Phone, Email } from '@mui/icons-material';
 import { motion } from 'framer-motion';
@@ -36,261 +35,45 @@ export default function EgyptPage() {
   const countryLogo = getImageUrl(country?.logo_url) || '/logo/AL BURHAN EGYPT.png';
 
   // Project categories (with their projects + images) come from the CMS.
+  // Pages no longer ship a static fallback — admin-managed content is the
+  // single source of truth.
   const cmsCategories = useProjectCategories();
-  const projectsLoading = false;
 
-  const apiProjectsByCategory = useMemo(() => {
-    if (!cmsCategories || cmsCategories.length === 0) return null;
-    const grouped: {
-      [categoryName: string]: { name: string; folderPath: string; images: string[]; firstImage: string }[];
-    } = {};
-    cmsCategories.forEach((cat) => {
-      const catName = cat.name_en || 'Uncategorized';
-      grouped[catName] = (cat.projects || [])
-        .map((project) => {
-          const imgs = (project.images || [])
-            .map((img) => getImageUrl(img.image_url))
-            .filter((u): u is string => !!u);
-          return imgs.length === 0
-            ? null
-            : {
-                name: project.name_en,
-                folderPath: '',
-                images: imgs,
-                firstImage: imgs[0],
-              };
-        })
-        .filter((p): p is { name: string; folderPath: string; images: string[]; firstImage: string } => !!p);
-    });
-    return Object.keys(grouped).length > 0 ? grouped : null;
-  }, [cmsCategories]);
-
-  // Static fallback projects data organized by categories
-  const projectCategories = {
-    gyms: [
-      {
-        name: 'Oxygen Gym Jahra',
-        folderPath: '/OurProject/Oxygen Gym Jahra',
-        images: [
-          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0005.jpg',
-          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0008.jpg',
-          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0011.jpg',
-          '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0012.jpg',
-        ],
-        firstImage: '/OurProject/Oxygen Gym Jahra/IMG-20251130-WA0005.jpg',
-      },
-      {
-        name: 'Oxygen Gym KSA',
-        folderPath: '/OurProject/Oxygen Gym KSA',
-        images: [
-          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
-          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.11 PM..jpeg',
-          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.11 PM.jpeg',
-          '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.35 PM..jpeg',
-        ],
-        firstImage: '/OurProject/Oxygen Gym KSA/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
-      },
-      {
-        name: 'Oxygen Gym Mahboula',
-        folderPath: '/OurProject/Oxygen Gym Mahboula',
-        images: [
-          '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2025-12-09 at 8.32.33 PM.jpeg',
-          '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2025-12-09 at 8.33.30 PM.jpeg',
-          '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2026-01-02 at 3.38.27 PM (1).jpeg',
-        ],
-        firstImage: '/OurProject/Oxygen Gym Mahboula/WhatsApp Image 2025-12-09 at 8.32.33 PM.jpeg',
-      },
-      {
-        name: 'Oxygen Gym UAE',
-        folderPath: '/OurProject/Oxygen Gym U.A.E',
-        images: [
-          '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.33.39 PM.jpeg',
-          '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.33.43 PM.jpeg',
-          '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.40.01 PM.jpeg',
-        ],
-        firstImage: '/OurProject/Oxygen Gym U.A.E/WhatsApp Image 2025-12-09 at 8.33.39 PM.jpeg',
-      },
-      {
-        name: 'Peak Gym Qurain',
-        folderPath: '/OurProject/Peak Gym Qurain',
-        images: [
-          '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.13 PM (1).jpeg',
-          '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.13 PM.jpeg',
-          '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.14 PM (1).jpeg',
-        ],
-        firstImage: '/OurProject/Peak Gym Qurain/WhatsApp Image 2025-12-09 at 8.40.13 PM (1).jpeg',
-      },
-      {
-        name: 'Plage Gym',
-        folderPath: '/OurProject/Plage Gym',
-        images: [
-          '/OurProject/Plage Gym/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
-          '/OurProject/Plage Gym/WhatsApp Image 2026-01-02 at 3.38.09 PM..jpeg',
-        ],
-        firstImage: '/OurProject/Plage Gym/WhatsApp Image 2026-01-02 at 3.38.06 PM.jpeg',
-      },
-    ],
-    restaurants: [
-      {
-        name: 'Nandos Al Kout Mall',
-        folderPath: '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall',
-        images: [
-          '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/12.jpg',
-          '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/14.jpg',
-          '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/5.jpg',
-        ],
-        firstImage: '/OurProject/Nandos Al Kout Mall/Nandos Al Kout Mall/12.jpg',
-      },
-      {
-        name: 'Wing Stop Al Bida',
-        folderPath: '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida',
-        images: [
-          '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.32 AM (1).jpeg',
-          '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.34 AM.jpeg',
-          '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.37 AM.jpeg',
-          '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.41 AM.jpeg',
-          '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.49 AM.jpeg',
-        ],
-        firstImage: '/OurProject/Wing Stop Al Bida/Wing Stop Al Bida/WhatsApp Image 2025-08-23 at 11.30.32 AM (1).jpeg',
-      },
-      {
-        name: 'Wing Stop Salmiya',
-        folderPath: '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya',
-        images: [
-          '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.29.56 AM (2).jpeg',
-          '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.29.58 AM.jpeg',
-          '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.30.03 AM.jpeg',
-        ],
-        firstImage: '/OurProject/Wing Stop Salmiya/Wing Stop Salmiya/WhatsApp Image 2025-08-23 at 11.29.56 AM (2).jpeg',
-      },
-      {
-        name: 'Paul Le Cafe',
-        folderPath: '/OurProject/Paul Le Cafe/Paul Le Cafe',
-        images: [
-          '/OurProject/Paul Le Cafe/Paul Le Cafe/WhatsApp Image 2025-12-09 at 8.30.21 PM.jpeg',
-        ],
-        firstImage: '/OurProject/Paul Le Cafe/Paul Le Cafe/WhatsApp Image 2025-12-09 at 8.30.21 PM.jpeg',
-      },
-      {
-        name: 'Wings Stop Liwan',
-        folderPath: '/OurProject/Wings Stop Liwan/Wings Stop Liwan',
-        images: [
-          '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.47 PM.jpeg',
-          '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.48 PM (1).jpeg',
-          '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.48 PM.jpeg',
-          '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.49 PM (1).jpeg',
-        ],
-        firstImage: '/OurProject/Wings Stop Liwan/Wings Stop Liwan/WhatsApp Image 2025-12-09 at 8.33.47 PM.jpeg',
-      },
-      {
-        name: 'Wings Stop Assima Mall',
-        folderPath: '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall',
-        images: [
-          '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall/WhatsApp Image 2025-12-09 at 8.33.45 PM (1).jpeg',
-          '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall/WhatsApp Image 2025-12-09 at 8.33.46 PM.jpeg',
-        ],
-        firstImage: '/OurProject/Wings Stop Assima Mall/Wings Stop Assima Mall/WhatsApp Image 2025-12-09 at 8.33.45 PM (1).jpeg',
-      },
-    ],
-    showrooms: [
-      {
-        name: 'Dar Al Saback',
-        folderPath: '/OurProject/Dar Al Saback/Dar Al Saback',
-        images: [
-          '/OurProject/Dar Al Saback/Dar Al Saback/WhatsApp Image 2025-12-09 at 8.30.23 PM (1).jpeg',
-          '/OurProject/Dar Al Saback/Dar Al Saback/WhatsApp Image 2025-12-09 at 8.30.23 PM.jpeg',
-        ],
-        firstImage: '/OurProject/Dar Al Saback/Dar Al Saback/WhatsApp Image 2025-12-09 at 8.30.23 PM (1).jpeg',
-      },
-      {
-        name: 'Beverly Hills',
-        folderPath: '/OurProject/Beverly Hills/Beverly Hills',
-        images: [
-          '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.44 PM.jpeg',
-          '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.45 PM (1).jpeg',
-          '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.45 PM.jpeg',
-        ],
-        firstImage: '/OurProject/Beverly Hills/Beverly Hills/WhatsApp Image 2025-08-22 at 1.49.44 PM.jpeg',
-      },
-      {
-        name: 'Audi Showroom',
-        folderPath: '/OurProject/Audi Showroom/Audi Showroom',
-        images: [
-          '/OurProject/Audi Showroom/Audi Showroom/WhatsApp Image 2025-08-23 at 19.37.39_bf3d8686.jpg',
-          '/OurProject/Audi Showroom/Audi Showroom/WhatsApp Image 2025-08-26 at 13.10.38_774bc71a.jpg',
-        ],
-        firstImage: '/OurProject/Audi Showroom/Audi Showroom/WhatsApp Image 2025-08-23 at 19.37.39_bf3d8686.jpg',
-      },
-      {
-        name: 'Inglot',
-        folderPath: '/OurProject/Inglot/Inglot',
-        images: [
-          '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.37 PM.jpeg',
-          '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.39 PM.jpeg',
-          '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.42 PM.jpeg',
-        ],
-        firstImage: '/OurProject/Inglot/Inglot/WhatsApp Image 2025-08-22 at 1.40.37 PM.jpeg',
-      },
-      {
-        name: 'Dune London',
-        folderPath: '/OurProject/Dune London/Dune London',
-        images: [
-          '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.46 PM.jpeg',
-          '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.47 PM (2).jpeg',
-          '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.47 PM.jpeg',
-        ],
-        firstImage: '/OurProject/Dune London/Dune London/WhatsApp Image 2025-08-22 at 1.49.46 PM.jpeg',
-      },
-    ],
-    banks: [
-      {
-        name: 'Warba Bank',
-        folderPath: '/OurProject/Warba Bank/Warba Bank',
-        images: [
-          '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.27 PM.jpeg',
-          '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.28 PM (1).jpeg',
-          '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.28 PM (2).jpeg',
-          '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.28 PM.jpeg',
-        ],
-        firstImage: '/OurProject/Warba Bank/Warba Bank/WhatsApp Image 2025-12-09 at 8.30.27 PM.jpeg',
-      },
-      {
-        name: 'HSBC',
-        folderPath: '/OurProject/HSBC/HSBC',
-        images: [
-          '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.24 PM (2).jpeg',
-          '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.25 PM (1).jpeg',
-          '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.25 PM.jpeg',
-        ],
-        firstImage: '/OurProject/HSBC/HSBC/WhatsApp Image 2025-12-09 at 8.30.24 PM (2).jpeg',
-      },
-    ],
-    offices: [
-      {
-        name: 'STC Office Assima Tower',
-        folderPath: '/OurProject/STC Office Assima Tower/STC Office Assima Tower',
-        images: [
-          '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.19.jpeg',
-          '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.20 (2).jpeg',
-          '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.24.jpeg',
-          '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.25 (4).jpeg',
-        ],
-        firstImage: '/OurProject/STC Office Assima Tower/STC Office Assima Tower/WhatsApp Image 2025-09-29 at 14.22.19.jpeg',
-      },
-      {
-        name: 'Zain Al Rai',
-        folderPath: '/OurProject/Zain Al Rai/Zain Al Rai',
-        images: [
-          '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.16 PM (2).jpeg',
-          '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.18 PM (1).jpeg',
-          '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.19 PM (1).jpeg',
-          '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.21 PM (1).jpeg',
-          '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.21 PM.jpeg',
-        ],
-        firstImage: '/OurProject/Zain Al Rai/Zain Al Rai/WhatsApp Image 2025-08-22 at 2.26.16 PM (2).jpeg',
-      },
-    ],
-  };
+  const projectsByCategory = useMemo(() => {
+    const cid = country?.id;
+    const sortedCats = [...(cmsCategories || [])]
+      .filter((c) => c.is_active !== false)
+      .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+    return sortedCats
+      .map((cat) => {
+        const catName = (locale === 'ar' ? cat.name_ar || cat.name_en : cat.name_en) || '';
+        const projects = [...(cat.projects || [])]
+          .filter((p) => p.is_active !== false)
+          // A project is shown on this country page if it is tagged for this
+          // country or is "global" (country_id null) — keeps pre-tagged data working.
+          .filter((p) => p.country_id == null || p.country_id === cid)
+          .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
+          .map((project) => {
+            const imgs = [...(project.images || [])]
+              .filter((i) => i.is_active !== false)
+              .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
+              .map((img) => getImageUrl(img.image_url))
+              .filter((u): u is string => !!u);
+            if (imgs.length === 0) return null;
+            const projectName =
+              (locale === 'ar' ? project.name_ar || project.name_en : project.name_en) || '';
+            return {
+              name: projectName,
+              folderPath: '',
+              images: imgs,
+              firstImage: imgs[0],
+            };
+          })
+          .filter((p): p is { name: string; folderPath: string; images: string[]; firstImage: string } => !!p);
+        return { categoryName: catName, projects };
+      })
+      .filter((g) => g.projects.length > 0);
+  }, [cmsCategories, locale, country?.id]);
 
   return (
     <Box sx={{ flex: 1, minHeight: '100vh' }}>
@@ -613,13 +396,17 @@ export default function EgyptPage() {
               </Typography>
             </motion.div>
 
-            {/* Dynamic API Projects or Static Fallback */}
-            {projectsLoading ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
-                <CircularProgress color="primary" />
+            {/* Project categories rendered from CMS (single source of truth). */}
+            {projectsByCategory.length === 0 ? (
+              <Box sx={{ textAlign: 'center', py: 6 }}>
+                <Typography variant="body1" color="text.secondary">
+                  {locale === 'ar'
+                    ? 'لا توجد مشاريع متاحة حالياً.'
+                    : 'No projects are available at the moment.'}
+                </Typography>
               </Box>
-            ) : apiProjectsByCategory ? (
-              Object.entries(apiProjectsByCategory).map(([categoryName, projects]) => (
+            ) : (
+              projectsByCategory.map(({ categoryName, projects }) => (
                 <Box key={categoryName} sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
                   <motion.div initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
                     <Typography variant={isMobile ? 'h6' : 'h5'} sx={{ fontWeight: 600, color: 'text.primary', mb: { xs: 3, sm: 4 }, fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' }, fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', letterSpacing: { xs: '0.02em', md: '0.04em' } }}>
@@ -629,49 +416,6 @@ export default function EgyptPage() {
                   <ProjectGallery projects={projects} />
                 </Box>
               ))
-            ) : (
-              <>
-                <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
-                  <motion.div initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                    <Typography variant={isMobile ? 'h6' : 'h5'} sx={{ fontWeight: 600, color: 'text.primary', mb: { xs: 3, sm: 4 }, fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' }, fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', letterSpacing: { xs: '0.02em', md: '0.04em' } }}>
-                      Gyms
-                    </Typography>
-                  </motion.div>
-                  <ProjectGallery projects={projectCategories.gyms} />
-                </Box>
-                <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
-                  <motion.div initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                    <Typography variant={isMobile ? 'h6' : 'h5'} sx={{ fontWeight: 600, color: 'text.primary', mb: { xs: 3, sm: 4 }, fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' }, fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', letterSpacing: { xs: '0.02em', md: '0.04em' } }}>
-                      Office
-                    </Typography>
-                  </motion.div>
-                  <ProjectGallery projects={projectCategories.offices} />
-                </Box>
-                <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
-                  <motion.div initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                    <Typography variant={isMobile ? 'h6' : 'h5'} sx={{ fontWeight: 600, color: 'text.primary', mb: { xs: 3, sm: 4 }, fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' }, fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', letterSpacing: { xs: '0.02em', md: '0.04em' } }}>
-                      Showrooms
-                    </Typography>
-                  </motion.div>
-                  <ProjectGallery projects={projectCategories.showrooms} />
-                </Box>
-                <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
-                  <motion.div initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                    <Typography variant={isMobile ? 'h6' : 'h5'} sx={{ fontWeight: 600, color: 'text.primary', mb: { xs: 3, sm: 4 }, fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' }, fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', letterSpacing: { xs: '0.02em', md: '0.04em' } }}>
-                      Restaurant
-                    </Typography>
-                  </motion.div>
-                  <ProjectGallery projects={projectCategories.restaurants} />
-                </Box>
-                <Box sx={{ mb: { xs: 5, sm: 6, md: 7 } }}>
-                  <motion.div initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                    <Typography variant={isMobile ? 'h6' : 'h5'} sx={{ fontWeight: 600, color: 'text.primary', mb: { xs: 3, sm: 4 }, fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' }, fontFamily: 'var(--font-montserrat), var(--font-poppins), sans-serif', letterSpacing: { xs: '0.02em', md: '0.04em' } }}>
-                      Banks
-                    </Typography>
-                  </motion.div>
-                  <ProjectGallery projects={projectCategories.banks} />
-                </Box>
-              </>
             )}
           </Container>
         </Box>

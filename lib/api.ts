@@ -30,25 +30,32 @@ export const CMS_BASE =
   process.env.NEXT_PUBLIC_CMS_URL?.replace(/\/$/, '') || 'http://13.60.4.75:8002';
 export const CMS_API = `${CMS_BASE}/api`;
 
+// S3 bucket base URL — used for legacy relative paths that were migrated to
+// S3 but never rewritten in the database (e.g. `/OurProject/...`).
+export const S3_BASE =
+  process.env.NEXT_PUBLIC_S3_BASE_URL?.replace(/\/$/, '') ||
+  'https://alburhan-asset.s3.eu-north-1.amazonaws.com';
+
 // ---------------------------------------------------------------------------
 // Image URL helper
 // ---------------------------------------------------------------------------
 
 /**
  * Convert a CMS-stored image path into a fully qualified URL.
- *  - `null` / empty input  → returns `null`
- *  - already-absolute URL → returned untouched
- *  - relative path        → prefixed with the CMS base URL
- *
- * Image rows in the DB store paths like `/uploads/Brands/brand1.png` and the
- * CMS serves the `uploads` folder via `app.mount("/uploads", ...)`.
+ *  - `null` / empty input       → returns `null`
+ *  - already-absolute URL       → returned untouched
+ *  - `/uploads/...`             → prefixed with the CMS base URL (FastAPI static mount)
+ *  - any other absolute path    → prefixed with the S3 base URL (legacy migrated assets)
+ *  - bare relative path         → prefixed with the CMS base URL
  */
 export function getImageUrl(path: string | null | undefined): string | null {
   if (!path) return null;
   const p = path.trim();
   if (!p) return null;
   if (p.startsWith('http://') || p.startsWith('https://')) return p;
-  return `${CMS_BASE}${p.startsWith('/') ? '' : '/'}${p}`;
+  if (p.startsWith('/uploads/')) return `${CMS_BASE}${p}`;
+  if (p.startsWith('/')) return `${S3_BASE}${encodeURI(p)}`;
+  return `${CMS_BASE}/${p}`;
 }
 
 // ---------------------------------------------------------------------------

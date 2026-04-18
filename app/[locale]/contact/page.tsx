@@ -17,7 +17,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { fadeInUp, staggerContainer, staggerItem } from '../../../utils/animations';
 import Image from 'next/image';
-import { useCountries } from '../../../hooks/useApi';
+import { useCountries } from '../../../context/SiteContentContext';
 import { getImageUrl } from '../../../lib/api';
 
 export default function ContactPage() {
@@ -27,8 +27,8 @@ export default function ContactPage() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const isRTL = locale === 'ar';
 
-  // Fetch countries from API
-  const { data: apiCountries } = useCountries();
+  // Countries come from the server-prefetched SiteContentProvider (no client CORS fetch).
+  const apiCountries = useCountries();
 
   // Map API countries to get names for current locale
   const apiCountryNames = useMemo(() => {
