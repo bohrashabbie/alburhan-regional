@@ -9,7 +9,7 @@ services:
     container_name: alburhan-regional
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_CMS_URL: ${NEXT_PUBLIC_CMS_URL:-http://13.60.4.75:8002}
