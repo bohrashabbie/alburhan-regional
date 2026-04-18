@@ -22,7 +22,7 @@ export function Hero3D({ className }: { className?: string }) {
     .map((item) => ({ src: getImageUrl(item.url), label: item.label || '' }))
     .filter((item): item is { src: string; label: string } => Boolean(item.src));
 
-  const imgs = pool.slice(0, 4);
+  const imgs = pool.slice(0, 3);
 
   // Fallback if no CMS images yet
   if (imgs.length === 0) {
@@ -45,7 +45,7 @@ export function Hero3D({ className }: { className?: string }) {
 
   return (
     <div className={className}>
-      <div className="relative grid h-full w-full grid-cols-2 gap-3 p-2">
+      <div className="relative grid h-full w-full grid-cols-2 grid-rows-2 gap-3 p-2">
         {/* Ambient glow behind the grid */}
         <div
           aria-hidden
@@ -57,28 +57,48 @@ export function Hero3D({ className }: { className?: string }) {
           }}
         />
 
-        {imgs.map((img, i) => (
-          <div
-            key={i}
-            className={`relative overflow-hidden rounded-2xl border border-[color:var(--glass-border)] ${
-              i === 0 ? 'row-span-2' : ''
-            }`}
-          >
+        {/* Main image — tall left */}
+        <div className="relative row-span-2 overflow-hidden rounded-2xl border border-[color:var(--glass-border)]">
+          <Image
+            src={imgs[0].src}
+            alt={imgs[0].label}
+            fill
+            sizes="(max-width: 768px) 50vw, 260px"
+            className="object-cover"
+            unoptimized
+          />
+          <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[rgba(7,7,11,0.6)] to-transparent" />
+        </div>
+
+        {/* Top right */}
+        {imgs[1] && (
+          <div className="relative overflow-hidden rounded-2xl border border-[color:var(--glass-border)]">
             <Image
-              src={img.src}
-              alt={img.label}
+              src={imgs[1].src}
+              alt={imgs[1].label}
               fill
               sizes="(max-width: 768px) 50vw, 260px"
               className="object-cover"
               unoptimized
             />
-            {/* Subtle dark overlay */}
-            <div
-              aria-hidden
-              className="absolute inset-0 bg-gradient-to-t from-[rgba(7,7,11,0.6)] to-transparent"
-            />
+            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[rgba(7,7,11,0.6)] to-transparent" />
           </div>
-        ))}
+        )}
+
+        {/* Bottom right */}
+        {imgs[2] && (
+          <div className="relative overflow-hidden rounded-2xl border border-[color:var(--glass-border)]">
+            <Image
+              src={imgs[2].src}
+              alt={imgs[2].label}
+              fill
+              sizes="(max-width: 768px) 50vw, 260px"
+              className="object-cover"
+              unoptimized
+            />
+            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[rgba(7,7,11,0.6)] to-transparent" />
+          </div>
+        )}
       </div>
     </div>
   );

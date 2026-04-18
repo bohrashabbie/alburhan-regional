@@ -22,6 +22,7 @@ import { GlassCard } from '@/components/fx/GlassCard';
 import { GradientText } from '@/components/fx/GradientText';
 import { NeonButton } from '@/components/fx/NeonButton';
 import { cn } from '@/lib/utils';
+import { submitContactForm } from '@/lib/api';
 
 export default function ContactPage() {
   const t = useTranslations();
@@ -55,6 +56,38 @@ export default function ContactPage() {
 
   const [active, setActive] = React.useState<number | null>(null);
   const activeBranch = active ? branches.find((b) => b.id === active) : null;
+
+  const formRef = React.useRef<HTMLFormElement>(null);
+  const [sending, setSending] = React.useState(false);
+  const [result, setResult] = React.useState<{ ok: boolean; msg: string } | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const form = formRef.current;
+    if (!form) return;
+    setSending(true);
+    setResult(null);
+
+    const fd = new FormData(form);
+    const res = await submitContactForm({
+      name: fd.get('name') as string,
+      email: fd.get('email') as string,
+      phone: (fd.get('phone') as string) || undefined,
+      subject: (fd.get('subject') as string) || undefined,
+      message: fd.get('message') as string,
+      country_id: active ?? undefined,
+    });
+
+    setSending(false);
+    if (res.success) {
+      setResult({ ok: true, msg: isRTL ? 'تم إرسال رسالتك بنجاح!' : 'Message sent successfully!' });
+      form.reset();
+    } else {
+      const errMsg = res.error || (isRTL ? 'حدث خطأ، يرجى المحاولة مرة أخرى.' : 'Something went wrong. Please try again.');
+      console.error('Form submission failed:', res.error);
+      setResult({ ok: false, msg: errMsg });
+    }
+  };
 
   return (
     <>
@@ -186,7 +219,8 @@ export default function ContactPage() {
                 </p>
 
                 <form
-                  onSubmit={(e) => e.preventDefault()}
+                  ref={formRef}
+                  onSubmit={handleSubmit}
                   className="mt-6 space-y-4"
                 >
                   {['name', 'email', 'phone', 'subject'].map((k) => (
@@ -195,6 +229,7 @@ export default function ContactPage() {
                         {t(`contact.form.${k}`)}
                       </span>
                       <input
+                        name={k}
                         type={k === 'email' ? 'email' : k === 'phone' ? 'tel' : 'text'}
                         required={k === 'name' || k === 'email'}
                         className="mt-1.5 w-full rounded-lg border border-[color:var(--glass-border)] bg-white/[0.02] px-3 py-2.5 text-sm text-[color:var(--fg-default)] placeholder:text-[color:var(--fg-subtle)] focus:border-[color:var(--brand-gold)] focus:outline-none"
@@ -206,15 +241,27 @@ export default function ContactPage() {
                       {t('contact.form.message')}
                     </span>
                     <textarea
+                      name="message"
                       rows={5}
                       required
                       className="mt-1.5 w-full rounded-lg border border-[color:var(--glass-border)] bg-white/[0.02] px-3 py-2.5 text-sm text-[color:var(--fg-default)] placeholder:text-[color:var(--fg-subtle)] focus:border-[color:var(--brand-gold)] focus:outline-none"
                     />
                   </label>
-                  <NeonButton type="submit" size="lg" className="w-full">
+                  <NeonButton type="submit" size="lg" className="w-full" disabled={sending}>
                     <Send className="size-4" />
-                    {t('contact.form.sendMessage')}
+                    {sending
+                      ? (isRTL ? 'جاري الإرسال...' : 'Sending...')
+                      : t('contact.form.sendMessage')}
                   </NeonButton>
+
+                  {result && (
+                    <p className={cn(
+                      'mt-3 text-center text-sm font-medium',
+                      result.ok ? 'text-green-400' : 'text-red-400',
+                    )}>
+                      {result.msg}
+                    </p>
+                  )}
                 </form>
               </GlassCard>
             </ScrollReveal>

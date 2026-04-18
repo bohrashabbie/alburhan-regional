@@ -234,15 +234,23 @@ export interface ContactFormData {
 }
 
 export async function submitContactForm(payload: ContactFormData) {
+  // Submit through the same-origin Next.js route handler (`/api/contact`).
+  // That handler forwards the request to the FastAPI CMS server-side, which
+  // avoids mixed-content / CORS issues when the CMS is served over plain HTTP.
   try {
-    const res = await fetch(`${CMS_API}/public/contact`, {
+    const res = await fetch('/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    if (!res.ok) return { success: false as const, error: res.statusText };
+    if (!res.ok) {
+      const errText = await res.text().catch(() => res.statusText);
+      console.error('Contact form error:', res.status, errText);
+      return { success: false as const, error: `${res.status}: ${errText}` };
+    }
     return { success: true as const, data: await res.json() };
   } catch (err) {
+    console.error('Contact form network error:', err);
     return {
       success: false as const,
       error: err instanceof Error ? err.message : 'Network error',
