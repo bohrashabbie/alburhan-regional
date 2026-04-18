@@ -62,6 +62,9 @@ next-env.d.ts
 *.rar
 alburhn.zip
 
+# git commit-message temp files
+.git-commit-msg.tmp
+
 # local uploads / user-generated content (served from S3/CMS now)
 /uploads/
 /public/uploads/
