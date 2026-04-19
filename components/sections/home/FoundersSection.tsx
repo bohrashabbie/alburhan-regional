@@ -38,12 +38,15 @@ export function FoundersSection() {
     <section className="relative py-24 md:py-32">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <ScrollReveal className="mb-14 text-center">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--brand-gold)]">
-            {isRTL ? 'صوت المؤسسين' : 'Voices behind the vision'}
-          </p>
+          <div className="flex justify-center">
+            <p className="section-kicker">
+              {isRTL ? 'صوت المؤسسين' : 'Voices behind the vision'}
+            </p>
+          </div>
           <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
             <GradientText>{t('sections.fromOwner')}</GradientText>
           </h2>
+          <div aria-hidden className="mx-auto mt-6 h-px w-24 bg-gradient-to-r from-transparent via-[color:var(--brand-gold)] to-transparent" />
         </ScrollReveal>
 
         <div className="grid gap-8 md:grid-cols-2 md:gap-10">
@@ -56,7 +59,7 @@ export function FoundersSection() {
             return (
               <ScrollReveal key={m.id} delay={i * 0.12}>
                 <SpotlightCard
-                  className="group relative h-full overflow-hidden"
+                  className="group card-lift corner-brackets relative h-full overflow-hidden"
                   color={i === 0 ? 'rgba(201,169,79,0.3)' : 'rgba(194,50,74,0.3)'}
                 >
                   <div className="grid h-full grid-cols-1 md:grid-cols-5">

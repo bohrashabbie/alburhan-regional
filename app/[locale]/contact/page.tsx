@@ -114,12 +114,14 @@ export default function ContactPage() {
                 const selected = active === b.id;
                 return (
                   <ScrollReveal key={b.id} delay={i * 0.05}>
-                    <button
-                      type="button"
+                    <div
                       onClick={() => setActive((x) => (x === b.id ? null : b.id))}
                       data-cursor-label={b.name}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => e.key === 'Enter' && setActive((x) => (x === b.id ? null : b.id))}
                       className={cn(
-                        'group relative block w-full overflow-hidden rounded-2xl p-5 text-start transition-all duration-500',
+                        'group relative block w-full cursor-pointer overflow-hidden rounded-2xl p-5 text-start transition-all duration-500',
                         'border',
                         selected
                           ? 'border-[color:var(--brand-gold)] bg-[rgba(201,169,79,0.08)] shadow-[0_0_30px_rgba(201,169,79,0.15)]'
@@ -145,16 +147,24 @@ export default function ContactPage() {
                       )}
                       <div className="mt-4 space-y-2 text-xs text-[color:var(--fg-muted)]">
                         {b.phone && (
-                          <div className="flex items-center gap-2">
+                          <a
+                            href={`tel:${b.phone.replace(/\s+/g, '')}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex items-center gap-2 hover:text-[color:var(--brand-gold)] transition-colors"
+                          >
                             <Phone className="size-3 text-[color:var(--brand-gold)]" />
                             <span>{b.phone}</span>
-                          </div>
+                          </a>
                         )}
                         {b.email && (
-                          <div className="flex items-center gap-2">
+                          <a
+                            href={`mailto:${b.email}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex items-center gap-2 hover:text-[color:var(--brand-gold)] transition-colors"
+                          >
                             <Mail className="size-3 text-[color:var(--brand-gold)]" />
                             <span className="truncate">{b.email}</span>
-                          </div>
+                          </a>
                         )}
                         {b.address && (
                           <div className="flex items-start gap-2">
@@ -163,7 +173,7 @@ export default function ContactPage() {
                           </div>
                         )}
                       </div>
-                    </button>
+                    </div>
                   </ScrollReveal>
                 );
               })}
@@ -177,10 +187,10 @@ export default function ContactPage() {
                 </p>
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
                   {[
-                    { icon: <Mail className="size-4" />, label: t('contact.email'), value: t('contact.emailValue') },
-                    { icon: <Phone className="size-4" />, label: t('contact.phoneNumbers'), value: `${t('contact.phone1')}${t('contact.phone2') ? ' · ' + t('contact.phone2') : ''}` },
-                    { icon: <MapPin className="size-4" />, label: t('contact.address'), value: t('contact.addressLine') },
-                    { icon: <Clock className="size-4" />, label: t('contact.businessHours'), value: t('contact.hours') },
+                    { icon: <Mail className="size-4" />, label: t('contact.email'), value: t('contact.emailValue'), href: `mailto:${t('contact.emailValue')}` },
+                    { icon: <Phone className="size-4" />, label: t('contact.phoneNumbers'), value: `${t('contact.phone1')}${t('contact.phone2') ? ' · ' + t('contact.phone2') : ''}`, href: `tel:${t('contact.phone1').replace(/\s+/g, '')}` },
+                    { icon: <MapPin className="size-4" />, label: t('contact.address'), value: t('contact.addressLine'), href: null },
+                    { icon: <Clock className="size-4" />, label: t('contact.businessHours'), value: t('contact.hours'), href: null },
                   ].map((c, i) => (
                     <div key={i} className="flex items-start gap-3">
                       <span className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-[color:var(--glass-border)] text-[color:var(--brand-gold)]">
@@ -190,7 +200,13 @@ export default function ContactPage() {
                         <p className="text-[10px] uppercase tracking-[0.2em] text-[color:var(--fg-subtle)]">
                           {c.label}
                         </p>
-                        <p className="mt-0.5 text-sm text-[color:var(--fg-default)]">{c.value}</p>
+                        {c.href ? (
+                          <a href={c.href} className="mt-0.5 block text-sm text-[color:var(--fg-default)] hover:text-[color:var(--brand-gold)] transition-colors">
+                            {c.value}
+                          </a>
+                        ) : (
+                          <p className="mt-0.5 text-sm text-[color:var(--fg-default)]">{c.value}</p>
+                        )}
                       </div>
                     </div>
                   ))}

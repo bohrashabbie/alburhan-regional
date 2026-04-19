@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Image from 'next/image';
-import { ArrowUpRight, MapPin } from 'lucide-react';
+import { ArrowUpRight, MapPin, Phone, Mail } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 
@@ -10,7 +10,7 @@ import { ScrollReveal } from '@/components/motion/ScrollReveal';
 import { GradientText } from '@/components/fx/GradientText';
 import { TiltCard } from '@/components/fx/TiltCard';
 import { GlassCard } from '@/components/fx/GlassCard';
-import { useCountries } from '@/context/SiteContentContext';
+import { useCountries, useContactInfo } from '@/context/SiteContentContext';
 import { getImageUrl } from '@/lib/api';
 import { cn } from '@/lib/utils';
 
@@ -34,6 +34,7 @@ export function PresenceSection() {
   const locale = useLocale();
   const isRTL = locale === 'ar';
   const countries = useCountries();
+  const allContacts = useContactInfo();
 
   const ordered = React.useMemo(() => {
     const order = ['uae', 'kuwait', 'china', 'egypt'];
@@ -46,7 +47,7 @@ export function PresenceSection() {
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-14 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <ScrollReveal>
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--brand-gold)]">
+            <p className="section-kicker">
               {isRTL ? 'وجودنا' : 'Global presence'}
             </p>
             <h2 className="mt-3 max-w-2xl font-display text-4xl font-bold leading-tight md:text-5xl">
@@ -71,6 +72,8 @@ export function PresenceSection() {
             const layout = LAYOUT[slug] || 'md:col-span-3';
             const href = `/${slug === 'uae' ? 'uae' : slug}` as any;
 
+            const ci = allContacts.find((x) => x.country_id === c.id);
+
             return (
               <ScrollReveal
                 key={c.id}
@@ -78,11 +81,8 @@ export function PresenceSection() {
                 className={cn('h-full', layout)}
               >
                 <TiltCard max={6} scale={1.02} className="h-full">
-                  <Link
-                    href={href}
-                    data-cursor-label={name}
-                    className="group relative block h-full overflow-hidden rounded-3xl border border-[color:var(--glass-border)]"
-                  >
+                  {/* Wrapper — position:relative so the Link overlay ajnd contact links can be absolutely/relatively placed */}
+                  <div className="group relative h-full overflow-hidden rounded-3xl border border-[color:var(--glass-border)] card-lift corner-brackets shine-hover">
                     <Image
                       src={img}
                       alt={name}
@@ -109,7 +109,15 @@ export function PresenceSection() {
                       }}
                     />
 
-                    <div className="absolute inset-x-6 bottom-6 flex items-end justify-between">
+                    {/* Full-card link — covers the whole card except the contact rows */}
+                    <Link
+                      href={href}
+                      data-cursor-label={name}
+                      className="absolute inset-0 z-10"
+                      aria-label={name}
+                    />
+
+                    <div className="absolute inset-x-6 bottom-6 z-20 flex items-end justify-between">
                       <div>
                         <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[color:var(--brand-gold)]">
                           {isRTL ? 'فرعنا في' : 'Our presence in'}
@@ -120,6 +128,27 @@ export function PresenceSection() {
                         {firm && (
                           <p className="mt-1 max-w-xs text-xs text-white/75">{firm}</p>
                         )}
+                        {/* Contact links — z-30 so they sit above the full-card Link */}
+                        <div className="relative z-30 mt-2 flex flex-col gap-1">
+                          {ci?.phone1 && (
+                            <a
+                              href={`tel:${ci.phone1.replace(/\s+/g, '')}`}
+                              className="flex items-center gap-1.5 text-[10px] text-white/70 hover:text-[color:var(--brand-gold)] transition-colors"
+                            >
+                              <Phone className="size-3 shrink-0 text-[color:var(--brand-gold)]" />
+                              <span>{ci.phone1}</span>
+                            </a>
+                          )}
+                          {ci?.email && (
+                            <a
+                              href={`mailto:${ci.email}`}
+                              className="flex items-center gap-1.5 text-[10px] text-white/70 hover:text-[color:var(--brand-gold)] transition-colors"
+                            >
+                              <Mail className="size-3 shrink-0 text-[color:var(--brand-gold)]" />
+                              <span>{ci.email}</span>
+                            </a>
+                          )}
+                        </div>
                       </div>
                       <div className="flex size-11 items-center justify-center rounded-full border border-[color:var(--brand-gold)]/60 bg-[rgba(7,7,11,0.5)] text-[color:var(--brand-gold)] transition-all duration-500 group-hover:bg-[rgba(194,50,74,0.4)] group-hover:text-white group-hover:rotate-45">
                         <ArrowUpRight className="size-5" />
@@ -127,11 +156,11 @@ export function PresenceSection() {
                     </div>
 
                     {/* Top corner pin */}
-                    <div className="absolute left-5 top-5 flex items-center gap-1.5 rounded-full border border-[color:var(--glass-border)] bg-[rgba(7,7,11,0.85)] px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white/85">
+                    <div className="absolute left-5 top-5 z-20 flex items-center gap-1.5 rounded-full border border-[color:var(--glass-border)] bg-[rgba(7,7,11,0.85)] px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white/85">
                       <MapPin className="size-3 text-[color:var(--brand-gold)]" />
                       <span>{slug.toUpperCase()}</span>
                     </div>
-                  </Link>
+                  </div>
                 </TiltCard>
               </ScrollReveal>
             );

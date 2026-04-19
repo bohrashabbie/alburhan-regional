@@ -1,11 +1,8 @@
-'use client';
-
-import * as React from 'react';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { CountryTemplate } from '@/components/sections/CountryTemplate';
 
-export default function KuwaitPage() {
-  const t = useTranslations();
+export default async function KuwaitPage() {
+  const t = await getTranslations();
 
   const branches = (['branch1', 'branch2', 'branch3', 'branch4'] as const).map(
     (key) => ({

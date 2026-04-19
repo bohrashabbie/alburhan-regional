@@ -1,11 +1,8 @@
-'use client';
-
-import * as React from 'react';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { CountryTemplate } from '@/components/sections/CountryTemplate';
 
-export default function UAEPage() {
-  const t = useTranslations();
+export default async function UAEPage() {
+  const t = await getTranslations();
 
   return (
     <CountryTemplate

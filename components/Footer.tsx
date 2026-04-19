@@ -9,6 +9,7 @@ import {
   Send,
   ArrowUpRight,
   Globe,
+  ArrowUp,
 } from 'lucide-react';
 import {
   IconFacebook,
@@ -142,6 +143,16 @@ const Footer: React.FC = () => {
             'linear-gradient(180deg, rgba(7,7,11,0.4) 0%, rgba(12,11,19,0.95) 40%, rgba(7,7,11,1) 100%)',
         }}
       />
+      {/* Subtle radial accents */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px]"
+        style={{
+          background:
+            'radial-gradient(ellipse 60% 80% at 20% 0%, rgba(194,50,74,0.15), transparent 60%),' +
+            'radial-gradient(ellipse 50% 70% at 85% 0%, rgba(201,169,79,0.10), transparent 60%)',
+        }}
+      />
 
       {/* Brand marquee */}
       {brands && brands.length > 0 && (
@@ -187,43 +198,58 @@ const Footer: React.FC = () => {
       <div className="mx-auto w-full max-w-7xl px-4 pt-16 pb-10 sm:px-6 lg:px-8">
         {/* Newsletter */}
         <ScrollReveal className="mb-14">
-          <div className="relative overflow-hidden rounded-3xl border border-[color:var(--glass-border)] glass-surface p-8 md:p-10">
+          <div className="relative overflow-hidden rounded-3xl border border-[color:var(--glass-border)] glass-premium p-8 md:p-10">
+            <div aria-hidden className="conic-glow opacity-40" />
             <div
               aria-hidden
-              className="absolute -inset-20 -z-10 opacity-60"
+              className="pointer-events-none absolute inset-0 opacity-20 bg-grid-soft"
               style={{
-                background:
-                  'radial-gradient(closest-side, rgba(194,50,74,0.4), transparent 70%)',
+                maskImage:
+                  'radial-gradient(ellipse at center, black 40%, transparent 85%)',
+                WebkitMaskImage:
+                  'radial-gradient(ellipse at center, black 40%, transparent 85%)',
               }}
             />
-            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div className="relative z-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div className="max-w-lg">
-                <p className="font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--brand-gold)]">
-                  Stay illuminated
+                <p className="section-kicker">
+                  {isRTL ? 'ابقَ مضيئاً' : 'Stay illuminated'}
                 </p>
                 <h3 className="mt-3 font-display text-2xl font-bold md:text-3xl">
-                  <GradientText>Subscribe</GradientText> to our newsletter
+                  <GradientText>{isRTL ? 'اشترك' : 'Subscribe'}</GradientText>{' '}
+                  {isRTL ? 'في نشرتنا البريدية' : 'to our newsletter'}
                 </h3>
                 <p className="mt-2 text-sm text-[color:var(--fg-muted)]">
-                  Monthly insights on lighting design, new installations and industry trends.
+                  {isRTL
+                    ? 'رؤى شهرية حول تصميم الإضاءة والمشاريع واتجاهات الصناعة.'
+                    : 'Monthly insights on lighting design, new installations and industry trends.'}
                 </p>
               </div>
-              <form
-                onSubmit={(e) => e.preventDefault()}
-                className="flex w-full max-w-md items-center gap-2 rounded-full border border-[color:var(--glass-border)] bg-white/[0.03] p-1.5 focus-within:border-[color:var(--brand-gold)]"
-              >
-                <Mail className="ml-3 size-4 shrink-0 text-[color:var(--brand-gold)]" />
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  required
-                  className="flex-1 bg-transparent px-2 py-2 text-sm text-[color:var(--fg-default)] placeholder:text-[color:var(--fg-subtle)] focus:outline-none"
-                />
-                <NeonButton type="submit" size="sm" className="shrink-0">
-                  <Send className="size-4" />
-                  <span className="hidden sm:inline">Subscribe</span>
-                </NeonButton>
-              </form>
+              <div className="flex w-full max-w-md flex-col gap-2">
+                <form
+                  onSubmit={(e) => e.preventDefault()}
+                  className="flex items-center gap-2 rounded-full border border-[color:var(--glass-border)] bg-white/[0.03] p-1.5 transition-colors duration-300 focus-within:border-[color:var(--brand-gold)] focus-within:shadow-[0_0_24px_-4px_rgba(201,169,79,0.5)]"
+                >
+                  <Mail className="ml-3 size-4 shrink-0 text-[color:var(--brand-gold)]" />
+                  <input
+                    type="email"
+                    placeholder={isRTL ? 'بريدك@الإلكتروني.com' : 'your@email.com'}
+                    required
+                    className="flex-1 bg-transparent px-2 py-2 text-sm text-[color:var(--fg-default)] placeholder:text-[color:var(--fg-subtle)] focus:outline-none"
+                  />
+                  <NeonButton type="submit" size="sm" className="shrink-0">
+                    <Send className="size-4" />
+                    <span className="hidden sm:inline">
+                      {isRTL ? 'اشترك' : 'Subscribe'}
+                    </span>
+                  </NeonButton>
+                </form>
+                <p className="px-4 text-[11px] text-[color:var(--fg-subtle)]">
+                  {isRTL
+                    ? 'نحترم خصوصيتك — بدون رسائل مزعجة.'
+                    : 'We respect your privacy — no spam, unsubscribe anytime.'}
+                </p>
+              </div>
             </div>
           </div>
         </ScrollReveal>
@@ -278,8 +304,9 @@ const Footer: React.FC = () => {
                   className={cn(
                     'grid size-10 place-items-center rounded-full',
                     'border border-[color:var(--glass-border)] text-[color:var(--fg-default)]',
-                    'transition-colors duration-300',
-                    'hover:border-[color:var(--brand-gold)] hover:text-[color:var(--brand-gold-bright)] hover:bg-[rgba(201,169,79,0.06)]',
+                    'transition-all duration-300',
+                    'hover:-translate-y-0.5 hover:border-[color:var(--brand-gold)] hover:text-[color:var(--brand-gold-bright)] hover:bg-[rgba(201,169,79,0.06)]',
+                    'hover:shadow-[0_0_18px_-4px_rgba(201,169,79,0.6)]',
                   )}
                 >
                   {s.icon}
@@ -290,8 +317,8 @@ const Footer: React.FC = () => {
 
           {/* Quick links */}
           <div className="md:col-span-2">
-            <h4 className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--brand-gold)]">
-              Navigate
+            <h4 className="section-kicker mb-4">
+              {isRTL ? 'روابط سريعة' : 'Navigate'}
             </h4>
             <ul className="space-y-2.5 text-sm">
               {quickLinks.map((l) => (
@@ -310,15 +337,15 @@ const Footer: React.FC = () => {
 
           {/* Branches */}
           <div className="md:col-span-6">
-            <h4 className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--brand-gold)]">
-              Our Presence
+            <h4 className="section-kicker mb-4">
+              {isRTL ? 'تواجدنا' : 'Our Presence'}
             </h4>
             <div className="grid gap-4 sm:grid-cols-2">
               {branches.map((b) => (
                 <Link
                   key={b.slug}
                   href={`/${b.slug}` as any}
-                  className="group relative overflow-hidden rounded-2xl border border-[color:var(--glass-border)] bg-white/[0.02] p-4 transition-colors duration-300 hover:border-[color:var(--brand-gold)]"
+                  className="group card-lift shine-hover relative overflow-hidden rounded-2xl border border-[color:var(--glass-border)] bg-white/[0.02] p-4 transition-colors duration-300 hover:border-[color:var(--brand-gold)]"
                 >
                   <div
                     aria-hidden
@@ -370,11 +397,24 @@ const Footer: React.FC = () => {
               <Link
                 key={l.href}
                 href={l.href as any}
-                className="transition-colors hover:text-[color:var(--brand-gold-bright)]"
+                className="link-underline transition-colors hover:text-[color:var(--brand-gold-bright)]"
               >
                 {l.label}
               </Link>
             ))}
+            <button
+              type="button"
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+              }}
+              aria-label={isRTL ? 'العودة للأعلى' : 'Back to top'}
+              className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--glass-border)] px-3 py-1.5 text-[10px] uppercase tracking-[0.25em] transition-all duration-300 hover:-translate-y-0.5 hover:border-[color:var(--brand-gold)] hover:text-[color:var(--brand-gold-bright)]"
+            >
+              <ArrowUp className="size-3" />
+              <span>{isRTL ? 'للأعلى' : 'Top'}</span>
+            </button>
           </div>
         </div>
       </div>

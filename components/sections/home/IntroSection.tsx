@@ -106,7 +106,7 @@ export function IntroSection() {
         {/* Text column */}
         <div className="lg:col-span-7">
           <ScrollReveal>
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--brand-gold)]">
+            <p className="section-kicker">
               {t('sections.introduction')}
             </p>
           </ScrollReveal>
@@ -124,12 +124,16 @@ export function IntroSection() {
           <div className="mt-10 grid gap-4 sm:grid-cols-3">
             {pillars.map((p, i) => (
               <ScrollReveal key={p.title} delay={0.12 + i * 0.08}>
-                <GlassCard className="group h-full p-5 transition-colors duration-500 hover:border-[color:var(--brand-gold)]">
-                  <div className="mb-3 flex size-10 items-center justify-center rounded-xl border border-[color:var(--glass-border)] text-[color:var(--brand-gold)] transition-all duration-300 group-hover:scale-110 group-hover:bg-[rgba(201,169,79,0.1)]">
+                <GlassCard className="group card-lift h-full p-5 transition-colors duration-500 hover:border-[color:var(--brand-gold)]">
+                  <div className="mb-3 flex size-10 items-center justify-center rounded-xl border border-[color:var(--glass-border)] text-[color:var(--brand-gold)] transition-all duration-300 group-hover:scale-110 group-hover:border-[color:var(--brand-gold)] group-hover:bg-[rgba(201,169,79,0.1)] group-hover:shadow-[0_0_22px_rgba(201,169,79,0.35)]">
                     {p.icon}
                   </div>
                   <h3 className="font-display text-lg font-semibold">{p.title}</h3>
                   <p className="mt-1 text-sm text-[color:var(--fg-muted)]">{p.text}</p>
+                  <span
+                    aria-hidden
+                    className="mt-4 block h-px w-10 origin-left scale-x-0 bg-gradient-to-r from-[color:var(--brand-gold)] to-transparent transition-transform duration-500 group-hover:scale-x-100"
+                  />
                 </GlassCard>
               </ScrollReveal>
             ))}

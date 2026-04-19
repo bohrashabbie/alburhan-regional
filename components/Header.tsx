@@ -122,7 +122,7 @@ const Header: React.FC = () => {
           'animate-[fade-in_0.5s_ease-out_both]',
           'sticky top-0 z-[800] w-full transition-all duration-500',
           scrolled
-            ? 'bg-[rgba(7,7,11,0.95)] border-b border-[color:var(--glass-border)] shadow-[0_8px_32px_rgba(0,0,0,0.35)]'
+            ? 'border-b border-[color:var(--glass-border)] bg-[rgba(7,7,11,0.72)] backdrop-blur-xl backdrop-saturate-150 shadow-[0_10px_40px_-12px_rgba(0,0,0,0.55)]'
             : 'bg-transparent',
         )}
         style={{ direction: 'ltr' }}
@@ -185,22 +185,37 @@ const Header: React.FC = () => {
                       : 'text-[color:var(--fg-default)]/85 hover:text-[color:var(--brand-gold-bright)]',
                   )}
                 >
-                  <span className="relative z-10">{item.label}</span>
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    {active && (
+                      <span
+                        aria-hidden
+                        className="size-1 rounded-full bg-[color:var(--brand-gold)] shadow-[0_0_10px_rgba(201,169,79,0.75)]"
+                      />
+                    )}
+                    {item.label}
+                  </span>
+                  {/* Active: filled gradient pill */}
                   <span
                     aria-hidden
                     className={cn(
-                      'absolute left-2 right-2 bottom-0 h-px origin-center transition-opacity duration-300',
-                      active ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
+                      'absolute inset-0 -z-10 rounded-full transition-opacity duration-300',
+                      active ? 'opacity-100' : 'opacity-0',
                     )}
                     style={{
                       background:
-                        'linear-gradient(90deg, transparent, var(--brand-gold), transparent)',
-                      boxShadow: '0 0 10px rgba(201,169,79,0.6)',
+                        'linear-gradient(135deg, rgba(194,50,74,0.18), rgba(201,169,79,0.10))',
+                      border: '1px solid rgba(201,169,79,0.35)',
+                      boxShadow:
+                        'inset 0 1px 0 rgba(255,255,255,0.06), 0 0 18px -4px rgba(201,169,79,0.35)',
                     }}
                   />
+                  {/* Hover: soft hover pill */}
                   <span
                     aria-hidden
-                    className="absolute inset-0 -z-10 rounded-lg bg-[rgba(201,169,79,0.06)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    className={cn(
+                      'absolute inset-0 -z-10 rounded-full bg-white/[0.04] transition-opacity duration-300',
+                      active ? 'opacity-0' : 'opacity-0 group-hover:opacity-100',
+                    )}
                   />
                 </Link>
               );

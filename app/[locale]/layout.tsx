@@ -23,7 +23,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   const siteContent = await getSiteContent();
 
   return (
-    <NextIntlClientProvider messages={messages}>
+    <NextIntlClientProvider locale={locale} messages={messages}>
       <SiteContentProvider content={siteContent}>
         <ThemeProvider>
           <AppShell>{children}</AppShell>

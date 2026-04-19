@@ -38,7 +38,7 @@ export function ProductsSection() {
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <ScrollReveal>
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--brand-gold)]">
+            <p className="section-kicker">
               {isRTL ? 'منتجاتنا' : 'Featured products'}
             </p>
             <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
@@ -46,6 +46,11 @@ export function ProductsSection() {
                 {isRTL ? 'مجموعة الإضاءة المميزة' : 'A curated lighting line-up'}
               </GradientText>
             </h2>
+            <p className="mt-3 max-w-xl text-sm text-[color:var(--fg-muted)]">
+              {isRTL
+                ? 'تشكيلة مختارة بعناية — تصاميم مميزة وأداء موثوق.'
+                : 'A carefully curated selection — distinctive design, dependable performance.'}
+            </p>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
             <NeonButton asChild variant="ghost" size="md">
@@ -69,7 +74,7 @@ export function ProductsSection() {
                 <Link
                   href="/products"
                   data-cursor-label="Open"
-                  className="group relative block h-full overflow-hidden rounded-3xl border border-[color:var(--glass-border)]"
+                  className="group relative block h-full overflow-hidden rounded-3xl border border-[color:var(--glass-border)] card-lift corner-brackets shine-hover"
                 >
                   <Image
                     src={img}
