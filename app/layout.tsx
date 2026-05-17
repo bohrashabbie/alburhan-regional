@@ -35,6 +35,7 @@ export const metadata: Metadata = {
   icons: { icon: '/logo.jpeg' },
 };
 
+
 export default async function RootLayout({
   children,
 }: {
@@ -46,6 +47,11 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} dir={dir} className="dark" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://alburhan-asset.s3.eu-north-1.amazonaws.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://cloudfront.net" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}
         style={{ direction: dir }}

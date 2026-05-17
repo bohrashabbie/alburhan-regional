@@ -28,7 +28,16 @@ import type {
 
 export const CMS_BASE =
   process.env.NEXT_PUBLIC_CMS_URL?.replace(/\/$/, '') || 'http://13.60.4.75:8002';
-export const CMS_API = `${CMS_BASE}/api`;
+
+// Server-side API calls may need a different URL when running inside Docker,
+// because the public IP / domain might not be routable from the container.
+// Set CMS_SERVER_URL (non-public, runtime-only) to e.g. http://host.docker.internal:8002
+const CMS_SERVER_BASE =
+  (typeof window === 'undefined'
+    ? process.env.CMS_SERVER_URL?.replace(/\/$/, '')
+    : undefined) || CMS_BASE;
+
+export const CMS_API = `${CMS_SERVER_BASE}/api`;
 
 // S3 bucket base URL — used for legacy relative paths that were migrated to
 // S3 but never rewritten in the database (e.g. `/OurProject/...`).
@@ -64,10 +73,14 @@ export function getImageUrl(path: string | null | undefined): string | null {
 
 /**
  * Revalidation interval in seconds.
- * Content is served from cache instantly, then refreshed in the background
- * every REVALIDATE_SECONDS. Change to 0 for real-time (no caching).
+ * Content is served from Next's Data Cache instantly and refreshed in the
+ * background after this interval. The CMS triggers on-demand revalidation
+ * via /api/revalidate when content changes, so a long TTL is safe — it
+ * just prevents stale cache after a missed webhook. Raise further if the
+ * CMS webhook is reliable; lower if you need near-real-time updates without
+ * webhooks.
  */
-const REVALIDATE_SECONDS = 30;
+const REVALIDATE_SECONDS = 3600; // 1 hour (was 30 s — caused constant CMS polls)
 
 async function cmsFetch<T>(path: string, init?: RequestInit): Promise<T | null> {
   try {

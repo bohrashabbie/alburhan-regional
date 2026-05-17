@@ -12,7 +12,7 @@ import { getImageUrl } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { GradientText } from '@/components/fx/GradientText';
 
-const AUTOPLAY_MS = 2000;
+const AUTOPLAY_MS = 5000; // was 2000 ms — 2 s caused constant framer-motion work on the main thread
 
 /**
  * Home page banner carousel — driven from the CMS `banners` table.
@@ -110,7 +110,6 @@ export function BannerCarousel() {
                 alt={active.title || 'Banner'}
                 fill
                 priority
-                unoptimized
                 sizes="100vw"
                 className="object-cover"
               />

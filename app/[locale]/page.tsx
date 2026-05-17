@@ -1,12 +1,35 @@
+import dynamic from 'next/dynamic';
 import HeroSection from '@/components/sections/home/HeroSection';
-import BannerCarousel from '@/components/sections/home/BannerCarousel';
-import IntroSection from '@/components/sections/home/IntroSection';
-import PresenceSection from '@/components/sections/home/PresenceSection';
-import ServicesSection from '@/components/sections/home/ServicesSection';
-import ProductsSection from '@/components/sections/home/ProductsSection';
-import BrandsSection from '@/components/sections/home/BrandsSection';
-import FoundersSection from '@/components/sections/home/FoundersSection';
-import CTASection from '@/components/sections/home/CTASection';
+
+// Above-the-fold: HeroSection is imported statically so it SSRs instantly.
+// Everything else is below the fold — load it only after the hero is painted.
+// `ssr: true` keeps server-rendered HTML for SEO; the JS bundle for these
+// sections is split into a separate chunk and streamed in after hydration.
+
+const BannerCarousel = dynamic(() => import('@/components/sections/home/BannerCarousel'), {
+  ssr: true,
+});
+const IntroSection = dynamic(() => import('@/components/sections/home/IntroSection'), {
+  ssr: true,
+});
+const PresenceSection = dynamic(() => import('@/components/sections/home/PresenceSection'), {
+  ssr: true,
+});
+const ServicesSection = dynamic(() => import('@/components/sections/home/ServicesSection'), {
+  ssr: true,
+});
+const ProductsSection = dynamic(() => import('@/components/sections/home/ProductsSection'), {
+  ssr: true,
+});
+const BrandsSection = dynamic(() => import('@/components/sections/home/BrandsSection'), {
+  ssr: true,
+});
+const FoundersSection = dynamic(() => import('@/components/sections/home/FoundersSection'), {
+  ssr: true,
+});
+const CTASection = dynamic(() => import('@/components/sections/home/CTASection'), {
+  ssr: true,
+});
 
 export default function Home() {
   return (

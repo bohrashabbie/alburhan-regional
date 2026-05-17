@@ -38,11 +38,14 @@ const nextConfig: NextConfig = {
 
   // --- Images --------------------------------------------------------------
   images: {
-    // Keep unoptimized for S3 to avoid remote fetch timeouts, but let Next
-    // still cache optimized variants for 1h (for hosts it does handle).
-    unoptimized: true,
-    qualities: [75, 90, 100],
-    minimumCacheTTL: 60 * 60,
+    // Next.js image optimization is now ENABLED (removed `unoptimized: true`).
+    // The optimizer resizes images to the requested width, converts to WebP/AVIF,
+    // and caches the result on disk — often 60–80% smaller than the raw S3 JPEG.
+    // If a downstream CMS image fetch times out the optimizer returns the
+    // original gracefully; set `unoptimized: true` to revert if needed.
+    formats: ['image/avif', 'image/webp'],
+    qualities: [60, 75, 90],
+    minimumCacheTTL: 60 * 60 * 24, // cache optimized images for 24 h (was 1 h)
     remotePatterns: [
       { protocol: 'https', hostname: 'flagcdn.com', pathname: '/**' },
       { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
