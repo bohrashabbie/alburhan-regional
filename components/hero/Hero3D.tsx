@@ -65,7 +65,6 @@ export function Hero3D({ className }: { className?: string }) {
             fill
             sizes="(max-width: 768px) 50vw, 260px"
             className="object-cover"
-            unoptimized
           />
           <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[rgba(7,7,11,0.6)] to-transparent" />
         </div>
@@ -79,7 +78,6 @@ export function Hero3D({ className }: { className?: string }) {
               fill
               sizes="(max-width: 768px) 50vw, 260px"
               className="object-cover"
-              unoptimized
             />
             <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[rgba(7,7,11,0.6)] to-transparent" />
           </div>
@@ -94,7 +92,6 @@ export function Hero3D({ className }: { className?: string }) {
               fill
               sizes="(max-width: 768px) 50vw, 260px"
               className="object-cover"
-              unoptimized
             />
             <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[rgba(7,7,11,0.6)] to-transparent" />
           </div>

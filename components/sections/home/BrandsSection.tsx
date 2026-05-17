@@ -48,7 +48,6 @@ function BrandTile({ name, img, href, size = 'md' }: BrandTileProps) {
         alt={name}
         fill
         sizes="(max-width: 768px) 180px, 240px"
-        unoptimized
         className="object-contain"
       />
     </Wrapper>

@@ -83,7 +83,6 @@ export function IntroSection() {
                 shift={40}
                 containerClassName="relative aspect-[4/5] w-full overflow-hidden rounded-2xl"
                 className="size-full"
-                unoptimized
               />
               {/* Floating chip */}
               <div className="absolute bottom-6 left-6 right-6 z-10 flex items-center justify-between rounded-2xl border border-[color:var(--glass-border)] bg-[rgba(7,7,11,0.9)] px-4 py-3">

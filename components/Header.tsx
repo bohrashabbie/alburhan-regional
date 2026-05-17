@@ -151,7 +151,6 @@ const Header: React.FC = () => {
                 fill
                 style={{ objectFit: 'contain', objectPosition: 'left center' }}
                 priority
-                unoptimized
                 className="transition-transform duration-500 group-hover:scale-[1.04]"
               />
             </div>
@@ -299,7 +298,7 @@ const Header: React.FC = () => {
             >
               <div className="flex items-center justify-between">
                 <div className="relative h-9 w-32">
-                  <Image src={logoSrc} alt="AL-Burhan Group" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} unoptimized />
+                  <Image src={logoSrc} alt="AL-Burhan Group" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} />
                 </div>
                 <button
                   type="button"

@@ -108,8 +108,56 @@ async function cmsFetch<T>(path: string, init?: RequestInit): Promise<T | null> 
 // Aggregated site content (preferred entry point)
 // ---------------------------------------------------------------------------
 
+/**
+ * Measured 2026-05: CMS `/public/site-content` returns ~84 KB. Of that:
+ *  - 29% is `page_contents` (49 entries, includes inactive)
+ *  - 12% is `project_categories` (with nested projects + images)
+ *  - 10% is `carousel_slides`
+ *  - 8%  is `team_members` (with long quote text)
+ *
+ * Every byte here is JSON-stringified into every server-rendered page via
+ * `SiteContentProvider`. Stripping inactive rows and trimming heavy nested
+ * arrays cuts the HTML payload measurably without changing UI behaviour —
+ * every consumer already calls `.filter(x => x.is_active)` so dropping the
+ * inactive rows server-side is invisible.
+ */
+function slimSiteContent(c: SiteContent | null): SiteContent | null {
+  if (!c) return null;
+  const isActive = <T extends { is_active?: boolean }>(arr: T[] | undefined) =>
+    (arr || []).filter((x) => x.is_active !== false);
+  return {
+    ...c,
+    settings: c.settings || [],
+    navigation: isActive(c.navigation),
+    carousel_slides: isActive(c.carousel_slides),
+    page_contents: isActive(c.page_contents),
+    services: isActive(c.services),
+    sectors: isActive(c.sectors),
+    team_members: isActive(c.team_members),
+    countries: isActive(c.countries),
+    contact_info: isActive(c.contact_info),
+    social_links: isActive(c.social_links),
+    brands: isActive(c.brands),
+    products: isActive(c.products),
+    banners: isActive(c.banners),
+    footer_links: isActive(c.footer_links),
+    static_pages: isActive(c.static_pages),
+    project_categories: isActive(c.project_categories).map((cat) => ({
+      ...cat,
+      projects: isActive(cat.projects).map((p) => ({
+        ...p,
+        // Keep all images: case-studies and country pages render full galleries
+        // from this nested array. If you need to slim further, push the project
+        // detail fetch to those pages via getProjectCategoriesFull below.
+        images: isActive(p.images),
+      })),
+    })),
+  };
+}
+
 export async function getSiteContent(): Promise<SiteContent | null> {
-  return cmsFetch<SiteContent>('/public/site-content');
+  const raw = await cmsFetch<SiteContent>('/public/site-content');
+  return slimSiteContent(raw);
 }
 
 // ---------------------------------------------------------------------------

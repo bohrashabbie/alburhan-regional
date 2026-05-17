@@ -185,7 +185,6 @@ const Footer: React.FC = () => {
                     alt={b.name || 'Brand'}
                     fill
                     sizes="144px"
-                    unoptimized
                     className="object-contain"
                   />
                 </Tag>

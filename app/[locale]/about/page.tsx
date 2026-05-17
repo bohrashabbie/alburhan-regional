@@ -113,7 +113,6 @@ export default function AboutPage() {
                   shift={40}
                   containerClassName="relative aspect-[4/5] w-full overflow-hidden rounded-2xl"
                   className="size-full"
-                  unoptimized
                 />
               </GlassCard>
             </div>
@@ -207,7 +206,6 @@ export default function AboutPage() {
                       fill
                       sizes="(max-width: 768px) 100vw, 25vw"
                       className="size-full object-cover transition-transform duration-[1.2s] group-hover:scale-[1.08]"
-                      unoptimized
                     />
                     <div
                       aria-hidden

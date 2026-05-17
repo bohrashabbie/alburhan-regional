@@ -144,7 +144,6 @@ export function CountryTemplate({
           alt={countryName}
           fill
           priority
-          unoptimized
           className="object-cover"
         />
 
@@ -186,7 +185,6 @@ export function CountryTemplate({
             src={countryLogo}
             alt={`${firmName} logo`}
             fill
-            unoptimized
             className="object-contain p-3"
           />
         </motion.div>

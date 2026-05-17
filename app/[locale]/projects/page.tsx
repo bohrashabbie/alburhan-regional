@@ -149,7 +149,6 @@ export default function ProjectsPage() {
                             fill
                             sizes="(max-width: 768px) 100vw, 33vw"
                             className="size-full object-cover transition-transform duration-[1.2s] group-hover:scale-[1.08]"
-                            unoptimized
                           />
                         ) : (
                           <div className="size-full bg-[color:var(--bg-elevated)]" />

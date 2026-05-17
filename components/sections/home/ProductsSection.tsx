@@ -82,7 +82,6 @@ export function ProductsSection() {
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="size-full object-cover transition-transform duration-[1.2s] group-hover:scale-[1.08]"
-                    unoptimized
                   />
                   <div
                     aria-hidden

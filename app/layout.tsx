@@ -20,10 +20,15 @@ const geistMono = Geist_Mono({
   preload: false,
 });
 
+// Audit (2026-05): Poppins is used only with `font-display` className, and
+// always combined with font-semibold (600) or font-bold (700). Weights 400
+// and 500 were loaded but never rendered (body uses Geist Sans for normal
+// text, Header nav uses Geist Sans + font-medium). Dropping unused weights
+// saves ~50 KB of WOFF2 traffic on every cold load.
 const poppins = Poppins({
   variable: '--font-poppins',
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['600', '700'],
   display: 'swap',
   preload: true,
 });

@@ -75,7 +75,6 @@ export function FoundersSection() {
                         alt={name}
                         fill
                         className="object-cover transition-transform duration-[1.2s] group-hover:scale-[1.05]"
-                        unoptimized
                       />
                       <div
                         aria-hidden

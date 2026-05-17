@@ -122,7 +122,6 @@ export default function CaseStudiesPage() {
                       alt={featured.name}
                       fill
                       sizes="(max-width: 768px) 100vw, 60vw"
-                      unoptimized
                       className="object-cover"
                     />
                     <div
@@ -229,7 +228,6 @@ export default function CaseStudiesPage() {
                         alt={s.name}
                         fill
                         sizes="(max-width:768px) 100vw, (max-width:1024px) 50vw, 33vw"
-                        unoptimized
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />

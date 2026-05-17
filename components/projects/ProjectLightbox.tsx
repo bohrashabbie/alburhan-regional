@@ -86,7 +86,6 @@ export function ProjectLightbox({ projects }: Props) {
               alt={p.name}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-              unoptimized
               className="object-cover transition-transform duration-700 group-hover:scale-110"
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
@@ -164,7 +163,6 @@ export function ProjectLightbox({ projects }: Props) {
                     alt={`${active.name} — ${index + 1}`}
                     fill
                     sizes="90vw"
-                    unoptimized
                     className="object-contain"
                     priority
                   />
@@ -220,7 +218,6 @@ export function ProjectLightbox({ projects }: Props) {
                           alt=""
                           fill
                           sizes="56px"
-                          unoptimized
                           className="object-cover"
                         />
                       </button>

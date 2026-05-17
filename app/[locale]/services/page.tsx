@@ -66,7 +66,6 @@ export default function ServicesPage() {
                         fill
                         sizes="(max-width: 768px) 100vw, 40vw"
                         className="size-full object-cover"
-                        unoptimized
                       />
                       <div
                         aria-hidden
