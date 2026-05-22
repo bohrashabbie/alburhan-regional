@@ -11,6 +11,7 @@ import { GradientText } from '@/components/fx/GradientText';
 import { NeonButton } from '@/components/fx/NeonButton';
 import { useProducts } from '@/context/SiteContentContext';
 import { getImageUrl } from '@/lib/api';
+import { productEnquiryHref } from '@/lib/product-enquiry';
 import { cn } from '@/lib/utils';
 
 const BENTO_LAYOUT = [
@@ -72,8 +73,8 @@ export function ProductsSection() {
             return (
               <ScrollReveal key={p.id} delay={i * 0.06} className={cn('h-full', layout)}>
                 <Link
-                  href="/products"
-                  data-cursor-label="Open"
+                  href={productEnquiryHref(p.id)}
+                  data-cursor-label={isRTL ? 'استفسار' : 'Enquire'}
                   className="group relative block h-full overflow-hidden rounded-3xl border border-[color:var(--glass-border)] card-lift corner-brackets shine-hover"
                 >
                   <Image

@@ -192,6 +192,11 @@
     "emailValue": "Info@alburhan-regional.com",
     "businessHours": "ساعات العمل",
     "hours": "السبت - الخميس: 9:00 صباحاً - 7:00 مساءً، الجمعة: مغلق",
+    "productEnquiry": {
+      "banner": "أنت تستفسر عن: {product}",
+      "formTitle": "استفسار عن منتج",
+      "formSubtitle": "أخبرنا بما تحتاجه وسنعود إليك خلال 24 ساعة."
+    },
     "form": {
       "name": "الاسم",
       "email": "البريد الإلكتروني",

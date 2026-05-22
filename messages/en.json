@@ -192,6 +192,11 @@
     "emailValue": "Info@alburhan-regional.com",
     "businessHours": "Business Hours",
     "hours": "Sat-Thu: 9:00 AM - 7:00 PM, Friday: Closed",
+    "productEnquiry": {
+      "banner": "You are enquiring about: {product}",
+      "formTitle": "Product enquiry",
+      "formSubtitle": "Tell us what you need and we will get back to you within 24 hours."
+    },
     "form": {
       "name": "Name",
       "email": "Email",

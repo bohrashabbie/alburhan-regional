@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import {
   Mail,
@@ -9,11 +10,13 @@ import {
   Clock,
   Send,
   ArrowUpRight,
+  Package,
 } from 'lucide-react';
 
 import {
   useContactInfo,
   useCountries,
+  useProducts,
   useSocialLinks,
 } from '@/context/SiteContentContext';
 import { PageHero } from '@/components/sections/PageHero';
@@ -23,11 +26,21 @@ import { GradientText } from '@/components/fx/GradientText';
 import { NeonButton } from '@/components/fx/NeonButton';
 import { cn } from '@/lib/utils';
 import { submitContactForm } from '@/lib/api';
+import {
+  PRODUCT_ENQUIRY_PARAM,
+  buildProductEnquiryMessage,
+  buildProductEnquirySubject,
+  getProductDisplayName,
+} from '@/lib/product-enquiry';
+import { useRouter } from '@/i18n/routing';
 
 export default function ContactPage() {
   const t = useTranslations();
   const locale = useLocale();
   const isRTL = locale === 'ar';
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const products = useProducts();
 
   const countries = useCountries();
   const allContacts = useContactInfo();
@@ -57,9 +70,36 @@ export default function ContactPage() {
   const [active, setActive] = React.useState<number | null>(null);
   const activeBranch = active ? branches.find((b) => b.id === active) : null;
 
+  const productParam = searchParams.get(PRODUCT_ENQUIRY_PARAM);
+  const enquiryProduct = React.useMemo(() => {
+    if (!productParam) return null;
+    const id = Number.parseInt(productParam, 10);
+    if (!Number.isFinite(id)) return null;
+    return products.find((p) => p.id === id) ?? null;
+  }, [productParam, products]);
+
+  const enquiryProductName = enquiryProduct
+    ? getProductDisplayName(enquiryProduct, locale)
+    : '';
+  const defaultSubject = enquiryProduct
+    ? buildProductEnquirySubject(enquiryProduct, locale)
+    : '';
+  const defaultMessage = enquiryProduct
+    ? buildProductEnquiryMessage(enquiryProduct, locale)
+    : '';
+
   const formRef = React.useRef<HTMLFormElement>(null);
+  const formSectionRef = React.useRef<HTMLDivElement>(null);
   const [sending, setSending] = React.useState(false);
   const [result, setResult] = React.useState<{ ok: boolean; msg: string } | null>(null);
+
+  React.useEffect(() => {
+    if (!enquiryProduct || !formSectionRef.current) return;
+    const timer = window.setTimeout(() => {
+      formSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+    return () => window.clearTimeout(timer);
+  }, [enquiryProduct]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,6 +122,9 @@ export default function ContactPage() {
     if (res.success) {
       setResult({ ok: true, msg: isRTL ? 'تم إرسال رسالتك بنجاح!' : 'Message sent successfully!' });
       form.reset();
+      if (productParam) {
+        router.replace('/contact');
+      }
     } else {
       const errMsg = res.error || (isRTL ? 'حدث خطأ، يرجى المحاولة مرة أخرى.' : 'Something went wrong. Please try again.');
       console.error('Form submission failed:', res.error);
@@ -216,12 +259,23 @@ export default function ContactPage() {
           </div>
 
           {/* Form */}
-          <div className="lg:col-span-2">
+          <div ref={formSectionRef} id="contact-form" className="lg:col-span-2 scroll-mt-28">
             <ScrollReveal direction="right">
               <GlassCard intensity="strong" className="p-6 md:p-8">
+                {enquiryProduct && (
+                  <div className="mb-5 flex items-start gap-3 rounded-xl border border-[color:var(--brand-gold)]/40 bg-[rgba(201,169,79,0.08)] px-4 py-3">
+                    <Package className="mt-0.5 size-5 shrink-0 text-[color:var(--brand-gold)]" />
+                    <p className="text-sm text-[color:var(--fg-default)]">
+                      {t('contact.productEnquiry.banner', { product: enquiryProductName })}
+                    </p>
+                  </div>
+                )}
+
                 <h2 className="font-display text-2xl font-bold md:text-3xl">
                   <GradientText>
-                    {activeBranch
+                    {enquiryProduct
+                      ? t('contact.productEnquiry.formTitle')
+                      : activeBranch
                       ? `${isRTL ? 'اكتب إلى' : 'Message'} ${activeBranch.name}`
                       : isRTL
                       ? 'اكتب لنا'
@@ -229,12 +283,15 @@ export default function ContactPage() {
                   </GradientText>
                 </h2>
                 <p className="mt-2 text-sm text-[color:var(--fg-muted)]">
-                  {isRTL
+                  {enquiryProduct
+                    ? t('contact.productEnquiry.formSubtitle')
+                    : isRTL
                     ? 'سنعود إليك خلال 24 ساعة.'
                     : "We'll get back to you within 24 hours."}
                 </p>
 
                 <form
+                  key={productParam ?? 'general'}
                   ref={formRef}
                   onSubmit={handleSubmit}
                   className="mt-6 space-y-4"
@@ -248,6 +305,7 @@ export default function ContactPage() {
                         name={k}
                         type={k === 'email' ? 'email' : k === 'phone' ? 'tel' : 'text'}
                         required={k === 'name' || k === 'email'}
+                        defaultValue={k === 'subject' ? defaultSubject : undefined}
                         className="mt-1.5 w-full rounded-lg border border-[color:var(--glass-border)] bg-white/[0.02] px-3 py-2.5 text-sm text-[color:var(--fg-default)] placeholder:text-[color:var(--fg-subtle)] focus:border-[color:var(--brand-gold)] focus:outline-none"
                       />
                     </label>
@@ -260,6 +318,7 @@ export default function ContactPage() {
                       name="message"
                       rows={5}
                       required
+                      defaultValue={defaultMessage}
                       className="mt-1.5 w-full rounded-lg border border-[color:var(--glass-border)] bg-white/[0.02] px-3 py-2.5 text-sm text-[color:var(--fg-default)] placeholder:text-[color:var(--fg-subtle)] focus:border-[color:var(--brand-gold)] focus:outline-none"
                     />
                   </label>

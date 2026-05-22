@@ -8,6 +8,7 @@ import { Link } from '@/i18n/routing';
 
 import { useProducts } from '@/context/SiteContentContext';
 import { getImageUrl } from '@/lib/api';
+import { productEnquiryHref } from '@/lib/product-enquiry';
 import { PageHero } from '@/components/sections/PageHero';
 import { ScrollReveal } from '@/components/motion/ScrollReveal';
 import { GlassCard } from '@/components/fx/GlassCard';
@@ -73,8 +74,8 @@ export default function ProductsPage() {
                   <ScrollReveal key={p.id} delay={(i % 8) * 0.05}>
                     <TiltCard max={6} className="h-full">
                       <Link
-                        href="#"
-                        data-cursor-label="View"
+                        href={productEnquiryHref(p.id)}
+                        data-cursor-label={isRTL ? 'استفسار' : 'Enquire'}
                         className="group block h-full overflow-hidden rounded-2xl border border-[color:var(--glass-border)] bg-white/[0.02]"
                       >
                         <div className="relative aspect-[4/5] overflow-hidden">
@@ -95,7 +96,7 @@ export default function ProductsPage() {
                           />
                           <div className="absolute inset-x-4 bottom-4 flex items-center justify-between opacity-0 transition-opacity duration-500 group-hover:opacity-100">
                             <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[color:var(--brand-gold)]">
-                              View
+                              {isRTL ? 'استفسار' : 'Enquire'}
                             </span>
                             <ArrowUpRight className="size-4 text-[color:var(--brand-gold)]" />
                           </div>
