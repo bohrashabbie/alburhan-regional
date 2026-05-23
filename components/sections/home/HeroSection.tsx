@@ -7,7 +7,6 @@ import { Link } from '@/i18n/routing';
 
 import { NeonButton } from '@/components/fx/NeonButton';
 import { GradientText } from '@/components/fx/GradientText';
-import { TypewriterText } from '@/components/motion/TypewriterText';
 import { CountUp } from '@/components/motion/CountUp';
 import Hero3D from '@/components/hero/Hero3D';
 
@@ -44,7 +43,7 @@ export function HeroSection() {
           <h1 className="font-display text-5xl font-bold leading-[1.05] tracking-tight text-[color:var(--fg-default)] sm:text-6xl md:text-7xl">
             <span className="block">
               <GradientText as="span">
-                <TypewriterText words={rotating} />
+                {isRTL ? 'يضيء' : 'Illuminate'}
               </GradientText>
             </span>
             <span className="mt-2 block">

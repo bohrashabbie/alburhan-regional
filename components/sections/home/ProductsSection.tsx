@@ -73,16 +73,17 @@ export function ProductsSection() {
             return (
               <ScrollReveal key={p.id} delay={i * 0.06} className={cn('h-full', layout)}>
                 <Link
-                  href={productEnquiryHref(p.id)}
-                  data-cursor-label={isRTL ? 'استفسار' : 'Enquire'}
+                  href={`/products/${p.id}` as any}
+                  data-cursor-label={isRTL ? 'عرض التفاصيل' : 'View details'}
                   className="group relative block h-full overflow-hidden rounded-3xl border border-[color:var(--glass-border)] card-lift corner-brackets shine-hover"
                 >
+                  <div className="absolute inset-0 bg-[rgba(7,7,11,0.6)]" />
                   <Image
                     src={img}
                     alt={title}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="size-full object-cover transition-transform duration-[1.2s] group-hover:scale-[1.08]"
+                    className="p-6 size-full object-contain transition-transform duration-[1.2s] group-hover:scale-[1.08]"
                   />
                   <div
                     aria-hidden

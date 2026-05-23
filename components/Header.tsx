@@ -144,14 +144,14 @@ const Header: React.FC = () => {
             className="group relative flex shrink-0 items-center"
             data-cursor-label="Home"
           >
-            <div className="relative h-10 w-36 overflow-hidden sm:h-12 sm:w-44 lg:h-14 lg:w-52">
+            <div className="relative h-12 w-48 overflow-hidden sm:h-16 sm:w-64 lg:h-20 lg:w-72">
               <Image
                 src={logoSrc}
                 alt="AL-Burhan Group"
                 fill
                 style={{ objectFit: 'contain', objectPosition: 'left center' }}
                 priority
-                className="transition-transform duration-500 group-hover:scale-[1.04]"
+                className="transition-transform duration-500 group-hover:scale-[1.06]"
               />
             </div>
             <span
@@ -278,81 +278,81 @@ const Header: React.FC = () => {
 
       {/* Mobile drawer */}
       {mobileOpen && (
-          <div
-            className="fixed inset-0 z-[850] lg:hidden"
+        <div
+          className="fixed inset-0 z-[850] lg:hidden"
+        >
+          <button
+            aria-label="Close menu"
+            onClick={() => setMobileOpen(false)}
+            className="absolute inset-0 bg-[rgba(3,3,6,0.75)]"
+          />
+          <aside
+            role="dialog"
+            aria-label="Mobile navigation"
+            className={cn(
+              'absolute top-0 bottom-0 flex h-full w-[min(86vw,380px)] flex-col gap-6 overflow-y-auto p-6 transition-transform duration-300 ease-out',
+              isRTL ? 'left-0 border-r' : 'right-0 border-l',
+              'border-[color:var(--glass-border)] bg-[color:var(--bg-raised)] shadow-[0_0_60px_rgba(0,0,0,0.5)]',
+            )}
+            dir={isRTL ? 'rtl' : 'ltr'}
           >
-            <button
-              aria-label="Close menu"
-              onClick={() => setMobileOpen(false)}
-              className="absolute inset-0 bg-[rgba(3,3,6,0.75)]"
-            />
-            <aside
-              role="dialog"
-              aria-label="Mobile navigation"
-              className={cn(
-                'absolute top-0 bottom-0 flex h-full w-[min(86vw,380px)] flex-col gap-6 overflow-y-auto p-6 transition-transform duration-300 ease-out',
-                isRTL ? 'left-0 border-r' : 'right-0 border-l',
-                'border-[color:var(--glass-border)] bg-[color:var(--bg-raised)] shadow-[0_0_60px_rgba(0,0,0,0.5)]',
-              )}
-              dir={isRTL ? 'rtl' : 'ltr'}
-            >
-              <div className="flex items-center justify-between">
-                <div className="relative h-9 w-32">
-                  <Image src={logoSrc} alt="AL-Burhan Group" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} />
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setMobileOpen(false)}
-                  aria-label="Close"
-                  className="size-9 rounded-full border border-[color:var(--glass-border)] text-[color:var(--fg-default)] transition-colors hover:border-[color:var(--brand-gold)] hover:text-[color:var(--brand-gold-bright)]"
-                >
-                  <CloseIcon className="m-auto size-4" />
-                </button>
+            <div className="flex items-center justify-between">
+              <div className="relative h-9 w-32">
+                <Image src={logoSrc} alt="AL-Burhan Group" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} />
               </div>
+              <button
+                type="button"
+                onClick={() => setMobileOpen(false)}
+                aria-label="Close"
+                className="size-9 rounded-full border border-[color:var(--glass-border)] text-[color:var(--fg-default)] transition-colors hover:border-[color:var(--brand-gold)] hover:text-[color:var(--brand-gold-bright)]"
+              >
+                <CloseIcon className="m-auto size-4" />
+              </button>
+            </div>
 
-              <nav className="flex flex-1 flex-col gap-1">
-                {navigationItems.map((item, i) => {
-                  const active = isActive(item.href);
-                  return (
-                    <div key={`${item.label}-${item.href}`}>
-                      <Link
-                        href={item.href as any}
-                        onClick={() => setMobileOpen(false)}
+            <nav className="flex flex-1 flex-col gap-1">
+              {navigationItems.map((item, i) => {
+                const active = isActive(item.href);
+                return (
+                  <div key={`${item.label}-${item.href}`}>
+                    <Link
+                      href={item.href as any}
+                      onClick={() => setMobileOpen(false)}
+                      className={cn(
+                        'group flex items-center gap-3 rounded-xl px-3 py-3 text-base transition-colors duration-200',
+                        active
+                          ? 'bg-[rgba(194,50,74,0.18)] text-[color:var(--brand-gold-bright)]'
+                          : 'text-[color:var(--fg-default)] hover:bg-white/[0.03] hover:text-[color:var(--brand-gold-bright)]',
+                      )}
+                    >
+                      <span
                         className={cn(
-                          'group flex items-center gap-3 rounded-xl px-3 py-3 text-base transition-colors duration-200',
+                          'flex size-9 items-center justify-center rounded-lg border',
                           active
-                            ? 'bg-[rgba(194,50,74,0.18)] text-[color:var(--brand-gold-bright)]'
-                            : 'text-[color:var(--fg-default)] hover:bg-white/[0.03] hover:text-[color:var(--brand-gold-bright)]',
+                            ? 'border-[color:var(--brand-gold)] text-[color:var(--brand-gold)]'
+                            : 'border-[color:var(--glass-border)] text-[color:var(--fg-muted)] group-hover:border-[color:var(--brand-gold)] group-hover:text-[color:var(--brand-gold)]',
                         )}
                       >
-                        <span
-                          className={cn(
-                            'flex size-9 items-center justify-center rounded-lg border',
-                            active
-                              ? 'border-[color:var(--brand-gold)] text-[color:var(--brand-gold)]'
-                              : 'border-[color:var(--glass-border)] text-[color:var(--fg-muted)] group-hover:border-[color:var(--brand-gold)] group-hover:text-[color:var(--brand-gold)]',
-                          )}
-                        >
-                          {item.icon}
-                        </span>
-                        <span className="font-medium tracking-wide">{item.label}</span>
-                      </Link>
-                    </div>
-                  );
-                })}
-              </nav>
+                        {item.icon}
+                      </span>
+                      <span className="font-medium tracking-wide">{item.label}</span>
+                    </Link>
+                  </div>
+                );
+              })}
+            </nav>
 
-              <div className="mt-auto border-t border-[color:var(--glass-border)] pt-6">
-                <NeonButton asChild className="w-full" size="lg">
-                  <Link href="/contact" onClick={() => setMobileOpen(false)}>
-                    <Phone className="size-4" />
-                    {t('contact')}
-                  </Link>
-                </NeonButton>
-              </div>
-            </aside>
-          </div>
-        )}
+            <div className="mt-auto border-t border-[color:var(--glass-border)] pt-6">
+              <NeonButton asChild className="w-full" size="lg">
+                <Link href="/contact" onClick={() => setMobileOpen(false)}>
+                  <Phone className="size-4" />
+                  {t('contact')}
+                </Link>
+              </NeonButton>
+            </div>
+          </aside>
+        </div>
+      )}
     </>
   );
 };

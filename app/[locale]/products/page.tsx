@@ -5,10 +5,10 @@ import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
 import { Search as SearchIcon, ArrowUpRight } from 'lucide-react';
 import { Link } from '@/i18n/routing';
+import { useRouter } from '@/i18n/routing';
 
 import { useProducts } from '@/context/SiteContentContext';
 import { getImageUrl } from '@/lib/api';
-import { productEnquiryHref } from '@/lib/product-enquiry';
 import { PageHero } from '@/components/sections/PageHero';
 import { ScrollReveal } from '@/components/motion/ScrollReveal';
 import { GlassCard } from '@/components/fx/GlassCard';
@@ -74,29 +74,33 @@ export default function ProductsPage() {
                   <ScrollReveal key={p.id} delay={(i % 8) * 0.05}>
                     <TiltCard max={6} className="h-full">
                       <Link
-                        href={productEnquiryHref(p.id)}
-                        data-cursor-label={isRTL ? 'استفسار' : 'Enquire'}
+                        href={`/products/${p.id}` as any}
+                        data-cursor-label={isRTL ? 'عرض التفاصيل' : 'View details'}
                         className="group block h-full overflow-hidden rounded-2xl border border-[color:var(--glass-border)] bg-white/[0.02]"
                       >
-                        <div className="relative aspect-[4/5] overflow-hidden">
+                        {/* Image container — fixed height, contain so nothing is cropped */}
+                        <div
+                          className="relative flex items-center justify-center overflow-hidden bg-[rgba(7,7,11,0.6)]"
+                          style={{ height: '220px' }}
+                        >
                           <Image
                             src={img}
                             alt={title}
                             fill
                             sizes="(max-width: 768px) 50vw, 25vw"
-                            className="size-full object-cover transition-transform duration-[1.2s] group-hover:scale-[1.08]"
+                            className="object-contain transition-transform duration-[1.2s] group-hover:scale-[1.04] p-3"
                           />
                           <div
                             aria-hidden
                             className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                             style={{
                               background:
-                                'linear-gradient(180deg, transparent 45%, rgba(7,7,11,0.9) 100%)',
+                                'linear-gradient(180deg, transparent 45%, rgba(7,7,11,0.75) 100%)',
                             }}
                           />
-                          <div className="absolute inset-x-4 bottom-4 flex items-center justify-between opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                          <div className="absolute inset-x-4 bottom-3 flex items-center justify-between opacity-0 transition-opacity duration-500 group-hover:opacity-100">
                             <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[color:var(--brand-gold)]">
-                              {isRTL ? 'استفسار' : 'Enquire'}
+                              {isRTL ? 'عرض التفاصيل' : 'View details'}
                             </span>
                             <ArrowUpRight className="size-4 text-[color:var(--brand-gold)]" />
                           </div>
