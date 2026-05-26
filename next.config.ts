@@ -38,11 +38,10 @@ const nextConfig: NextConfig = {
 
   // --- Images --------------------------------------------------------------
   images: {
-    // Next.js image optimization is now ENABLED (removed `unoptimized: true`).
-    // The optimizer resizes images to the requested width, converts to WebP/AVIF,
-    // and caches the result on disk — often 60–80% smaller than the raw S3 JPEG.
-    // If a downstream CMS image fetch times out the optimizer returns the
-    // original gracefully; set `unoptimized: true` to revert if needed.
+    // Keep the optimizer enabled in production, but bypass it in local dev.
+    // Some remote S3 assets time out in the dev optimizer and surface as 500s
+    // on /_next/image even though the app itself renders correctly.
+    unoptimized: process.env.NODE_ENV !== 'production',
     formats: ['image/avif', 'image/webp'],
     qualities: [60, 75, 90],
     minimumCacheTTL: 60 * 60 * 24, // cache optimized images for 24 h (was 1 h)
