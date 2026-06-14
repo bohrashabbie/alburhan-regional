@@ -101,7 +101,7 @@ export default function AboutPage() {
                 className="absolute -inset-4 rounded-3xl opacity-60 blur-2xl"
                 style={{
                   background:
-                    'radial-gradient(closest-side, rgba(194,50,74,0.45), transparent 70%)',
+                    'radial-gradient(closest-side, rgba(212,168,67,0.18), transparent 70%)',
                 }}
               />
               <GlassCard intensity="strong" className="relative overflow-hidden p-2">
@@ -224,7 +224,7 @@ export default function AboutPage() {
                           {serviceTitle(i, tile.key)}
                         </h3>
                       </div>
-                      <div className="flex size-9 items-center justify-center rounded-full border border-[color:var(--brand-gold)]/60 text-[color:var(--brand-gold)] transition-all group-hover:rotate-45 group-hover:bg-[rgba(194,50,74,0.35)] group-hover:text-white">
+                      <div className="flex size-9 items-center justify-center rounded-full border border-[color:var(--brand-gold)]/60 text-[color:var(--brand-gold)] transition-all group-hover:rotate-45 group-hover:bg-[rgba(212,168,67,0.12)] group-hover:text-white">
                         <ArrowUpRight className="size-4" />
                       </div>
                     </div>
@@ -246,7 +246,7 @@ export default function AboutPage() {
                 className="absolute -inset-20 -z-10 opacity-70"
                 style={{
                   background:
-                    'radial-gradient(closest-side, rgba(194,50,74,0.4), transparent 65%)',
+                    'radial-gradient(closest-side, rgba(212,168,67,0.15), transparent 65%)',
                 }}
               />
               <h3 className="font-display text-3xl font-bold leading-tight md:text-5xl">

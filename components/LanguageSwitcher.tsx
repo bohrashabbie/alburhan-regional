@@ -68,7 +68,7 @@ const LanguageSwitcher: React.FC = () => {
                   className={cn(
                     'flex cursor-pointer items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm outline-none',
                     active
-                      ? 'bg-[rgba(194,50,74,0.18)] text-[color:var(--brand-gold-bright)]'
+                      ? 'bg-[rgba(212,168,67,0.12)] text-[color:var(--brand-gold-bright)]'
                       : 'text-[color:var(--fg-default)] hover:bg-white/[0.04] hover:text-[color:var(--brand-gold-bright)]',
                   )}
                 >

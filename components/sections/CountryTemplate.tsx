@@ -144,6 +144,7 @@ export function CountryTemplate({
           alt={countryName}
           fill
           priority
+          sizes="100vw"
           className="object-cover"
         />
 
@@ -161,7 +162,7 @@ export function CountryTemplate({
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse at 20% 80%, rgba(194,50,74,0.35), transparent 55%), radial-gradient(ellipse at 85% 10%, rgba(201,169,79,0.22), transparent 50%)',
+              'radial-gradient(ellipse at 20% 80%, rgba(212,168,67,0.12), transparent 55%), radial-gradient(ellipse at 85% 10%, rgba(201,169,79,0.22), transparent 50%)',
           }}
         />
 
@@ -185,6 +186,7 @@ export function CountryTemplate({
             src={countryLogo}
             alt={`${firmName} logo`}
             fill
+            sizes="96px"
             className="object-contain p-3"
           />
         </motion.div>

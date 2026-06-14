@@ -37,9 +37,12 @@ export function BannerCarousel() {
               ''
             : '';
           const countrySlug = country?.slug || '';
+          // Strip CMS placeholder suffixes such as "Kuwait Hero" → "Kuwait"
+          const rawTitle = (isRTL ? b.name_ar || b.name_en : b.name_en) || '';
+          const cleanTitle = rawTitle.replace(/\s+hero$/i, '').trim();
           return {
             id: b.id,
-            title: (isRTL ? b.name_ar || b.name_en : b.name_en) || countryName,
+            title: cleanTitle || countryName,
             description:
               (isRTL
                 ? b.description_ar || b.description_en
@@ -109,8 +112,8 @@ export function BannerCarousel() {
                 src={active.image}
                 alt={active.title || 'Banner'}
                 fill
-                priority
-                sizes="100vw"
+                loading="lazy"
+                sizes="(max-width: 1280px) 100vw, 1280px"
                 className="object-cover"
               />
             </motion.div>

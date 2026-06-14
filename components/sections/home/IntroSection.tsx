@@ -3,31 +3,23 @@
 import * as React from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/routing';
-import { ArrowUpRight, Leaf, Gauge, Handshake } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
-import { ScrollReveal } from '@/components/motion/ScrollReveal';
-import { GradientText } from '@/components/fx/GradientText';
-import { GlassCard } from '@/components/fx/GlassCard';
-import { NeonButton } from '@/components/fx/NeonButton';
-import { ParallaxImage } from '@/components/motion/ParallaxImage';
+import { useReveal } from '@/hooks/useReveal';
 import { useSiteContent } from '@/context/SiteContentContext';
-import { getImageUrl } from '@/lib/api';
-
-const FALLBACK =
-  'https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1600&q=80';
 
 export function IntroSection() {
   const t = useTranslations();
   const locale = useLocale();
   const isRTL = locale === 'ar';
-  const { setting, content } = useSiteContent();
+  const { setting: _setting, content } = useSiteContent();
 
-  const heroImage =
-    getImageUrl(setting('home_intro_image_url')) ||
-    getImageUrl(setting('about_feature_image_url')) ||
-    FALLBACK;
+  const { ref: leftRef, visible: leftVisible } = useReveal(0.2);
+  const { ref: rightRef, visible: rightVisible } = useReveal(0.15);
 
-  const intro = content?.page_contents?.find((p) => p.page_key === 'home' && p.section_key === 'introduction');
+  const intro = content?.page_contents?.find(
+    (p) => p.page_key === 'home' && p.section_key === 'introduction',
+  );
   const introTitle =
     (isRTL ? intro?.title_ar : intro?.title_en) || t('sections.aboutUsTitle');
   const introBody =
@@ -38,121 +30,90 @@ export function IntroSection() {
 
   const pillars = isRTL
     ? [
-        { icon: <Gauge className="size-5" />, title: 'أداء', text: 'إضاءة دقيقة وموثوقة.' },
-        { icon: <Leaf className="size-5" />, title: 'استدامة', text: 'حلول موفرة للطاقة.' },
-        { icon: <Handshake className="size-5" />, title: 'شراكة', text: 'تصميم وتنفيذ بيد واحدة.' },
+        { title: 'أداء', text: 'إضاءة دقيقة وموثوقة طوال دورة الحياة.' },
+        { title: 'استدامة', text: 'حلول موفرة للطاقة تخفض الأحمال الكهربائية.' },
+        { title: 'شراكة', text: 'فريق واحد من التصور إلى التشغيل.' },
+        { title: 'ابتكار', text: 'تقنيات LED ذكية وأنظمة إضاءة متطورة.' },
       ]
     : [
-        {
-          icon: <Gauge className="size-5" />,
-          title: 'Performance',
-          text: 'Precision lighting engineered for lifetime reliability.',
-        },
-        {
-          icon: <Leaf className="size-5" />,
-          title: 'Sustainability',
-          text: 'Smart, energy-efficient fixtures that cut grid load.',
-        },
-        {
-          icon: <Handshake className="size-5" />,
-          title: 'Partnership',
-          text: 'One team — from concept to commissioning.',
-        },
+        { title: 'Performance', text: 'Precision lighting engineered for lifetime reliability.' },
+        { title: 'Sustainability', text: 'Smart, energy-efficient fixtures that cut grid load.' },
+        { title: 'Partnership', text: 'One team — from concept to commissioning.' },
+        { title: 'Innovation', text: 'Smart LED systems redefining modern spaces.' },
       ];
 
   return (
-    <section className="relative py-24 md:py-32">
-      <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:gap-16 lg:px-8">
-        {/* Image column */}
-        <ScrollReveal direction="left" className="lg:col-span-5">
-          <div className="relative">
+    <section
+      className="luxury-section relative bg-[#080808] py-24 md:py-32"
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
+      {/* Subtle border top */}
+      <div className="absolute inset-x-0 top-0 h-px bg-[#1A1A1A]" />
+
+      <div className="mx-auto grid w-full max-w-7xl gap-16 px-4 sm:px-6 lg:grid-cols-2 lg:gap-24 lg:px-8">
+
+        {/* Left — eyebrow + heading */}
+        <div
+          ref={leftRef}
+          className="reveal-left flex flex-col justify-center"
+          data-visible={leftVisible || undefined}
+          style={{
+            opacity: leftVisible ? 1 : 0,
+            transform: leftVisible ? 'translateX(0)' : (isRTL ? 'translateX(40px)' : 'translateX(-40px)'),
+            transition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)',
+          }}
+        >
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#D4A843]">
+            {t('sections.introduction')}
+          </p>
+
+          <h2 className="mt-5 font-display text-[clamp(2rem,4vw,3rem)] font-light leading-[1.1] tracking-[-0.02em] text-white">
+            {introTitle}
+          </h2>
+
+          <p className="mt-6 text-[15px] font-light leading-relaxed text-[#555]">
+            {introBody}
+          </p>
+
+          <Link
+            href="/about"
+            className="mt-10 inline-flex w-fit items-center gap-2 border-b border-[#2A2A2A] pb-1 text-[12px] uppercase tracking-[0.18em] text-[#555] transition-all duration-300 hover:border-[#D4A843] hover:text-white"
+          >
+            {isRTL ? 'تعرف علينا' : 'Learn more'}
+            <ArrowRight className="size-3" />
+          </Link>
+        </div>
+
+        {/* Right — pillars list */}
+        <div
+          ref={rightRef}
+          className="flex flex-col justify-center gap-0"
+        >
+          {pillars.map((p, i) => (
             <div
-              aria-hidden
-              className="absolute -inset-4 rounded-3xl blur-2xl opacity-60"
+              key={p.title}
+              className="group flex items-start gap-5 border-b border-[#111] py-6 last:border-0"
               style={{
-                background:
-                  'radial-gradient(closest-side, rgba(194,50,74,0.4), transparent 70%)',
+                opacity: rightVisible ? 1 : 0,
+                transform: rightVisible ? 'translateX(0)' : 'translateX(24px)',
+                transition: `opacity 0.7s cubic-bezier(0.16,1,0.3,1) ${i * 100}ms, transform 0.7s cubic-bezier(0.16,1,0.3,1) ${i * 100}ms`,
               }}
-            />
-            <GlassCard intensity="strong" className="relative overflow-hidden p-2">
-              <ParallaxImage
-                src={heroImage}
-                alt="Al-Burhan"
-                width={720}
-                height={900}
-                shift={40}
-                containerClassName="relative aspect-[4/5] w-full overflow-hidden rounded-2xl"
-                className="size-full"
+            >
+              {/* Gold dot */}
+              <span
+                className="mt-[7px] size-1.5 shrink-0 rounded-full bg-[#D4A843] transition-all duration-300 group-hover:scale-150 group-hover:shadow-[0_0_8px_rgba(212,168,67,0.6)]"
+                aria-hidden
               />
-              {/* Floating chip */}
-              <div className="absolute bottom-6 left-6 right-6 z-10 flex items-center justify-between rounded-2xl border border-[color:var(--glass-border)] bg-[rgba(7,7,11,0.9)] px-4 py-3">
-                <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-[color:var(--brand-gold)]">
-                    Since 2005
-                  </p>
-                  <p className="mt-0.5 text-sm font-semibold">
-                    {isRTL ? '20+ عاماً من الابتكار' : '20+ years of innovation'}
-                  </p>
-                </div>
-                <div className="flex size-10 items-center justify-center rounded-full border border-[color:var(--brand-gold)]/50 bg-[rgba(201,169,79,0.08)]">
-                  <Leaf className="size-4 text-[color:var(--brand-gold)]" />
-                </div>
+              <div>
+                <h3 className="text-[15px] font-light text-white transition-colors duration-300 group-hover:text-[#D4A843]">
+                  {p.title}
+                </h3>
+                <p className="mt-1 text-[13px] font-light leading-relaxed text-[#444]">
+                  {p.text}
+                </p>
               </div>
-            </GlassCard>
-          </div>
-        </ScrollReveal>
-
-        {/* Text column */}
-        <div className="lg:col-span-7">
-          <ScrollReveal>
-            <p className="section-kicker">
-              {t('sections.introduction')}
-            </p>
-          </ScrollReveal>
-          <ScrollReveal delay={0.05}>
-            <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
-              <GradientText>{introTitle}</GradientText>
-            </h2>
-          </ScrollReveal>
-          <ScrollReveal delay={0.1}>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-[color:var(--fg-muted)] md:text-lg">
-              {introBody}
-            </p>
-          </ScrollReveal>
-
-          <div className="mt-10 grid gap-4 sm:grid-cols-3">
-            {pillars.map((p, i) => (
-              <ScrollReveal key={p.title} delay={0.12 + i * 0.08}>
-                <GlassCard className="group card-lift h-full p-5 transition-colors duration-500 hover:border-[color:var(--brand-gold)]">
-                  <div className="mb-3 flex size-10 items-center justify-center rounded-xl border border-[color:var(--glass-border)] text-[color:var(--brand-gold)] transition-all duration-300 group-hover:scale-110 group-hover:border-[color:var(--brand-gold)] group-hover:bg-[rgba(201,169,79,0.1)] group-hover:shadow-[0_0_22px_rgba(201,169,79,0.35)]">
-                    {p.icon}
-                  </div>
-                  <h3 className="font-display text-lg font-semibold">{p.title}</h3>
-                  <p className="mt-1 text-sm text-[color:var(--fg-muted)]">{p.text}</p>
-                  <span
-                    aria-hidden
-                    className="mt-4 block h-px w-10 origin-left scale-x-0 bg-gradient-to-r from-[color:var(--brand-gold)] to-transparent transition-transform duration-500 group-hover:scale-x-100"
-                  />
-                </GlassCard>
-              </ScrollReveal>
-            ))}
-          </div>
-
-          <ScrollReveal delay={0.4}>
-            <div className="mt-10 flex flex-wrap items-center gap-3">
-              <NeonButton asChild size="md">
-                <Link href="/about" data-cursor-label="About">
-                  {isRTL ? 'تعرف علينا' : 'Learn about us'}
-                  <ArrowUpRight className="size-4" />
-                </Link>
-              </NeonButton>
-              <NeonButton asChild size="md" variant="ghost">
-                <Link href="/services" data-cursor-label="Services">
-                  {isRTL ? 'خدماتنا' : 'Our services'}
-                </Link>
-              </NeonButton>
             </div>
-          </ScrollReveal>
+          ))}
         </div>
       </div>
     </section>

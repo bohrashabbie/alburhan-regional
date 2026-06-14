@@ -1,170 +1,203 @@
 'use client';
 
 import * as React from 'react';
-import { ArrowRight, Sparkles, Zap, Globe, ChevronDown } from 'lucide-react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/routing';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 
-import { NeonButton } from '@/components/fx/NeonButton';
-import { GradientText } from '@/components/fx/GradientText';
-import { CountUp } from '@/components/motion/CountUp';
-import Hero3D from '@/components/hero/Hero3D';
+const STATS = [
+  { to: 20, suffix: '+', labelEn: 'Years Experience', labelAr: 'سنة خبرة' },
+  { to: 4,  suffix: '',  labelEn: 'Countries',        labelAr: 'دول' },
+  { to: 500,suffix: '+', labelEn: 'Projects',         labelAr: 'مشروع' },
+  { to: 50, suffix: '+', labelEn: 'Global Brands',    labelAr: 'علامة عالمية' },
+];
+
+function useWordReveal(count: number) {
+  const [revealed, setRevealed] = React.useState<boolean[]>(() => Array(count).fill(false));
+  React.useEffect(() => {
+    let cancelled = false;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    for (let i = 0; i < count; i++) {
+      const t = setTimeout(
+        () => { if (!cancelled) setRevealed((p) => p.map((v, j) => j === i ? true : v)); },
+        300 + i * 90,
+      );
+      timers.push(t);
+    }
+    return () => { cancelled = true; timers.forEach(clearTimeout); };
+  }, [count]); // eslint-disable-line react-hooks/exhaustive-deps
+  return revealed;
+}
+
+function StatCounter({ to, suffix }: { to: number; suffix: string }) {
+  const ref = React.useRef<HTMLSpanElement>(null);
+  const started = React.useRef(false);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting || started.current) return;
+      started.current = true;
+      obs.disconnect();
+      const dur = 1600;
+      const t0 = performance.now();
+      const tick = (now: number) => {
+        const p = Math.min((now - t0) / dur, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.floor(ease * to) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      el.textContent = '0' + suffix;
+      requestAnimationFrame(tick);
+    }, { threshold: 0.5 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [to, suffix]);
+  return <span ref={ref} suppressHydrationWarning>{to}{suffix}</span>;
+}
 
 export function HeroSection() {
   const t = useTranslations();
   const locale = useLocale();
   const isRTL = locale === 'ar';
 
-  const rotating = isRTL
-    ? ['يضيء', 'يلهم', 'يحوّل', 'يبهر']
-    : ['Illuminate', 'Inspire', 'Transform', 'Astonish'];
+  /* Words for the headline */
+  const headline = isRTL
+    ? ['يضيء', 'رؤيتك', 'بما', 'هو', 'أبعد', 'من', 'الضوء']
+    : ['Illuminating', 'Your', 'Vision', 'Beyond', 'Light'];
+
+  /* Words that get the gold accent colour */
+  const goldenEn = new Set(['Beyond', 'Light']);
+  const goldenArIdx = new Set([5, 6]);
+
+  const revealed = useWordReveal(headline.length);
+  const allIn = revealed[headline.length - 1];
 
   return (
-    <section className="relative flex min-h-[calc(100vh-5rem)] items-center overflow-hidden py-16 md:py-24">
-      {/* Ambient radial glows */}
+    <section
+      className="luxury-section relative min-h-[100svh] overflow-hidden bg-[#080808]"
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
+      {/* ── Beam behind the headline ── */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 flex justify-center">
+        <div
+          className="animate-beam w-px"
+          style={{ background: 'linear-gradient(to bottom, transparent 0%, #D4A843 40%, #D4A843 60%, transparent 100%)', opacity: 0.15 }}
+        />
+        <div
+          className="animate-cone absolute top-0 h-[55vh] w-[340px]"
+          style={{ background: 'conic-gradient(from 270deg at 50% 0%, transparent 85deg, rgba(212,168,67,0.07) 90deg, transparent 95deg)' }}
+        />
+      </div>
+
+      {/* Ambient radial glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            'radial-gradient(ellipse 80% 60% at 20% 30%, rgba(194,50,74,0.18), transparent 55%),' +
-            'radial-gradient(ellipse 60% 50% at 85% 75%, rgba(201,169,79,0.14), transparent 55%)',
-        }}
+        className="pointer-events-none absolute inset-0"
+        style={{ background: 'radial-gradient(ellipse 55% 35% at 50% 28%, rgba(212,168,67,0.05), transparent 70%)' }}
       />
 
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:px-8">
-        {/* Text column */}
-        <div className="relative z-10 flex flex-col items-start justify-center lg:col-span-7 animate-[fade-in_0.6s_ease-out_both]">
-          <div className="section-kicker mb-6">
-            <Sparkles className="size-3.5" />
-            <span>{t('common.companyName')}</span>
-          </div>
+      {/* ── Main flex column ── */}
+      <div className="relative z-10 flex min-h-[100svh] flex-col">
 
-          <h1 className="font-display text-5xl font-bold leading-[1.05] tracking-tight text-[color:var(--fg-default)] sm:text-6xl md:text-7xl">
-            <span className="block">
-              <GradientText as="span">
-                {isRTL ? 'يضيء' : 'Illuminate'}
-              </GradientText>
-            </span>
-            <span className="mt-2 block">
-              {isRTL ? 'رؤيتك بالضوء' : t('hero.title2')}
-            </span>
-            <span className="mt-2 block text-[color:var(--fg-muted)]">
-              {t('hero.title3')}.
-            </span>
+        {/* Centre block — grows to fill, centres content */}
+        <div className="flex flex-1 flex-col items-center justify-center px-5 pt-24 pb-8 text-center">
+
+          {/* Eyebrow */}
+          <p
+            className="mb-7 font-mono text-[11px] uppercase tracking-[0.32em] text-[#D4A843]"
+            style={{ opacity: revealed[0] ? 1 : 0, transition: 'opacity 0.7s ease 0.1s' }}
+          >
+            {t('common.companyName')}
+          </p>
+
+          {/* Headline — inline spans with natural word spacing */}
+          <h1
+            className="max-w-3xl font-display leading-[1.08] tracking-[-0.025em] text-white"
+            style={{ fontSize: 'clamp(2.4rem, 7.5vw, 5.5rem)', fontWeight: 300 }}
+            aria-label={headline.join(' ')}
+          >
+            {headline.map((word, i) => (
+              <React.Fragment key={i}>
+                {i > 0 && ' '}
+                <span
+                  className="inline-block transition-all duration-700"
+                  style={{
+                    opacity: revealed[i] ? 1 : 0,
+                    transform: revealed[i] ? 'translateY(0)' : 'translateY(16px)',
+                    transitionDelay: `${i * 80}ms`,
+                    color: (!isRTL && goldenEn.has(word)) || (isRTL && goldenArIdx.has(i)) ? '#D4A843' : undefined,
+                  }}
+                >
+                  {word}
+                </span>
+              </React.Fragment>
+            ))}
           </h1>
 
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-[color:var(--fg-muted)] md:text-lg">
+          {/* Description */}
+          <p
+            className="mt-7 max-w-lg text-[15px] font-light leading-relaxed text-[#444]"
+            style={{ opacity: allIn ? 1 : 0, transform: allIn ? 'translateY(0)' : 'translateY(10px)', transition: 'opacity 0.8s ease, transform 0.8s ease', transitionDelay: '200ms' }}
+          >
             {t('hero.description')}
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-3">
-            <NeonButton asChild size="lg">
-              <Link href="/projects">
-                <Zap className="size-5" />
-                {isRTL ? 'استكشف مشاريعنا' : 'Explore our projects'}
-                <ArrowRight className="size-5" />
-              </Link>
-            </NeonButton>
-            <NeonButton asChild size="lg" variant="ghost">
-              <Link href="/contact">
-                <Globe className="size-5" />
-                {isRTL ? 'تواصل معنا' : 'Start a project'}
-              </Link>
-            </NeonButton>
+          {/* CTAs */}
+          <div
+            className="mt-9 flex flex-wrap items-center justify-center gap-4"
+            style={{ opacity: allIn ? 1 : 0, transition: 'opacity 0.8s ease', transitionDelay: '360ms' }}
+          >
+            <Link
+              href="/projects"
+              className="inline-flex items-center gap-2 bg-[#D4A843] px-7 py-3.5 text-[11px] font-normal uppercase tracking-[0.18em] text-black transition-all duration-300 hover:bg-[#C49730]"
+            >
+              {isRTL ? 'استكشف مشاريعنا' : 'Explore Projects'}
+              <ArrowRight className="size-3.5" />
+            </Link>
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 border border-[#2A2A2A] px-7 py-3.5 text-[11px] font-normal uppercase tracking-[0.18em] text-[#555] transition-all duration-300 hover:border-[#D4A843] hover:text-white"
+            >
+              {isRTL ? 'تواصل معنا' : 'Get In Touch'}
+            </Link>
           </div>
+        </div>
 
-          {/* Stats */}
-          <div className="mt-14 grid w-full grid-cols-2 gap-3 sm:grid-cols-4">
-            {[
-              { to: 20, suffix: '+', label: isRTL ? 'سنوات خبرة' : 'Years of expertise' },
-              { to: 4, suffix: '', label: isRTL ? 'دول' : 'Countries' },
-              { to: 500, suffix: '+', label: isRTL ? 'مشروع' : 'Projects' },
-              { to: 50, suffix: '+', label: isRTL ? 'شريك تجاري' : 'Global brands' },
-            ].map((s, i) => (
-              <div key={i} className="stat-pill group">
-                <span className="block font-display text-3xl font-bold md:text-4xl">
-                  <GradientText as="span">
-                    <CountUp to={s.to} suffix={s.suffix} duration={1.8} />
-                  </GradientText>
+        {/* Scroll indicator */}
+        <div
+          aria-hidden
+          className="flex justify-center py-3 transition-all duration-700"
+          style={{ opacity: allIn ? 1 : 0, transitionDelay: '600ms' }}
+        >
+          <div className="flex flex-col items-center gap-1.5">
+            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[#2A2A2A]">
+              {isRTL ? 'مرر' : 'Scroll'}
+            </span>
+            <ChevronDown className="animate-scroll-pulse size-3.5 text-[#D4A843]" />
+          </div>
+        </div>
+
+        {/* Stats strip pinned to bottom */}
+        <div
+          className="w-full border-t border-[#1A1A1A] transition-all duration-700"
+          style={{ opacity: allIn ? 1 : 0, transitionDelay: '500ms' }}
+        >
+          <div className="grid grid-cols-2 divide-x divide-[#1A1A1A] sm:grid-cols-4">
+            {STATS.map((s, i) => (
+              <div key={i} className="flex flex-col items-center px-4 py-5 text-center">
+                <span
+                  className="font-display leading-none text-white"
+                  style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', fontWeight: 300 }}
+                >
+                  <StatCounter to={s.to} suffix={s.suffix} />
                 </span>
-                <span className="mt-1 block font-mono text-[10px] uppercase tracking-[0.22em] text-[color:var(--fg-subtle)] transition-colors duration-300 group-hover:text-[color:var(--fg-muted)]">
-                  {s.label}
+                <span className="mt-2 font-mono text-[9px] uppercase tracking-[0.22em] text-[#333]">
+                  {isRTL ? s.labelAr : s.labelEn}
                 </span>
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Visual column */}
-        <div className="relative lg:col-span-5 animate-[fade-in_0.8s_ease-out_0.2s_both]">
-          <div className="relative mx-auto aspect-square max-w-[520px]">
-            {/* Orbital decorative rings behind the 3D */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
-            >
-              <div
-                className="absolute inset-[6%] rounded-full border border-[rgba(201,169,79,0.14)] animate-[spin_36s_linear_infinite]"
-                style={{
-                  background:
-                    'conic-gradient(from 180deg at 50% 50%, transparent 0deg, rgba(201,169,79,0.25) 60deg, transparent 120deg, transparent 240deg, rgba(194,50,74,0.25) 300deg, transparent 360deg)',
-                  WebkitMask:
-                    'radial-gradient(circle, transparent 58%, black 59%, black 60%, transparent 61%)',
-                  mask:
-                    'radial-gradient(circle, transparent 58%, black 59%, black 60%, transparent 61%)',
-                }}
-              />
-              <div className="absolute inset-[14%] rounded-full border border-dashed border-[rgba(201,169,79,0.15)] animate-[spin_48s_linear_infinite_reverse]" />
-              <div className="absolute inset-[24%] rounded-full border border-[rgba(201,169,79,0.10)]" />
-
-              {/* Corner gold dots on the outer ring */}
-              {[
-                { x: '50%', y: '6%' },
-                { x: '94%', y: '50%' },
-                { x: '50%', y: '94%' },
-                { x: '6%', y: '50%' },
-              ].map((p, i) => (
-                <span
-                  key={i}
-                  className="absolute size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color:var(--brand-gold)]"
-                  style={{
-                    left: p.x,
-                    top: p.y,
-                    boxShadow: '0 0 12px rgba(201,169,79,0.7)',
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* Soft center glow */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-[12%] rounded-full blur-3xl opacity-70"
-              style={{
-                background:
-                  'radial-gradient(closest-side, rgba(194,50,74,0.35), transparent 70%)',
-              }}
-            />
-
-            <Hero3D className="absolute inset-0" />
-          </div>
-        </div>
-      </div>
-
-      {/* Scroll indicator — polished mouse + chevron */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-6 mx-auto flex justify-center animate-[fade-in_0.6s_ease-out_1s_both]"
-      >
-        <div className="flex flex-col items-center gap-2">
-          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[color:var(--fg-subtle)]">
-            {isRTL ? 'مرر' : 'Scroll'}
-          </span>
-          <span className="relative flex h-9 w-5 items-start justify-center rounded-full border border-[color:var(--glass-border)] bg-white/[0.02]">
-            <span className="mt-1.5 block h-2 w-px rounded-full bg-[color:var(--brand-gold)] animate-[bounce-soft_2.4s_ease-in-out_infinite]" />
-          </span>
-          <ChevronDown className="size-3 text-[color:var(--brand-gold)]/70 animate-[bounce-soft_2.4s_ease-in-out_infinite]" />
         </div>
       </div>
     </section>

@@ -2,31 +2,23 @@
 
 import * as React from 'react';
 import Image from 'next/image';
-import { ArrowUpRight, MapPin, Phone, Mail } from 'lucide-react';
+import { MapPin, Phone, Mail, ArrowUpRight } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 
-import { ScrollReveal } from '@/components/motion/ScrollReveal';
-import { GradientText } from '@/components/fx/GradientText';
-import { TiltCard } from '@/components/fx/TiltCard';
-import { GlassCard } from '@/components/fx/GlassCard';
+import { useReveal } from '@/hooks/useReveal';
 import { useCountries, useContactInfo } from '@/context/SiteContentContext';
 import { getImageUrl } from '@/lib/api';
 import { cn } from '@/lib/utils';
+
+const isValidContact = (v: string | null | undefined): v is string =>
+  typeof v === 'string' && v.length > 0 && !/(to be added|information|placeholder)/i.test(v);
 
 const FALLBACKS: Record<string, string> = {
   china: 'https://images.unsplash.com/photo-1545893835-abaa50cbe628?auto=format&fit=crop&w=1200&q=80',
   kuwait: 'https://images.unsplash.com/photo-1578895104528-1daa6f2a5d4b?auto=format&fit=crop&w=1200&q=80',
   uae: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80',
   egypt: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73b0b?auto=format&fit=crop&w=1200&q=80',
-};
-
-// Visual footprint — each country gets a distinct grid area for a bento feel.
-const LAYOUT: Record<string, string> = {
-  uae: 'md:col-span-6 md:row-span-2',
-  kuwait: 'md:col-span-3 md:row-span-1',
-  china: 'md:col-span-3 md:row-span-1',
-  egypt: 'md:col-span-6 md:row-span-1',
 };
 
 export function PresenceSection() {
@@ -36,6 +28,9 @@ export function PresenceSection() {
   const countries = useCountries();
   const allContacts = useContactInfo();
 
+  const { ref: headRef, visible: headVisible } = useReveal(0.3);
+  const { ref: gridRef, visible: gridVisible } = useReveal(0.1);
+
   const ordered = React.useMemo(() => {
     const order = ['uae', 'kuwait', 'china', 'egypt'];
     const map = new Map(countries.map((c) => [c.slug, c]));
@@ -43,133 +38,147 @@ export function PresenceSection() {
   }, [countries]);
 
   return (
-    <section className="relative py-24 md:py-32">
+    <section
+      className="luxury-section relative bg-[#080808] py-24 md:py-32"
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
+      <div className="absolute inset-x-0 top-0 h-px bg-[#1A1A1A]" />
+
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-14 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-          <ScrollReveal>
-            <p className="section-kicker">
+
+        {/* Header */}
+        <div
+          ref={headRef}
+          className="mb-14 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end"
+          style={{
+            opacity: headVisible ? 1 : 0,
+            transform: headVisible ? 'translateY(0)' : 'translateY(24px)',
+            transition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)',
+          }}
+        >
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#D4A843]">
               {isRTL ? 'وجودنا' : 'Global presence'}
             </p>
-            <h2 className="mt-3 max-w-2xl font-display text-4xl font-bold leading-tight md:text-5xl">
-              <GradientText>{t('sections.aboutUs')}</GradientText>
+            <h2 className="mt-4 font-display text-[clamp(2rem,4vw,3rem)] font-light leading-[1.1] tracking-[-0.02em] text-white">
+              {t('sections.aboutUs')}
             </h2>
-          </ScrollReveal>
-          <ScrollReveal delay={0.1}>
-            <p className="max-w-md text-sm text-[color:var(--fg-muted)] md:text-base">
-              {isRTL
-                ? 'أربع دول. فريق واحد. حلول إضاءة متكاملة تمتد من الخليج إلى آسيا وشمال أفريقيا.'
-                : 'Four countries. One team. Integrated lighting delivered from the Gulf to Asia and North Africa.'}
-            </p>
-          </ScrollReveal>
+          </div>
+          <p className="max-w-sm text-[14px] font-light leading-relaxed text-[#444]">
+            {isRTL
+              ? 'أربع دول. فريق واحد. حلول إضاءة متكاملة تمتد من الخليج إلى آسيا وشمال أفريقيا.'
+              : 'Four countries. One team. Integrated lighting from the Gulf to Asia and North Africa.'}
+          </p>
         </div>
 
-        <div className="grid auto-rows-[260px] gap-4 md:grid-cols-6 md:gap-5">
+        {/* Grid */}
+        <div
+          ref={gridRef}
+          className="grid gap-[1px] bg-[#1A1A1A] sm:grid-cols-2 lg:grid-cols-4"
+        >
           {ordered.map((c, idx) => {
             const slug = c.slug;
             const name = isRTL ? c.name_ar || c.name_en : c.name_en;
             const firm = isRTL ? c.firm_name_ar || c.firm_name_en : c.firm_name_en;
             const img = getImageUrl(c.country_image_url) || FALLBACKS[slug] || FALLBACKS.uae;
-            const layout = LAYOUT[slug] || 'md:col-span-3';
-            const href = `/${slug === 'uae' ? 'uae' : slug}` as any;
-
+            const href = `/${slug}` as any;
             const ci = allContacts.find((x) => x.country_id === c.id);
 
             return (
-              <ScrollReveal
+              <Link
                 key={c.id}
-                delay={0.05 * idx}
-                className={cn('h-full', layout)}
+                href={href}
+                className={cn(
+                  'group relative flex h-[340px] flex-col justify-end overflow-hidden bg-[#0C0C0C] p-6',
+                  'transition-all duration-500',
+                  'hover:z-10',
+                )}
+                style={{
+                  opacity: gridVisible ? 1 : 0,
+                  transform: gridVisible ? 'translateY(0)' : 'translateY(32px)',
+                  transition: `opacity 0.7s cubic-bezier(0.16,1,0.3,1) ${idx * 80}ms, transform 0.7s cubic-bezier(0.16,1,0.3,1) ${idx * 80}ms`,
+                }}
               >
-                <TiltCard max={6} scale={1.02} className="h-full">
-                  {/* Wrapper — position:relative so the Link overlay ajnd contact links can be absolutely/relatively placed */}
-                  <div className="group relative h-full overflow-hidden rounded-3xl border border-[color:var(--glass-border)] card-lift corner-brackets shine-hover">
-                    <Image
-                      src={img}
-                      alt={name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      className="size-full object-cover transition-transform duration-[1.2s] group-hover:scale-[1.08]"
-                    />
-                    <div
-                      aria-hidden
-                      className="absolute inset-0 transition-opacity duration-500"
-                      style={{
-                        background:
-                          'linear-gradient(135deg, rgba(7,7,11,0.2) 0%, rgba(7,7,11,0.6) 60%, rgba(7,7,11,0.95) 100%)',
-                      }}
-                    />
-                    {/* Neon frame on hover */}
-                    <div
-                      aria-hidden
-                      className="absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                      style={{
-                        boxShadow:
-                          'inset 0 0 0 1px rgba(201,169,79,0.45), 0 0 40px rgba(194,50,74,0.35)',
-                      }}
-                    />
+                {/* Background image */}
+                <Image
+                  src={img}
+                  alt={name}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+                  loading="lazy"
+                />
 
-                    {/* Full-card link — covers the whole card except the contact rows */}
-                    <Link
-                      href={href}
-                      data-cursor-label={name}
-                      className="absolute inset-0 z-10"
-                      aria-label={name}
-                    />
+                {/* Scrim */}
+                <div
+                  aria-hidden
+                  className="absolute inset-0 transition-opacity duration-500"
+                  style={{
+                    background:
+                      'linear-gradient(to top, rgba(8,8,8,0.97) 0%, rgba(8,8,8,0.7) 45%, rgba(8,8,8,0.1) 100%)',
+                  }}
+                />
 
-                    <div className="absolute inset-x-6 bottom-6 z-20 flex items-end justify-between">
-                      <div>
-                        <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[color:var(--brand-gold)]">
-                          {isRTL ? 'فرعنا في' : 'Our presence in'}
-                        </p>
-                        <h3 className="mt-1 font-display text-2xl font-bold text-white md:text-3xl">
-                          {name}
-                        </h3>
-                        {firm && (
-                          <p className="mt-1 max-w-xs text-xs text-white/75">{firm}</p>
-                        )}
-                        {/* Contact links — z-30 so they sit above the full-card Link */}
-                        <div className="relative z-30 mt-2 flex flex-col gap-1">
-                          {ci?.phone1 && (
-                            <a
-                              href={`tel:${ci.phone1.replace(/\s+/g, '')}`}
-                              className="flex items-center gap-1.5 text-[10px] text-white/70 hover:text-[color:var(--brand-gold)] transition-colors"
-                            >
-                              <Phone className="size-3 shrink-0 text-[color:var(--brand-gold)]" />
-                              <span>{ci.phone1}</span>
-                            </a>
-                          )}
-                          {ci?.email && (
-                            <a
-                              href={`mailto:${ci.email}`}
-                              className="flex items-center gap-1.5 text-[10px] text-white/70 hover:text-[color:var(--brand-gold)] transition-colors"
-                            >
-                              <Mail className="size-3 shrink-0 text-[color:var(--brand-gold)]" />
-                              <span>{ci.email}</span>
-                            </a>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex size-11 items-center justify-center rounded-full border border-[color:var(--brand-gold)]/60 bg-[rgba(7,7,11,0.5)] text-[color:var(--brand-gold)] transition-all duration-500 group-hover:bg-[rgba(194,50,74,0.4)] group-hover:text-white group-hover:rotate-45">
-                        <ArrowUpRight className="size-5" />
-                      </div>
-                    </div>
+                {/* Gold border on hover */}
+                <div
+                  aria-hidden
+                  className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  style={{ boxShadow: 'inset 0 0 0 0.5px #D4A843' }}
+                />
 
-                    {/* Top corner pin */}
-                    <div className="absolute left-5 top-5 z-20 flex items-center gap-1.5 rounded-full border border-[color:var(--glass-border)] bg-[rgba(7,7,11,0.85)] px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white/85">
-                      <MapPin className="size-3 text-[color:var(--brand-gold)]" />
-                      <span>{slug.toUpperCase()}</span>
-                    </div>
+                {/* Country pin — top */}
+                <div className="absolute left-5 top-5 z-10 flex items-center gap-1.5">
+                  <MapPin className="size-3 text-[#D4A843]" />
+                  <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#D4A843]">
+                    {slug.toUpperCase()}
+                  </span>
+                </div>
+
+                {/* Arrow — top right */}
+                <ArrowUpRight
+                  className="absolute right-5 top-5 z-10 size-4 text-[#333] transition-all duration-300 group-hover:text-[#D4A843] group-hover:rotate-0"
+                  style={{ transform: 'rotate(0deg)' }}
+                />
+
+                {/* Content — bottom */}
+                <div className="relative z-10">
+                  <h3 className="font-display text-[1.4rem] font-light uppercase tracking-[0.04em] text-white transition-colors duration-300 group-hover:text-[#D4A843]">
+                    {name}
+                  </h3>
+                  {firm && (
+                    <p className="mt-1 text-[11px] font-light text-[#555]">{firm}</p>
+                  )}
+
+                  {/* Contact */}
+                  <div className="mt-3 flex flex-col gap-1.5">
+                    {isValidContact(ci?.phone1) && (
+                      <span className="flex items-center gap-1.5 text-[10px] text-[#444]">
+                        <Phone className="size-3 shrink-0 text-[#D4A843]" />
+                        {ci!.phone1}
+                      </span>
+                    )}
+                    {isValidContact(ci?.email) && (
+                      <span className="flex items-center gap-1.5 text-[10px] text-[#444]">
+                        <Mail className="size-3 shrink-0 text-[#D4A843]" />
+                        {ci!.email}
+                      </span>
+                    )}
+                    {!isValidContact(ci?.phone1) && !isValidContact(ci?.email) && (
+                      <span className="inline-flex w-fit items-center rounded-sm border border-[#D4A843]/20 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-[#D4A843]/60">
+                        {isRTL ? 'قريباً' : 'Coming soon'}
+                      </span>
+                    )}
                   </div>
-                </TiltCard>
-              </ScrollReveal>
+                </div>
+              </Link>
             );
           })}
         </div>
 
         {ordered.length === 0 && (
-          <GlassCard className="p-10 text-center text-sm text-[color:var(--fg-muted)]">
-            Countries are loading…
-          </GlassCard>
+          <div className="py-16 text-center font-mono text-[11px] uppercase tracking-[0.2em] text-[#333]">
+            Loading…
+          </div>
         )}
       </div>
     </section>

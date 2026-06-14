@@ -49,6 +49,10 @@ export default function ContactPage() {
   const pick = (en?: string | null, ar?: string | null) =>
     (isRTL ? ar || en : en || ar) || '';
 
+  /** Hide CMS placeholder strings so they're never shown to visitors. */
+  const isValid = (v?: string | null): v is string =>
+    typeof v === 'string' && v.length > 0 && !/(to be added|information|placeholder)/i.test(v);
+
   const branches = React.useMemo(() => {
     return countries.map((c) => {
       const ci = allContacts.find((x) => x.country_id === c.id);
@@ -171,49 +175,55 @@ export default function ContactPage() {
                           : 'border-[color:var(--glass-border)] glass-surface hover:border-[color:var(--brand-gold)]',
                       )}
                     >
+                      {/* Gold glow on hover */}
                       <div
                         aria-hidden
-                        className="pointer-events-none absolute -right-16 -top-16 size-36 rounded-full opacity-50 blur-2xl transition-opacity duration-500 group-hover:opacity-100"
+                        className="pointer-events-none absolute -right-16 -top-16 size-36 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100"
                         style={{
                           background:
-                            'radial-gradient(closest-side, rgba(194,50,74,0.55), transparent 70%)',
+                            'radial-gradient(closest-side, rgba(212,168,67,0.3), transparent 70%)',
                         }}
                       />
                       <div className="flex items-center justify-between">
-                        <h3 className="font-display text-xl font-semibold text-[color:var(--fg-default)] group-hover:text-[color:var(--brand-gold-bright)]">
+                        <h3 className="font-display text-xl font-semibold text-[color:var(--fg-default)] group-hover:text-[#D4A843]">
                           {b.name}
                         </h3>
-                        <ArrowUpRight className="size-4 text-[color:var(--fg-subtle)] transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[color:var(--brand-gold)]" />
+                        <ArrowUpRight className="size-4 text-[color:var(--fg-subtle)] transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#D4A843]" />
                       </div>
                       {b.firm && (
                         <p className="mt-1 text-xs text-[color:var(--fg-muted)]">{b.firm}</p>
                       )}
                       <div className="mt-4 space-y-2 text-xs text-[color:var(--fg-muted)]">
-                        {b.phone && (
+                        {isValid(b.phone) && (
                           <a
                             href={`tel:${b.phone.replace(/\s+/g, '')}`}
                             onClick={(e) => e.stopPropagation()}
-                            className="flex items-center gap-2 hover:text-[color:var(--brand-gold)] transition-colors"
+                            className="flex items-center gap-2 transition-colors hover:text-[#D4A843]"
                           >
-                            <Phone className="size-3 text-[color:var(--brand-gold)]" />
+                            <Phone className="size-3 text-[#D4A843]" />
                             <span>{b.phone}</span>
                           </a>
                         )}
-                        {b.email && (
+                        {isValid(b.email) && (
                           <a
                             href={`mailto:${b.email}`}
                             onClick={(e) => e.stopPropagation()}
-                            className="flex items-center gap-2 hover:text-[color:var(--brand-gold)] transition-colors"
+                            className="flex items-center gap-2 transition-colors hover:text-[#D4A843]"
                           >
-                            <Mail className="size-3 text-[color:var(--brand-gold)]" />
+                            <Mail className="size-3 text-[#D4A843]" />
                             <span className="truncate">{b.email}</span>
                           </a>
                         )}
-                        {b.address && (
+                        {isValid(b.address) && (
                           <div className="flex items-start gap-2">
-                            <MapPin className="mt-0.5 size-3 shrink-0 text-[color:var(--brand-gold)]" />
+                            <MapPin className="mt-0.5 size-3 shrink-0 text-[#D4A843]" />
                             <span className="line-clamp-2">{b.address}</span>
                           </div>
+                        )}
+                        {!isValid(b.phone) && !isValid(b.email) && !isValid(b.address) && (
+                          <span className="inline-flex items-center border border-[#D4A843]/20 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-[#D4A843]/60">
+                            {isRTL ? 'قريباً' : 'Coming soon'}
+                          </span>
                         )}
                       </div>
                     </div>

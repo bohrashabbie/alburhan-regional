@@ -178,7 +178,7 @@ export default function ProjectsPage() {
                               {tile.name}
                             </h3>
                           </div>
-                          <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-[color:var(--brand-gold)]/60 text-[color:var(--brand-gold)] transition-all group-hover:rotate-45 group-hover:bg-[rgba(194,50,74,0.35)] group-hover:text-white">
+                          <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-[color:var(--brand-gold)]/60 text-[color:var(--brand-gold)] transition-all group-hover:rotate-45 group-hover:bg-[rgba(212,168,67,0.12)] group-hover:text-white">
                             <ArrowUpRight className="size-4" />
                           </div>
                         </div>

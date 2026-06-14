@@ -356,9 +356,9 @@ a, button, [role="button"] {
 .text-gradient-brand {
   background: linear-gradient(
     135deg,
-    var(--brand-burgundy-bright) 0%,
-    var(--brand-gold) 50%,
-    var(--brand-burgundy-bright) 100%
+    #e8c96a 0%,
+    #D4A843 50%,
+    #b8892e 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -685,4 +685,96 @@ a, button, [role="button"] {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* =========================================================================
+ * DARK LUXURY CINEMATIC REDESIGN — TOKENS
+ * ========================================================================= */
+
+:root {
+  --color-bg:       #080808;
+  --color-surface:  #0C0C0C;
+  --color-border:   #1A1A1A;
+  --color-gold:     #D4A843;
+  --color-gold-dim: rgba(212, 168, 67, 0.15);
+  --color-text-1:   #FFFFFF;
+  --color-text-2:   #888888;
+  --color-text-3:   #444444;
+}
+
+/* Override body to use the new luxury palette */
+body {
+  background-color: var(--color-bg);
+}
+
+/* Only the redesigned home sections get weight-300 headings.
+   Inner pages keep their own font-weight so GlassCard/SpotlightCard layouts
+   still look correct. */
+.luxury-section h1,
+.luxury-section h2,
+.luxury-section h3 {
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+/* =========================================================================
+ * SCROLL REVEAL — CSS-only utility classes driven by Intersection Observer
+ * Pair with useReveal hook: add class "on" when element enters viewport.
+ * ========================================================================= */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity  0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.on {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-24px);
+  transition:
+    opacity  0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-left.on {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.stagger-1 { transition-delay: 0.10s; }
+.stagger-2 { transition-delay: 0.20s; }
+.stagger-3 { transition-delay: 0.30s; }
+.stagger-4 { transition-delay: 0.45s; }
+
+/* =========================================================================
+ * HERO BEAM / CONE
+ * ========================================================================= */
+@keyframes beam {
+  from { height: 0; }
+  to   { height: 280px; }
+}
+@keyframes cone {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.animate-beam {
+  animation: beam 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-cone {
+  animation: cone 1.6s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes scroll-pulse {
+  0%         { transform: scaleY(0); transform-origin: top;    opacity: 1; }
+  49.9%      { transform: scaleY(1); transform-origin: top;    opacity: 1; }
+  50%        { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+  100%       { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+.animate-scroll-pulse {
+  animation: scroll-pulse 2s ease-in-out infinite;
 }

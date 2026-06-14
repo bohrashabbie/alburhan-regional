@@ -27,7 +27,7 @@ export function LoadingScreen({ label = 'Loading' }: { label?: string }) {
           />
           <motion.span
             aria-hidden
-            className="absolute inset-2 rounded-full border border-dashed border-[color:var(--brand-burgundy-bright)]/60"
+            className="absolute inset-2 rounded-full border border-dashed border-[#D4A843]/40"
             animate={{ rotate: -360 }}
             transition={{ repeat: Infinity, duration: 10, ease: 'linear' }}
           />

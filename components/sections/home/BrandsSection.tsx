@@ -3,53 +3,42 @@
 import * as React from 'react';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
-import { Sparkles } from 'lucide-react';
 
-import { ScrollReveal } from '@/components/motion/ScrollReveal';
+import { useReveal } from '@/hooks/useReveal';
 import { MarqueeRow } from '@/components/motion/MarqueeRow';
-import { GradientText } from '@/components/fx/GradientText';
 import { useBrands } from '@/context/SiteContentContext';
 import { getImageUrl } from '@/lib/api';
-import { cn } from '@/lib/utils';
 
 interface BrandTileProps {
   name: string;
   img: string;
   href?: string | null;
-  size?: 'sm' | 'md' | 'lg';
 }
 
-function BrandTile({ name, img, href, size = 'md' }: BrandTileProps) {
-  const dims =
-    size === 'sm'
-      ? 'h-20 w-40 md:h-24 md:w-48'
-      : size === 'lg'
-      ? 'h-28 w-56 md:h-32 md:w-64'
-      : 'h-24 w-48 md:h-28 md:w-56';
-
+function BrandTile({ name, img, href }: BrandTileProps) {
   const Wrapper: React.ElementType = href ? 'a' : 'div';
-  const extra = href
-    ? { href, target: '_blank', rel: 'noopener noreferrer' }
-    : {};
+  const extra = href ? { href, target: '_blank', rel: 'noopener noreferrer' } : {};
 
   return (
     <Wrapper
       {...extra}
-      className={cn(
-        'group relative block shrink-0 transition-transform duration-500',
-        'hover:-translate-y-1 hover:scale-105',
-        dims,
-      )}
-      data-cursor-label={name}
       aria-label={name}
+      title={name}
+      className="brand-tile group flex shrink-0 flex-col items-center gap-2 px-2"
     >
-      <Image
-        src={img}
-        alt={name}
-        fill
-        sizes="(max-width: 768px) 180px, 240px"
-        className="object-contain"
-      />
+      <div className="brand-card relative flex h-16 w-36 items-center justify-center rounded-lg border border-[#1A1A1A] bg-white/[0.04] p-3 transition-all duration-300 group-hover:border-[#D4A843]/40 group-hover:bg-white/[0.08]">
+        <Image
+          src={img}
+          alt={name}
+          width={120}
+          height={48}
+          loading="lazy"
+          className="brand-logo max-h-full max-w-full object-contain"
+        />
+      </div>
+      <span className="max-w-[140px] truncate text-center font-mono text-[8px] uppercase tracking-[0.22em] text-[#444] transition-colors duration-300 group-hover:text-[#D4A843]">
+        {name}
+      </span>
     </Wrapper>
   );
 }
@@ -59,6 +48,8 @@ export function BrandsSection() {
   const locale = useLocale();
   const isRTL = locale === 'ar';
   const t = useTranslations();
+
+  const { ref: headRef, visible: headVisible } = useReveal(0.3);
 
   if (!brands || brands.length === 0) return null;
 
@@ -70,113 +61,72 @@ export function BrandsSection() {
 
   if (!valid.length) return null;
 
-  // Split into two staggered rows for visual rhythm
-  const row1 = valid.filter((_, i) => i % 2 === 0);
-  const row2 = valid.filter((_, i) => i % 2 === 1);
-
   return (
-    <section className="relative overflow-hidden py-24 md:py-32">
-      {/* layered background */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            'radial-gradient(ellipse at 20% 0%, rgba(194,50,74,0.18), transparent 55%), radial-gradient(ellipse at 80% 100%, rgba(201,169,79,0.12), transparent 50%)',
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-grid-soft opacity-40"
-        style={{
-          maskImage:
-            'radial-gradient(ellipse at center, black 30%, transparent 80%)',
-          WebkitMaskImage:
-            'radial-gradient(ellipse at center, black 30%, transparent 80%)',
-        }}
-      />
+    <section
+      className="luxury-section relative overflow-hidden bg-[#080808] py-24 md:py-32"
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
+      {/* CSS for brand logo hover — no JS needed */}
+      <style>{`
+        .brand-logo {
+          opacity: 0.9;
+          transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .brand-tile:hover .brand-logo {
+          opacity: 1;
+          transform: scale(1.04);
+        }
+      `}</style>
 
-      {/* header */}
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <ScrollReveal className="mb-12 text-center">
-          <div
-            className="inline-flex items-center gap-2 rounded-full border border-[color:var(--glass-border)] bg-[rgba(20,19,30,0.6)] px-3 py-1"
-          >
-            <Sparkles className="size-3.5 text-[color:var(--brand-gold)]" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[color:var(--brand-gold)]">
-              {t('sections.europeanBrands')}
-            </span>
-            <span className="ml-2 rounded-full bg-[color:var(--brand-gold)]/10 px-2 py-0.5 text-[10px] font-semibold text-[color:var(--brand-gold-bright)]">
-              {valid.length}+
-            </span>
-          </div>
+      <div className="absolute inset-x-0 top-0 h-px bg-[#1A1A1A]" />
 
-          <h2 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
-            <GradientText>{t('sections.ourBrand')}</GradientText>
-          </h2>
-          <p className="mx-auto mt-5 max-w-xl text-sm text-[color:var(--fg-muted)] md:text-base">
-            {isRTL
-              ? 'نفخر بشراكتنا مع أفضل العلامات التجارية العالمية لنقدم لكم حلول إضاءة استثنائية.'
-              : 'Proudly partnered with Europe’s most respected lighting ateliers and manufacturers.'}
-          </p>
-        </ScrollReveal>
+      {/* Header */}
+      <div
+        ref={headRef}
+        className="mx-auto mb-12 w-full max-w-7xl px-4 text-center sm:px-6 lg:px-8"
+        style={{
+          opacity: headVisible ? 1 : 0,
+          transform: headVisible ? 'translateY(0)' : 'translateY(24px)',
+          transition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)',
+        }}
+      >
+        <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#D4A843]">
+          {t('sections.europeanBrands')}
+        </p>
+        <h2 className="mt-4 text-[clamp(1.8rem,3.5vw,2.8rem)] font-light leading-[1.1] tracking-[-0.02em] text-white">
+          {t('sections.ourBrand')}
+        </h2>
+        <p className="mx-auto mt-3 max-w-md text-[13px] font-light text-[#444]">
+          {isRTL
+            ? 'شراكات مع أفضل علامات الإضاءة الأوروبية.'
+            : "Partnered with Europe's most respected lighting ateliers."}
+        </p>
       </div>
 
-      {/* marquee rows */}
-      <div className="relative flex flex-col gap-6">
-        {/* ambient glow strip behind marquees */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-1/2 -z-0 h-px -translate-y-1/2 opacity-60"
-          style={{
-            background:
-              'linear-gradient(90deg, transparent, rgba(201,169,79,0.35), transparent)',
-          }}
-        />
+      {/* Marquee */}
+      <MarqueeRow speed={55} fade>
+        {valid.map((b) => (
+          <BrandTile key={b.id} name={b.name} img={b.img} href={b.website_url} />
+        ))}
+      </MarqueeRow>
 
-        <MarqueeRow speed={60}>
-          {row1.map((b, i) => (
-            <BrandTile
-              key={b.id}
-              name={b.name}
-              img={b.img}
-              href={b.website_url}
-              size={i % 3 === 0 ? 'lg' : 'md'}
-            />
+      {/* Bottom attestations */}
+      <div className="mx-auto mt-10 w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 border-t border-[#111] pt-7">
+          {[
+            isRTL ? 'مصادر أصلية' : 'Authentic sourcing',
+            isRTL ? 'ضمان المصنّع' : 'Manufacturer warranty',
+            isRTL ? 'دعم ما بعد البيع' : 'After-sales support',
+          ].map((item) => (
+            <span
+              key={item}
+              className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.25em] text-[#333]"
+            >
+              <span className="size-1 shrink-0 rounded-full bg-[#D4A843]" aria-hidden />
+              {item}
+            </span>
           ))}
-        </MarqueeRow>
-
-        {row2.length > 0 && (
-          <MarqueeRow speed={75} reverse>
-            {row2.map((b, i) => (
-              <BrandTile
-                key={b.id}
-                name={b.name}
-                img={b.img}
-                href={b.website_url}
-                size={i % 2 === 0 ? 'md' : 'sm'}
-              />
-            ))}
-          </MarqueeRow>
-        )}
-      </div>
-
-      {/* bottom caption */}
-      <div className="mx-auto mt-14 w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <ScrollReveal className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs uppercase tracking-[0.25em] text-[color:var(--fg-subtle)]">
-          <span className="inline-flex items-center gap-2">
-            <span className="size-1 rounded-full bg-[color:var(--brand-gold)]" />
-            {isRTL ? 'علامات أصلية' : 'Authentic sourcing'}
-          </span>
-          <span className="inline-flex items-center gap-2">
-            <span className="size-1 rounded-full bg-[color:var(--brand-gold)]" />
-            {isRTL ? 'ضمان الصانع' : 'Manufacturer warranty'}
-          </span>
-          <span className="inline-flex items-center gap-2">
-            <span className="size-1 rounded-full bg-[color:var(--brand-gold)]" />
-            {isRTL ? 'دعم ما بعد البيع' : 'After-sales support'}
-          </span>
-        </ScrollReveal>
+        </div>
       </div>
     </section>
   );

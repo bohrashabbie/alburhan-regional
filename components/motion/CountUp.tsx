@@ -16,7 +16,8 @@ interface Props {
 
 /**
  * Counts from `from` up to `to` as soon as the element enters view.
- * Respects reduced-motion (shows final value immediately).
+ * Initialises at `to` so SSR and pre-hydration show the final value, not "0+".
+ * Respects reduced-motion (shows final value immediately, no animation).
  */
 export function CountUp({
   to,
@@ -30,17 +31,21 @@ export function CountUp({
   const reduced = useReducedMotion();
   const ref = React.useRef<HTMLSpanElement | null>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
-  const mv = useMotionValue(reduced ? to : from);
+  // Start at `to` so the server-rendered HTML and initial paint show the real
+  // value instead of "0+". The animation resets to `from` on mount then counts up.
+  const mv = useMotionValue(to);
   const rounded = useTransform(mv, (v) => {
     const n = Number.isFinite(v) ? v : 0;
     return prefix + n.toFixed(decimals) + suffix;
   });
 
   React.useEffect(() => {
-    if (!inView || reduced) return;
+    if (reduced || !inView) return;
+    mv.set(from);
     const controls = animate(mv, to, { duration, ease: [0.19, 1, 0.22, 1] });
     return () => controls.stop();
-  }, [inView, mv, to, duration, reduced]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView, reduced]);
 
   return (
     <motion.span ref={ref} className={className}>

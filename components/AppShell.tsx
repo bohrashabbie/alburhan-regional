@@ -5,16 +5,12 @@ import { useLocale } from 'next-intl';
 import Header from './Header';
 import Footer from './Footer';
 import { BackToTop } from './chrome/BackToTop';
+import { ScrollProgress } from './chrome/ScrollProgress';
 
 interface AppShellProps {
   children: React.ReactNode;
 }
 
-/**
- * Top-level client shell for every locale page.
- * Hosts the dark glass backdrop, header, main, footer, and
- * all floating chrome widgets (cursor, scroll progress, back-to-top, cmd-k).
- */
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const locale = useLocale();
   const isRTL = locale === 'ar';
@@ -22,8 +18,11 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   return (
     <div
       dir={isRTL ? 'rtl' : 'ltr'}
-      className="relative flex min-h-screen flex-col bg-[color:var(--bg-base)] text-[color:var(--fg-default)]"
+      className="relative flex min-h-screen flex-col bg-[#080808] text-white"
     >
+      {/* 2 px gold progress bar — fixed at the very top */}
+      <ScrollProgress />
+
       <Header />
 
       <main className="relative z-[1] flex flex-1 flex-col">

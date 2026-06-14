@@ -1,72 +1,41 @@
 'use client';
 
 import * as React from 'react';
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+/**
+ * Floating back-to-top button — pure CSS, no Framer Motion.
+ * Appears after 300 px of scroll; 32×32 gold circle.
+ */
 export function BackToTop() {
-  const { scrollYProgress } = useScroll();
-  const pathLen = useTransform(scrollYProgress, [0, 1], [0, 1]);
   const [visible, setVisible] = React.useState(false);
 
   React.useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 500);
-    onScroll();
+    const onScroll = () => setVisible(window.scrollY > 300);
     window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0.6, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.6, y: 20 }}
-          transition={{ duration: 0.28, ease: [0.19, 1, 0.22, 1] }}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          aria-label="Back to top"
-          data-cursor-label="Top"
-          className={cn(
-            'fixed bottom-6 right-6 z-[700] size-12',
-            'rounded-full glass-surface-strong',
-            'flex items-center justify-center',
-            'text-[color:var(--brand-gold-bright)]',
-            'hover:text-white hover:bg-[rgba(194,50,74,0.4)]',
-            'transition-colors duration-300',
-            'shadow-[0_0_22px_rgba(201,169,79,0.25)]',
-          )}
-        >
-          <svg
-            aria-hidden
-            viewBox="0 0 36 36"
-            className="pointer-events-none absolute inset-0 size-full -rotate-90"
-          >
-            <circle
-              cx="18"
-              cy="18"
-              r="16"
-              stroke="rgba(201,169,79,0.18)"
-              strokeWidth="1.5"
-              fill="none"
-            />
-            <motion.circle
-              cx="18"
-              cy="18"
-              r="16"
-              stroke="var(--brand-gold)"
-              strokeWidth="1.5"
-              fill="none"
-              pathLength="1"
-              style={{ pathLength: pathLen }}
-              strokeLinecap="round"
-            />
-          </svg>
-          <ArrowUp className="size-4" strokeWidth={2.4} />
-        </motion.button>
+    <button
+      type="button"
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      aria-label="Back to top"
+      className={cn(
+        'fixed bottom-6 right-6 z-[900] size-8 rounded-full',
+        'flex items-center justify-center',
+        'bg-[#D4A843] text-black',
+        'transition-all duration-300',
+        'hover:scale-110 hover:shadow-[0_0_20px_rgba(212,168,67,0.5)]',
+        visible
+          ? 'opacity-100 translate-y-0 pointer-events-auto'
+          : 'opacity-0 translate-y-4 pointer-events-none',
       )}
-    </AnimatePresence>
+    >
+      <ArrowUp className="size-3.5" strokeWidth={2.5} />
+    </button>
   );
 }
 

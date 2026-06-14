@@ -253,9 +253,9 @@
     },
     "egypt": {
       "companyName": "Al-Burhan",
-      "address": "Address information to be added",
-      "phone": "Phone information to be added",
-      "email": "Email information to be added"
+      "address": "",
+      "phone": "",
+      "email": ""
     }
   },
   "footer": {

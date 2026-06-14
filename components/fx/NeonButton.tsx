@@ -18,12 +18,11 @@ const neonButton = cva(
     variants: {
       variant: {
         primary: [
-          'text-white font-semibold',
-          'bg-[linear-gradient(135deg,var(--brand-burgundy-deep)_0%,var(--brand-burgundy)_45%,var(--brand-burgundy-bright)_100%)]',
-          'border border-[color:var(--brand-burgundy-bright)]/60',
-          'shadow-[0_10px_30px_-10px_rgba(139,26,43,0.7),inset_0_1px_0_rgba(255,255,255,0.18)]',
-          'hover:shadow-[0_16px_40px_-10px_rgba(194,50,74,0.75),0_0_0_1px_rgba(201,169,79,0.5),inset_0_1px_0_rgba(255,255,255,0.25)]',
-          'hover:-translate-y-0.5',
+          'text-black font-semibold',
+          'bg-[#D4A843]',
+          'border border-[#D4A843]',
+          'hover:bg-[#C49730] hover:-translate-y-0.5',
+          'hover:shadow-[0_12px_32px_-12px_rgba(212,168,67,0.6)]',
         ],
         ghost: [
           'text-[color:var(--fg-default)]',

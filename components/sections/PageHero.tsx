@@ -39,7 +39,7 @@ export function PageHero({
         className="pointer-events-none absolute inset-0 -z-10 opacity-90"
         style={{
           background:
-            'radial-gradient(ellipse at 50% 0%, rgba(194,50,74,0.28), transparent 55%), radial-gradient(ellipse at 90% 20%, rgba(201,169,79,0.2), transparent 50%)',
+            'radial-gradient(ellipse at 50% 0%, rgba(212,168,67,0.12), transparent 55%), radial-gradient(ellipse at 90% 20%, rgba(212,168,67,0.07), transparent 50%)',
         }}
       />
       <div
