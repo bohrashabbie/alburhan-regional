@@ -37,7 +37,9 @@ export const metadata: Metadata = {
   title: 'AL-BURHAN — Innovative Lighting Solutions',
   description:
     'Leading lighting solutions provider delivering innovative, design-forward lighting across the region.',
-  icons: { icon: '/logo.jpeg' },
+  // Favicon is served from the file-based convention `app/icon.png`
+  // (the AL-Burhan Group logo). No manual `icons` override needed — the
+  // previous `/logo.jpeg` reference pointed at a file that doesn't exist.
 };
 
 
