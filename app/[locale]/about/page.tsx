@@ -26,7 +26,7 @@ export default function AboutPage() {
   const locale = useLocale();
   const isRTL = locale === 'ar';
   const cmsServices = useServices();
-  const { setting } = useSiteContent();
+  const { setting, content } = useSiteContent();
 
   const serviceImage = (index: number) => {
     const svc = cmsServices[index];
@@ -57,6 +57,35 @@ export default function AboutPage() {
         { icon: <Zap className="size-5" />, title: 'Efficiency', desc: 'Lean, smart, grid-friendly.' },
         { icon: <Globe2 className="size-5" />, title: 'Reach', desc: 'Four countries and growing.' },
       ];
+
+  // CMS-editable story: page_contents row with page_key='about', section_key='story'.
+  // Edit it in the CMS; the hardcoded copy below is only a fallback when the row
+  // is missing/empty. Paragraphs are split on blank lines (or single newlines).
+  const aboutStory = content?.page_contents?.find(
+    (p) => p.page_key === 'about' && p.section_key === 'story',
+  );
+  const cmsStoryBody = (isRTL ? aboutStory?.content_ar : aboutStory?.content_en)?.trim();
+  const cmsStoryTitle = (isRTL ? aboutStory?.title_ar : aboutStory?.title_en)?.trim();
+
+  const fallbackParagraphs = isRTL
+    ? [
+        'لكل شركة نقطة بداية. أما بدايتنا فكانت مع شخصين آمنا بأن النجاح لا يُقاس بالمكان الذي تأتي منه، بل بمدى التزامك بالمكان الذي تريد الوصول إليه.',
+        'تأسست البرهان للإضاءة عام 2008 على الإصرار والعمل الجاد ووعدٍ بسيط — أن نعامل كل عميل بصدقٍ واحترام. وما بدأ كعملٍ صغير في مجال الإضاءة نما تدريجياً ليصبح شركة عالمية لها عمليات في الكويت ودبي والصين ومصر. لم تكن الرحلة سهلة قط، لكن كل تحدٍّ أصبح درساً، وكل عميلٍ راضٍ أصبح سبباً لمواصلة المسير.',
+        'بالنسبة لنا، الإضاءة أكثر من مجرد منتجات؛ إنها تتعلق بمساعدة الناس على خلق مساحاتٍ أفضل للعيش والعمل والنمو. وسواء كان منزلاً أو مشروعاً تجارياً أو مشروعاً فندقياً أو منشأة صناعية، فإننا نتعامل مع كل مشروع بالقدر نفسه من الالتزام، بغض النظر عن حجمه.',
+        'رضا العملاء ليس مجرد قيمة مكتوبة على موقعنا — بل هو المبدأ الذي يوجّه كل قرارٍ نتخذه. نؤمن بأن العلاقات طويلة الأمد تُبنى على الموثوقية والجودة والثقة، وما زالت هذه المبادئ تشكّل شركتنا حتى اليوم.',
+        'بعد أكثر من عقدٍ على تأسيسنا، ما زلنا مدفوعين بالروح نفسها التي بدأت بها هذه الرحلة: العمل بجدّ، والتحلّي بالتواضع، والبحث المستمر عن طرقٍ أفضل لخدمة عملائنا.',
+      ]
+    : [
+        'Every company has a starting point. Ours started with two individuals who believed that success is not determined by where you come from, but by how committed you are to where you want to go.',
+        'Founded in 2008, Al Burhan Lighting was built on determination, hard work, and a simple promise—to treat every customer with honesty and respect. What began as a small lighting business has steadily grown into an international company with operations in Kuwait, Dubai, China, and Egypt. The journey was never easy, but every challenge became a lesson, and every satisfied customer became a reason to keep moving forward.',
+        'For us, lighting is more than just products. It is about helping people create better spaces to live, work, and grow. Whether it is a home, a commercial development, a hospitality project, or an industrial facility, we approach every project with the same level of commitment, regardless of its size.',
+        'Customer satisfaction is not just a value written on our website—it is the principle that guides every decision we make. We believe long-term relationships are built through reliability, quality, and trust, and these principles continue to shape our company today.',
+        'More than a decade after our founding, we remain driven by the same spirit that started this journey: working hard, staying humble, and continuously finding better ways to serve our customers.',
+      ];
+
+  const storyParagraphs = cmsStoryBody
+    ? cmsStoryBody.split(/\r?\n\s*\r?\n|\r?\n/).map((s) => s.trim()).filter(Boolean)
+    : fallbackParagraphs;
 
   const tiles = [
     { key: 'interior' },
@@ -125,16 +154,22 @@ export default function AboutPage() {
               </p>
               <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
                 <GradientText>
-                  {isRTL
-                    ? '20 عاماً من الإضاءة المتقنة'
-                    : 'Two decades of precision lighting'}
+                  {cmsStoryTitle ||
+                    (isRTL
+                      ? '20 عاماً من الإضاءة المتقنة'
+                      : 'Two decades of precision lighting')}
                 </GradientText>
               </h2>
-              <p className="mt-6 text-base leading-relaxed text-[color:var(--fg-muted)] md:text-lg">
-                {isRTL
-                  ? 'بدأنا في الكويت عام 2005 بفكرة واحدة: أن يكون الضوء جزءاً من الهوية. اليوم، فريقنا يمتد إلى الإمارات والصين ومصر مع مشاريع في كل قطاع.'
-                  : 'We began in Kuwait in 2005 with one idea — that light should feel like identity. Today our team reaches UAE, China, and Egypt, with landmark work in every sector.'}
-              </p>
+              <div className="mt-6 space-y-4">
+                {storyParagraphs.map((para, i) => (
+                  <p
+                    key={i}
+                    className="text-base leading-relaxed text-[color:var(--fg-muted)] md:text-lg"
+                  >
+                    {para}
+                  </p>
+                ))}
+              </div>
             </ScrollReveal>
 
             <div className="mt-10 grid gap-4 sm:grid-cols-2">
