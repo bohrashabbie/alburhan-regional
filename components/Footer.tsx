@@ -258,7 +258,7 @@ const Footer: React.FC = () => {
               rel="noopener noreferrer"
               className="group mt-6 inline-flex items-center gap-2 border border-line bg-canvas px-4 py-2.5 text-[0.8125rem] text-ink-2 transition-colors hover:border-accent hover:text-accent"
             >
-              <span className="t-mono text-[0.5625rem] text-ink-4">
+              <span className="t-mono text-[0.625rem] text-ink-4">
                 {isRTL ? 'مصنعنا' : 'Our factory'}
               </span>
               <span className="font-medium">MS Lighting</span>
@@ -283,7 +283,7 @@ const Footer: React.FC = () => {
 
           {columns.map((col) => (
             <nav key={col.title} aria-label={col.title}>
-              <p className="t-mono text-[0.5625rem] text-ink-4">{col.title}</p>
+              <p className="t-mono text-[0.625rem] text-ink-4">{col.title}</p>
               <ul className="mt-4 space-y-2.5">
                 {col.links.map((l) => (
                   <li key={l.href}>
@@ -304,7 +304,7 @@ const Footer: React.FC = () => {
         <div className="grid gap-px border-b border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
           {branches.map((b) => (
             <div key={b.slug} className="bg-surface py-8 sm:px-6 sm:first:ps-0">
-              <p className="t-mono text-[0.5625rem] text-accent">{b.slug.toUpperCase()}</p>
+              <p className="t-mono text-[0.625rem] text-accent">{b.slug.toUpperCase()}</p>
               <p className="mt-2 text-[0.9375rem] font-medium text-ink">{b.firm || b.name}</p>
               {isValidContact(b.address) && (
                 <p className="t-small mt-2 flex items-start gap-2">
@@ -339,7 +339,7 @@ const Footer: React.FC = () => {
 
         {/* ── Legal bar ── */}
         <div className="flex flex-col items-start justify-between gap-4 py-7 md:flex-row md:items-center">
-          <p className="t-mono text-[0.5625rem] text-ink-4">
+          <p className="t-mono text-[0.625rem] text-ink-4">
             © {new Date().getFullYear()} {t('common.companyName')} · {t('common.allRightsReserved')}
           </p>
           <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">

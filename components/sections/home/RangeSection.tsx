@@ -72,7 +72,7 @@ function FamilyCard({
           <ArrowUpRight className="mt-0.5 size-4 shrink-0 text-ink-4 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" />
         </span>
         <span className="t-small mt-2 line-clamp-2 flex-1">{family.blurb}</span>
-        <span className="t-mono mt-4 text-[0.5625rem] text-ink-4">
+        <span className="t-mono mt-4 text-[0.625rem] text-ink-4">
           {family.products.length} {family.products.length === 1 ? 'model' : 'models'}
         </span>
       </span>

@@ -78,7 +78,7 @@ export default async function ModelPage({ params }: Props) {
             fill
             sizes="(max-width: 1024px) 92vw, 52vw"
             priority
-            className="object-contain p-10"
+            className="object-contain p-6 sm:p-10"
           />
           <span aria-hidden className="absolute left-3 top-3 size-3 border-l border-t border-line-2" />
           <span aria-hidden className="absolute right-3 top-3 size-3 border-r border-t border-line-2" />
@@ -95,7 +95,7 @@ export default async function ModelPage({ params }: Props) {
               { k: isRTL ? 'التصنيع' : 'Manufacture', v: isRTL ? 'جيانغمن، الصين' : 'Jiangmen, China' },
             ].map((row) => (
               <div key={row.k} className="flex items-baseline justify-between gap-6 border-b border-line py-3.5">
-                <dt className="t-mono text-[0.5625rem] text-ink-4">{row.k}</dt>
+                <dt className="t-mono text-[0.625rem] text-ink-4">{row.k}</dt>
                 <dd className="text-[0.9375rem] font-medium text-ink">{row.v}</dd>
               </div>
             ))}
@@ -146,16 +146,22 @@ export default async function ModelPage({ params }: Props) {
               </a>
             </div>
 
-            <div className="mt-6 overflow-hidden border border-line bg-canvas">
+            {/* Spec sheets are dense technical drawings. Scaled to a 360 px
+                screen the dimension callouts are illegible, so below the
+                sheet's natural width the container pans instead of shrinking. */}
+            <div className="mt-6 overflow-x-auto border border-line bg-canvas">
               <Image
                 src={item.spec}
                 alt={`${item.code} specification sheet`}
                 width={1600}
                 height={1100}
-                sizes="(max-width: 1024px) 100vw, 82rem"
-                className="h-auto w-full object-contain"
+                sizes="(max-width: 48rem) 44rem, 82rem"
+                className="h-auto w-full min-w-[44rem] object-contain"
               />
             </div>
+            <p className="t-mono mt-3 text-[0.625rem] text-ink-4 md:hidden">
+              {isRTL ? 'مرّر أفقياً لقراءة الورقة' : 'Scroll sideways to read the sheet'}
+            </p>
           </div>
         </section>
       )}
@@ -180,14 +186,14 @@ export default async function ModelPage({ params }: Props) {
                       fill
                       sizes="(max-width: 1024px) 50vw, 25vw"
                       loading="lazy"
-                      className="object-contain p-6 transition-transform duration-[800ms] [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.06]"
+                      className="object-contain p-4 transition-transform duration-[800ms] [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.06] sm:p-6"
                     />
                   </span>
                   <span className="border-t border-line px-4 py-3.5">
                     <span className="block text-[0.875rem] font-medium text-ink transition-colors duration-300 group-hover:text-accent">
                       {p.code}
                     </span>
-                    <span className="t-mono mt-1 block text-[0.5625rem] text-ink-4">{fam.name}</span>
+                    <span className="t-mono mt-1 block text-[0.625rem] text-ink-4">{fam.name}</span>
                   </span>
                 </Link>
               ))}

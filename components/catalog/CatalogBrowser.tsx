@@ -97,7 +97,7 @@ export function CatalogBrowser({ initialZone = 'all' }: { initialZone?: Filter }
             ))}
           </div>
 
-          <p className="t-mono hidden text-[0.5625rem] text-ink-4 sm:block">
+          <p className="t-mono hidden text-[0.625rem] text-ink-4 sm:block">
             {q
               ? `${hits.length} ${isRTL ? 'نتيجة' : 'results'}`
               : `${families.reduce((n, f) => n + f.products.length, 0)} ${isRTL ? 'موديل' : 'models'}`}
@@ -130,7 +130,7 @@ export function CatalogBrowser({ initialZone = 'all' }: { initialZone?: Filter }
               <section key={family.slug}>
                 <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-4">
                   <div>
-                    <p className="t-mono text-[0.5625rem] text-ink-4">
+                    <p className="t-mono text-[0.625rem] text-ink-4">
                       {family.zone === 'indoor'
                         ? isRTL ? 'داخلي' : 'Indoor'
                         : isRTL ? 'خارجي' : 'Outdoor'}
@@ -144,7 +144,7 @@ export function CatalogBrowser({ initialZone = 'all' }: { initialZone?: Filter }
                       </Link>
                     </h2>
                   </div>
-                  <p className="t-mono text-[0.5625rem] text-ink-4">
+                  <p className="t-mono text-[0.625rem] text-ink-4">
                     {family.products.length} {isRTL ? 'موديل' : 'models'}
                   </p>
                 </div>
@@ -189,14 +189,14 @@ function ModelTile({
           fill
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
           loading="lazy"
-          className="object-contain p-5 transition-transform duration-[800ms] [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.06]"
+          className="object-contain p-3 transition-transform duration-[800ms] [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.06] sm:p-5"
         />
       </span>
       <span className="border-t border-line px-4 py-3.5">
         <span className="block text-[0.875rem] font-medium text-ink transition-colors duration-300 group-hover:text-accent">
           {model.code}
         </span>
-        <span className="t-mono mt-1 block truncate text-[0.5625rem] text-ink-4">
+        <span className="t-mono mt-1 block truncate text-[0.625rem] text-ink-4">
           {family.name}
         </span>
       </span>

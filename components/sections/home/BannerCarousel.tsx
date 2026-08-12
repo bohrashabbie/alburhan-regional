@@ -73,8 +73,9 @@ export function BannerCarousel() {
       aria-label={isRTL ? 'أسواقنا' : 'Our markets'}
     >
       <div className="wrap grid gap-8 py-14 lg:grid-cols-[1fr_20rem] lg:gap-12 lg:py-20">
-        {/* Plate */}
-        <div className="relative aspect-[16/10] overflow-hidden border border-line bg-canvas sm:aspect-[16/8]">
+        {/* Plate. Portrait on phones: at 16/10 the overlaid caption filled
+            almost the entire image and the headline collided with the CTA. */}
+        <div className="relative aspect-[4/5] overflow-hidden border border-line bg-canvas sm:aspect-[16/9] lg:aspect-[16/8]">
           {slides.map((s, i) => (
             <div
               key={s.id}
@@ -107,7 +108,7 @@ export function BannerCarousel() {
           />
 
           <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-            <p className="t-mono text-[0.5625rem] text-white/60">
+            <p className="t-mono text-[0.625rem] text-white/60">
               {active.country || (isRTL ? 'السوق' : 'Market')}
             </p>
             <h3 className="t-h2 mt-2 max-w-lg text-white">{active.title}</h3>
@@ -161,7 +162,7 @@ export function BannerCarousel() {
                   >
                     {s.title}
                   </span>
-                  <span className="t-mono text-[0.5625rem] text-ink-4">
+                  <span className="t-mono text-[0.625rem] text-ink-4">
                     {String(i + 1).padStart(2, '0')}
                   </span>
                 </button>
@@ -177,7 +178,7 @@ export function BannerCarousel() {
               aria-label={paused ? 'Resume autoplay' : 'Pause autoplay'}
             >
               {paused ? <Play className="size-3.5" /> : <Pause className="size-3.5" />}
-              <span className="t-mono text-[0.5625rem]">
+              <span className="t-mono text-[0.625rem]">
                 {paused ? (isRTL ? 'تشغيل' : 'Play') : (isRTL ? 'إيقاف' : 'Pause')}
               </span>
             </button>

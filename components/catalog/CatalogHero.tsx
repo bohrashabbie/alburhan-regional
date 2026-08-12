@@ -47,12 +47,12 @@ export function CatalogHero({
                   {c.href ? (
                     <Link
                       href={c.href as never}
-                      className="t-mono text-[0.5625rem] text-ink-4 transition-colors hover:text-accent"
+                      className="t-mono text-[0.625rem] text-ink-4 transition-colors hover:text-accent"
                     >
                       {c.label}
                     </Link>
                   ) : (
-                    <span className="t-mono text-[0.5625rem] text-ink-2">{c.label}</span>
+                    <span className="t-mono text-[0.625rem] text-ink-2">{c.label}</span>
                   )}
                 </li>
               ))}

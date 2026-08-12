@@ -125,7 +125,7 @@ const Header: React.FC = () => {
             <span
               className={cn(
                 'relative block transition-all duration-500',
-                scrolled ? 'h-8 w-32' : 'h-10 w-40 sm:w-44',
+                scrolled ? 'h-8 w-28 sm:w-32' : 'h-9 w-32 sm:h-10 sm:w-40 md:w-44',
               )}
             >
               <Image
@@ -187,7 +187,7 @@ const Header: React.FC = () => {
 
             <Link
               href="/contact"
-              className="btn btn-primary hidden h-9 px-4 text-[0.75rem] lg:inline-flex"
+              className="btn btn-primary hidden h-9 min-h-9 px-4 text-[0.75rem] lg:inline-flex"
             >
               {isRTL ? 'اطلب عرض سعر' : 'Request a quote'}
             </Link>
@@ -365,7 +365,7 @@ function MegaColumn({
               className="group flex items-baseline justify-between border-b border-line py-2 text-[0.8125rem] text-ink-2 transition-colors duration-300 hover:text-accent"
             >
               <span>{f.name}</span>
-              <span className="t-mono text-[0.5625rem] text-ink-4 transition-colors group-hover:text-accent">
+              <span className="t-mono text-[0.625rem] text-ink-4 transition-colors group-hover:text-accent">
                 {f.products.length}
               </span>
             </Link>

@@ -66,7 +66,7 @@ export function BrandsSection() {
                 {...linkProps}
                 title={b.name}
                 aria-label={b.name}
-                className="group flex h-28 items-center justify-center bg-canvas p-6 transition-colors duration-500 hover:bg-surface"
+                className="group flex h-24 items-center justify-center bg-canvas p-4 sm:h-28 sm:p-6 transition-colors duration-500 hover:bg-surface"
                 style={{
                   opacity: visible ? 1 : 0,
                   transform: visible ? 'none' : 'translateY(14px)',
@@ -95,7 +95,7 @@ export function BrandsSection() {
             isRTL ? 'ضمان المصنّع' : 'Manufacturer warranty',
             isRTL ? 'دعم ما بعد البيع' : 'After-sales support',
           ].map((item) => (
-            <span key={item} className="t-mono flex items-center gap-2 text-[0.5625rem] text-ink-4">
+            <span key={item} className="t-mono flex items-center gap-2 text-[0.625rem] text-ink-4">
               <span className="size-1 shrink-0 rounded-full bg-accent" aria-hidden />
               {item}
             </span>

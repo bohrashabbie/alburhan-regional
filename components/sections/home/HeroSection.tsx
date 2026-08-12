@@ -140,7 +140,7 @@ export function HeroSection() {
                 className="enter-up"
                 style={{ '--d': `${720 + i * 90}ms` } as React.CSSProperties}
               >
-                <dt className="t-mono text-[0.5625rem] text-ink-4">{isRTL ? s.ar : s.en}</dt>
+                <dt className="t-mono text-[0.625rem] text-ink-4">{isRTL ? s.ar : s.en}</dt>
                 <dd className="mt-1.5 text-[1.75rem] font-medium tracking-[-0.035em] text-ink">
                   {s.value}
                 </dd>
@@ -194,14 +194,15 @@ export function HeroSection() {
             <span aria-hidden className="absolute bottom-3 right-3 z-[4] size-3 border-b border-r border-line-2" />
           </div>
 
-          {/* Caption bar */}
-          <div className="mt-px flex items-stretch border border-line border-t-0 bg-canvas">
+          {/* Caption bar. Stacks on phones — side by side there was ~150 px
+              left for the model name once the five indicators had their say. */}
+          <div className="mt-px flex flex-col items-stretch border border-line border-t-0 bg-canvas sm:flex-row">
             <Link
               href={`/products/${active.famSlug}/${active.slug}` as never}
               className="group flex flex-1 items-center justify-between gap-4 px-5 py-4"
             >
               <span className="min-w-0">
-                <span className="t-mono block text-[0.5625rem] text-ink-4">{active.famName}</span>
+                <span className="t-mono block text-[0.625rem] text-ink-4">{active.famName}</span>
                 <span className="mt-1 block truncate text-[0.9375rem] font-medium text-ink transition-colors group-hover:text-accent">
                   {active.code}
                 </span>
@@ -210,7 +211,7 @@ export function HeroSection() {
             </Link>
 
             {/* Slide indicators double as the progress readout */}
-            <div className="flex items-center gap-1.5 border-s border-line px-5">
+            <div className="flex items-center gap-1.5 border-t border-line px-5 py-1 sm:border-s sm:border-t-0 sm:py-0">
               {SLIDES.map((s, i) => (
                 <button
                   key={s.code}
@@ -229,7 +230,7 @@ export function HeroSection() {
             </div>
           </div>
 
-          <p className="t-mono mt-3 text-[0.5625rem] text-ink-4">
+          <p className="t-mono mt-3 text-[0.625rem] text-ink-4">
             {isRTL
               ? `${CATALOG_FAMILY_COUNT} عائلة · ${CATALOG_MODEL_COUNT} موديل · MS Lighting`
               : `${CATALOG_FAMILY_COUNT} families · ${CATALOG_MODEL_COUNT} models · manufactured by MS Lighting`}

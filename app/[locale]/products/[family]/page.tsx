@@ -70,7 +70,7 @@ export default async function FamilyPage({ params }: Props) {
       <section className="wrap py-14">
         <div className="flex items-end justify-between border-b border-line pb-4">
           <h2 className="t-h3">{isRTL ? 'الموديلات' : 'Models'}</h2>
-          <p className="t-mono text-[0.5625rem] text-ink-4">
+          <p className="t-mono text-[0.625rem] text-ink-4">
             {fam.products.length} {isRTL ? 'موديل' : 'models'} · CE · RoHS
           </p>
         </div>
@@ -97,9 +97,9 @@ export default async function FamilyPage({ params }: Props) {
                   fill
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   loading={i < 4 ? 'eager' : 'lazy'}
-                  className="object-contain p-6 transition-transform duration-[800ms] [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.06]"
+                  className="object-contain p-4 transition-transform duration-[800ms] [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.06] sm:p-6"
                 />
-                <span className="t-mono absolute start-3 top-3 text-[0.5625rem] text-ink-4">
+                <span className="t-mono absolute start-3 top-3 text-[0.625rem] text-ink-4">
                   {String(i + 1).padStart(2, '0')}
                 </span>
               </span>
@@ -108,7 +108,7 @@ export default async function FamilyPage({ params }: Props) {
                   <span className="block text-[0.9375rem] font-medium text-ink transition-colors duration-300 group-hover:text-accent">
                     {model.code}
                   </span>
-                  <span className="t-mono mt-1 block text-[0.5625rem] text-ink-4">
+                  <span className="t-mono mt-1 block text-[0.625rem] text-ink-4">
                     {isRTL ? 'عرض المواصفات' : 'View specifications'}
                   </span>
                 </span>
@@ -133,7 +133,7 @@ export default async function FamilyPage({ params }: Props) {
                   className="inline-flex items-center gap-2 border border-line bg-canvas px-4 py-2.5 text-[0.8125rem] text-ink-2 transition-colors duration-300 hover:border-accent hover:text-accent"
                 >
                   {f.name}
-                  <span className="t-mono text-[0.5625rem] text-ink-4">{f.products.length}</span>
+                  <span className="t-mono text-[0.625rem] text-ink-4">{f.products.length}</span>
                 </Link>
               </li>
             ))}

@@ -291,25 +291,44 @@ a, button, [role="button"] { -webkit-tap-highlight-color: transparent; }
 [dir="ltr"] { direction: ltr; text-align: left; }
 
 /* =========================================================================
+ * COMPONENTS LAYER
+ *
+ * Everything from here to the end of TEXTURE & LIGHT sits in Tailwind's
+ * components layer. That is not cosmetic: unlayered CSS beats layered
+ * utilities regardless of specificity, so an unlayered .t-mono { font-size }
+ * silently overrode every text-[0.625rem] in the markup, and .btn { height }
+ * overrode h-9. Inside the layer utilities win — which is the whole point of
+ * being able to write class="btn h-9" at the call site.
+ * ========================================================================= */
+@layer components {
+
+/* =========================================================================
  * TYPE SCALE
  * Fluid, ratio-locked. Use these instead of ad-hoc clamp() in components.
  * ========================================================================= */
+/* The vw term does the work between phone and desktop; the clamp floors are
+   set for a 360 px viewport, not for "smallest thing that still looks big on
+   my monitor". A 44 px floor on t-display put "from the factory up" wider
+   than the screen. */
 .t-display {
-  font-size: clamp(2.75rem, 7.2vw, 6.5rem);
-  line-height: 0.98;
-  letter-spacing: -0.038em;
+  font-size: clamp(2.1rem, 8.4vw, 6.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.034em;
   font-weight: 500;
 }
+@media (min-width: 40rem) {
+  .t-display { line-height: 0.98; letter-spacing: -0.038em; }
+}
 .t-h1 {
-  font-size: clamp(2rem, 4.6vw, 3.5rem);
-  line-height: 1.06;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.75rem, 5.2vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.028em;
   font-weight: 500;
 }
 .t-h2 {
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
-  line-height: 1.12;
-  letter-spacing: -0.024em;
+  font-size: clamp(1.375rem, 3.4vw, 2.25rem);
+  line-height: 1.16;
+  letter-spacing: -0.022em;
   font-weight: 500;
 }
 .t-h3 {
@@ -327,11 +346,13 @@ a, button, [role="button"] { -webkit-tap-highlight-color: transparent; }
 .t-body { font-size: 0.9375rem; line-height: 1.7; color: var(--ink-2); }
 .t-small { font-size: 0.8125rem; line-height: 1.6; color: var(--ink-3); }
 
-/* Mono caption — the technical voice of the system */
+/* Mono caption — the technical voice of the system.
+   0.625rem is the floor: below that, uppercase mono at 0.24em tracking stops
+   being a caption and becomes texture, especially on a phone. */
 .t-mono {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.6875rem;
-  letter-spacing: 0.24em;
+  font-size: 0.625rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   font-weight: 500;
 }
@@ -351,19 +372,19 @@ a, button, [role="button"] { -webkit-tap-highlight-color: transparent; }
   width: 100%;
   max-width: 82rem;
   margin-inline: auto;
-  padding-inline: clamp(1.15rem, 4vw, 2.5rem);
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
 }
 .wrap-narrow {
   width: 100%;
   max-width: 46rem;
   margin-inline: auto;
-  padding-inline: clamp(1.15rem, 4vw, 2.5rem);
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
 }
 .container-responsive { /* legacy name, same behaviour */
   width: 100%;
   max-width: 82rem;
   margin-inline: auto;
-  padding-inline: clamp(1.15rem, 4vw, 2.5rem);
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
 }
 .section {
   padding-block: clamp(4.5rem, 9vw, 8.5rem);
@@ -413,14 +434,21 @@ a, button, [role="button"] { -webkit-tap-highlight-color: transparent; }
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  height: 2.875rem;
+  /* min-height, not height: labels like "Request a quote for this model" are
+     wider than a 360 px screen, and a nowrap button just overflows the
+     viewport. Let them wrap to two lines and grow instead. */
+  min-height: 2.875rem;
+  padding-block: 0.5rem;
   padding-inline: 1.375rem;
+  max-width: 100%;
   border-radius: 2px;
   border: 1px solid transparent;
   font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0.01em;
-  white-space: nowrap;
+  line-height: 1.35;
+  text-align: center;
+  text-wrap: balance;
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -467,7 +495,7 @@ a, button, [role="button"] { -webkit-tap-highlight-color: transparent; }
 }
 .btn-ghost:hover { color: var(--ink); background: var(--surface); }
 
-.btn-lg { height: 3.25rem; padding-inline: 1.75rem; font-size: 0.875rem; }
+.btn-lg { min-height: 3.25rem; padding-inline: 1.75rem; font-size: 0.875rem; }
 
 /* --- Chip / badge -------------------------------------------------------- */
 .chip {
@@ -722,6 +750,8 @@ a, button, [role="button"] { -webkit-tap-highlight-color: transparent; }
 }
 .shine-hover:hover::after,
 .group:hover .shine-hover::after { transform: translateX(140%) skewX(-16deg); }
+} /* end @layer components */
+
 
 /* =========================================================================
  * KEYFRAMES
@@ -929,11 +959,14 @@ html[data-intro="off"] #curtain { display: none; }
 .ct-mask { display: block; overflow: hidden; }
 .ct-mask > span {
   display: block;
-  font-size: clamp(2.2rem, 6.5vw, 4.75rem);
-  line-height: 1.02;
-  letter-spacing: -0.04em;
+  /* "Regional Lighting" has to fit one line inside the panel, or the clip
+     mask reveals a wrapped second line that was never designed for. */
+  font-size: clamp(1.6rem, 7.4vw, 4.75rem);
+  line-height: 1.06;
+  letter-spacing: -0.035em;
   font-weight: 500;
   color: var(--ink);
+  white-space: nowrap;
   transform: translateY(110%);
 }
 .ct-mask > span em {
@@ -962,6 +995,13 @@ html[data-intro="off"] #curtain { display: none; }
 .ct-tl { top: clamp(1.9rem, 4.4vw, 3rem); inset-inline-start: clamp(1.9rem, 5vw, 4rem); color: var(--ink-2); }
 .ct-tr { top: clamp(1.9rem, 4.4vw, 3rem); inset-inline-end: clamp(1.9rem, 5vw, 4rem); }
 .ct-bl { bottom: clamp(1.9rem, 4.4vw, 3rem); inset-inline-start: clamp(1.9rem, 5vw, 4rem); }
+
+/* Four corner labels need a viewport wide enough to hold two of them per
+   edge. Below that they run into each other, so keep the diagonal pair —
+   identity top-left, counter bottom-right — and drop the other two. */
+@media (max-width: 40rem) {
+  .ct-tr, .ct-bl { display: none; }
+}
 .ct-br {
   bottom: clamp(1.9rem, 4.4vw, 3rem);
   inset-inline-end: clamp(1.9rem, 5vw, 4rem);
@@ -971,7 +1011,7 @@ html[data-intro="off"] #curtain { display: none; }
   color: var(--ink-2);
 }
 .ct-br b {
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-size: clamp(1.35rem, 4vw, 2.4rem);
   font-weight: 500;
   letter-spacing: -0.03em;
   color: var(--ink);

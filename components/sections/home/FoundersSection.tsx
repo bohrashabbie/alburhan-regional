@@ -95,7 +95,7 @@ export function FoundersSection() {
                   <figcaption className="border-t border-line pt-6">
                     <p className="text-[1.0625rem] font-medium text-ink">{name}</p>
                     {role && (
-                      <p className="t-mono mt-1 text-[0.5625rem] text-accent">{role}</p>
+                      <p className="t-mono mt-1 text-[0.625rem] text-accent">{role}</p>
                     )}
                   </figcaption>
                 </div>
