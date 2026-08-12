@@ -1,11 +1,14 @@
 import { getLocale } from 'next-intl/server';
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Poppins } from 'next/font/google';
+import { Geist, Geist_Mono, Instrument_Serif } from 'next/font/google';
 import './globals.css';
 
-// Only fonts actually referenced in globals.css are loaded. Dropping the
-// unused Montserrat/Roboto/Open_Sans cuts ~300 KB of font CSS + WOFF2 traffic
-// on the first paint.
+// Three faces, three jobs:
+//   Geist Sans   — everything structural (headlines, body, nav)
+//   Geist Mono   — technical captions, counters, model codes
+//   Instrument Serif italic — a single emphasised word per headline
+// Poppins was dropped: it only ever rendered at 600/700 behind `font-display`,
+// which now resolves to Geist Sans, so nothing loses its typeface.
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -20,28 +23,50 @@ const geistMono = Geist_Mono({
   preload: false,
 });
 
-// Audit (2026-05): Poppins is used only with `font-display` className, and
-// always combined with font-semibold (600) or font-bold (700). Weights 400
-// and 500 were loaded but never rendered (body uses Geist Sans for normal
-// text, Header nav uses Geist Sans + font-medium). Dropping unused weights
-// saves ~50 KB of WOFF2 traffic on every cold load.
-const poppins = Poppins({
-  variable: '--font-poppins',
+const instrumentSerif = Instrument_Serif({
+  variable: '--font-instrument-serif',
   subsets: ['latin'],
-  weight: ['600', '700'],
+  weight: '400',
+  style: ['italic', 'normal'],
   display: 'swap',
   preload: true,
 });
 
 export const metadata: Metadata = {
-  title: 'AL-BURHAN — Innovative Lighting Solutions',
+  title: {
+    default: 'Al-Burhan Regional — Lighting, engineered for the region',
+    template: '%s | Al-Burhan Regional',
+  },
   description:
-    'Leading lighting solutions provider delivering innovative, design-forward lighting across the region.',
-  // Favicon is served from the file-based convention `app/icon.png`
-  // (the AL-Burhan Group logo). No manual `icons` override needed — the
-  // previous `/logo.jpeg` reference pointed at a file that doesn't exist.
+    'Al-Burhan Regional supplies, engineers and installs architectural lighting across Kuwait, the UAE, China and Egypt — backed by MS Lighting, the group’s own factory in Jiangmen, Guangdong.',
 };
 
+export const viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#08080a' },
+  ],
+};
+
+/**
+ * Runs before first paint.
+ *  1. Resolves the stored/system theme and stamps `class="dark"` so there is
+ *     no white flash before next-themes hydrates.
+ *  2. Decides whether the intro curtain plays. It plays once per tab session;
+ *     on every later navigation `data-intro="off"` keeps it out of the render
+ *     entirely, and `ct-active` pre-scales the stage only when it will play.
+ */
+const BOOT_SCRIPT = `(function(){try{
+var d=document.documentElement;
+var t=localStorage.getItem('theme')||'system';
+var dark=t==='dark'||(t==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);
+d.classList.toggle('dark',dark);
+d.style.colorScheme=dark?'dark':'light';
+var quiet=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var skip=quiet||sessionStorage.getItem('ab_intro');
+if(skip){d.setAttribute('data-intro','off');}else{d.classList.add('ct-active');}
+d.style.setProperty('--enter-delay',skip?'0ms':'1900ms');
+}catch(e){}})();`;
 
 export default async function RootLayout({
   children,
@@ -49,18 +74,28 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const locale = await getLocale();
-  const isRTL = locale === 'ar';
-  const dir = isRTL ? 'rtl' : 'ltr';
+  const dir = locale === 'ar' ? 'rtl' : 'ltr';
 
   return (
-    <html lang={locale} dir={dir} className="dark" suppressHydrationWarning>
+    <html lang={locale} dir={dir} suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://alburhan-asset.s3.eu-north-1.amazonaws.com" crossOrigin="anonymous" />
+        <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />
+        {/* Without JS the curtain would never lift, so remove it outright and
+            land every scroll-reveal in its resting state. */}
+        <noscript>
+          <style>{`#curtain{display:none!important}
+.reveal,.reveal-left,.reveal-plate{opacity:1!important;transform:none!important;clip-path:none!important}
+.reveal-line>*{transform:none!important}`}</style>
+        </noscript>
+        <link
+          rel="preconnect"
+          href="https://alburhan-asset.s3.eu-north-1.amazonaws.com"
+          crossOrigin="anonymous"
+        />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://cloudfront.net" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased`}
         style={{ direction: dir }}
       >
         {children}

@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 
 /**
  * Floating back-to-top button — pure CSS, no Framer Motion.
- * Appears after 300 px of scroll; 32×32 gold circle.
+ * Appears after 300 px of scroll.
  */
 export function BackToTop() {
   const [visible, setVisible] = React.useState(false);
@@ -24,11 +24,11 @@ export function BackToTop() {
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label="Back to top"
       className={cn(
-        'fixed bottom-6 right-6 z-[900] size-8 rounded-full',
+        'fixed bottom-6 end-6 z-[900] size-10 rounded-full',
         'flex items-center justify-center',
-        'bg-[#D4A843] text-black',
+        'border border-line bg-canvas text-ink shadow-[var(--shadow-2)]',
         'transition-all duration-300',
-        'hover:scale-110 hover:shadow-[0_0_20px_rgba(212,168,67,0.5)]',
+        'hover:border-accent hover:text-accent',
         visible
           ? 'opacity-100 translate-y-0 pointer-events-auto'
           : 'opacity-0 translate-y-4 pointer-events-none',

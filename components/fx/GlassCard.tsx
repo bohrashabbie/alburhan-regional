@@ -15,7 +15,7 @@ export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
   ({ className, intensity = 'normal', glow = 'none', as: Tag = 'div', ...props }, ref) => {
     const intensityClass =
       intensity === 'soft'
-        ? 'bg-[rgba(20,19,30,0.4)] border-white/5 backdrop-blur-md'
+        ? 'bg-surface/60 border border-line backdrop-blur-md'
         : intensity === 'strong'
         ? 'glass-surface-strong'
         : 'glass-surface';

@@ -1,203 +1,239 @@
 'use client';
 
 import * as React from 'react';
-import { useTranslations, useLocale } from 'next-intl';
+import Image from 'next/image';
+import { useLocale } from 'next-intl';
 import { Link } from '@/i18n/routing';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
+
+import { CATALOG, CATALOG_MODEL_COUNT, CATALOG_FAMILY_COUNT } from '@/lib/catalog/ms-lighting';
+
+/**
+ * The banner.
+ *
+ * An editorial split: statement on one side, a lit plate on the other. The
+ * plate cycles through real catalogue models — each one crossfades in behind a
+ * slow warm beam, with its model code and family set in mono underneath, so
+ * the first thing a visitor sees is actual product rather than stock imagery.
+ */
+
+const SPOTLIGHT = [
+  { family: 'recessed-down-light', model: 'ms-240r' },
+  { family: 'linear-light', model: 'ms-t8' },
+  { family: 'track-spot-light', model: 'ms-601c' },
+  { family: 'magnet-light', model: 'ms20y' },
+  { family: 'flood-light', model: 'ms-413' },
+] as const;
+
+const SLIDES = SPOTLIGHT.map(({ family, model }) => {
+  const fam = CATALOG.find((f) => f.slug === family);
+  const mod = fam?.products.find((p) => p.slug === model) ?? fam?.products[0];
+  return fam && mod
+    ? { famName: fam.name, famSlug: fam.slug, code: mod.code, slug: mod.slug, image: mod.image }
+    : null;
+}).filter(Boolean) as {
+  famName: string;
+  famSlug: string;
+  code: string;
+  slug: string;
+  image: string;
+}[];
 
 const STATS = [
-  { to: 20, suffix: '+', labelEn: 'Years Experience', labelAr: 'سنة خبرة' },
-  { to: 4,  suffix: '',  labelEn: 'Countries',        labelAr: 'دول' },
-  { to: 500,suffix: '+', labelEn: 'Projects',         labelAr: 'مشروع' },
-  { to: 50, suffix: '+', labelEn: 'Global Brands',    labelAr: 'علامة عالمية' },
+  { value: '20+', en: 'Years in the region', ar: 'سنة في المنطقة' },
+  { value: '500+', en: 'Projects delivered', ar: 'مشروع منجز' },
+  { value: `${CATALOG_MODEL_COUNT}`, en: 'Models in catalogue', ar: 'موديل في الكتالوج' },
+  { value: '4', en: 'Countries', ar: 'دول' },
 ];
 
-function useWordReveal(count: number) {
-  const [revealed, setRevealed] = React.useState<boolean[]>(() => Array(count).fill(false));
-  React.useEffect(() => {
-    let cancelled = false;
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    for (let i = 0; i < count; i++) {
-      const t = setTimeout(
-        () => { if (!cancelled) setRevealed((p) => p.map((v, j) => j === i ? true : v)); },
-        300 + i * 90,
-      );
-      timers.push(t);
-    }
-    return () => { cancelled = true; timers.forEach(clearTimeout); };
-  }, [count]); // eslint-disable-line react-hooks/exhaustive-deps
-  return revealed;
-}
-
-function StatCounter({ to, suffix }: { to: number; suffix: string }) {
-  const ref = React.useRef<HTMLSpanElement>(null);
-  const started = React.useRef(false);
-  React.useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting || started.current) return;
-      started.current = true;
-      obs.disconnect();
-      const dur = 1600;
-      const t0 = performance.now();
-      const tick = (now: number) => {
-        const p = Math.min((now - t0) / dur, 1);
-        const ease = 1 - Math.pow(1 - p, 3);
-        el.textContent = Math.floor(ease * to) + suffix;
-        if (p < 1) requestAnimationFrame(tick);
-      };
-      el.textContent = '0' + suffix;
-      requestAnimationFrame(tick);
-    }, { threshold: 0.5 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [to, suffix]);
-  return <span ref={ref} suppressHydrationWarning>{to}{suffix}</span>;
-}
-
 export function HeroSection() {
-  const t = useTranslations();
   const locale = useLocale();
   const isRTL = locale === 'ar';
+  const [index, setIndex] = React.useState(0);
 
-  /* Words for the headline */
-  const headline = isRTL
-    ? ['يضيء', 'رؤيتك', 'بما', 'هو', 'أبعد', 'من', 'الضوء']
-    : ['Illuminating', 'Your', 'Vision', 'Beyond', 'Light'];
+  // Hold each model long enough to actually be read, and stop entirely when
+  // the tab is hidden or the visitor has asked for less motion.
+  React.useEffect(() => {
+    if (SLIDES.length < 2) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  /* Words that get the gold accent colour */
-  const goldenEn = new Set(['Beyond', 'Light']);
-  const goldenArIdx = new Set([5, 6]);
+    let timer: ReturnType<typeof setInterval>;
+    const start = () => {
+      timer = setInterval(() => setIndex((i) => (i + 1) % SLIDES.length), 4200);
+    };
+    const onVisibility = () => {
+      clearInterval(timer);
+      if (!document.hidden) start();
+    };
 
-  const revealed = useWordReveal(headline.length);
-  const allIn = revealed[headline.length - 1];
+    start();
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      clearInterval(timer);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, []);
+
+  const active = SLIDES[index];
 
   return (
-    <section
-      className="luxury-section relative min-h-[100svh] overflow-hidden bg-[#080808]"
-      dir={isRTL ? 'rtl' : 'ltr'}
-    >
-      {/* ── Beam behind the headline ── */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 flex justify-center">
-        <div
-          className="animate-beam w-px"
-          style={{ background: 'linear-gradient(to bottom, transparent 0%, #D4A843 40%, #D4A843 60%, transparent 100%)', opacity: 0.15 }}
-        />
-        <div
-          className="animate-cone absolute top-0 h-[55vh] w-[340px]"
-          style={{ background: 'conic-gradient(from 270deg at 50% 0%, transparent 85deg, rgba(212,168,67,0.07) 90deg, transparent 95deg)' }}
-        />
-      </div>
-
-      {/* Ambient radial glow */}
+    <section className="relative overflow-hidden border-b border-line" dir={isRTL ? 'rtl' : 'ltr'}>
+      {/* Blueprint grid, masked so it fades out before it reaches the type */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{ background: 'radial-gradient(ellipse 55% 35% at 50% 28%, rgba(212,168,67,0.05), transparent 70%)' }}
+        className="bg-grid pointer-events-none absolute inset-0 opacity-60"
+        style={{
+          maskImage: 'radial-gradient(120% 90% at 50% 0%, #000 20%, transparent 78%)',
+          WebkitMaskImage: 'radial-gradient(120% 90% at 50% 0%, #000 20%, transparent 78%)',
+        }}
       />
+      <div aria-hidden className="lumen-wash" />
 
-      {/* ── Main flex column ── */}
-      <div className="relative z-10 flex min-h-[100svh] flex-col">
-
-        {/* Centre block — grows to fill, centres content */}
-        <div className="flex flex-1 flex-col items-center justify-center px-5 pt-24 pb-8 text-center">
-
-          {/* Eyebrow */}
-          <p
-            className="mb-7 font-mono text-[11px] uppercase tracking-[0.32em] text-[#D4A843]"
-            style={{ opacity: revealed[0] ? 1 : 0, transition: 'opacity 0.7s ease 0.1s' }}
-          >
-            {t('common.companyName')}
+      <div className="wrap relative grid items-center gap-14 py-16 lg:grid-cols-[1.05fr_1fr] lg:gap-20 lg:py-24">
+        {/* ── Statement ── */}
+        <div>
+          <p className="kicker enter-fade">
+            {isRTL ? 'مجموعة البرهان' : 'Al-Burhan Regional'}
           </p>
 
-          {/* Headline — inline spans with natural word spacing */}
-          <h1
-            className="max-w-3xl font-display leading-[1.08] tracking-[-0.025em] text-white"
-            style={{ fontSize: 'clamp(2.4rem, 7.5vw, 5.5rem)', fontWeight: 300 }}
-            aria-label={headline.join(' ')}
-          >
-            {headline.map((word, i) => (
-              <React.Fragment key={i}>
-                {i > 0 && ' '}
-                <span
-                  className="inline-block transition-all duration-700"
-                  style={{
-                    opacity: revealed[i] ? 1 : 0,
-                    transform: revealed[i] ? 'translateY(0)' : 'translateY(16px)',
-                    transitionDelay: `${i * 80}ms`,
-                    color: (!isRTL && goldenEn.has(word)) || (isRTL && goldenArIdx.has(i)) ? '#D4A843' : undefined,
-                  }}
-                >
-                  {word}
-                </span>
-              </React.Fragment>
-            ))}
+          <h1 className="t-display mt-6">
+            <span className="line-in" style={{ '--d': '80ms' } as React.CSSProperties}>
+              <span>{isRTL ? 'نُضيء معالم' : 'We light the'}</span>
+            </span>
+            <span className="line-in" style={{ '--d': '190ms' } as React.CSSProperties}>
+              <span>
+                {isRTL ? 'المنطقة' : 'region’s'}{' '}
+                <em className="t-accent text-accent">
+                  {isRTL ? 'من مصنعنا' : 'landmarks'}
+                </em>
+              </span>
+            </span>
+            <span className="line-in" style={{ '--d': '300ms' } as React.CSSProperties}>
+              <span>{isRTL ? 'حتى التركيب' : 'from the factory up'}</span>
+            </span>
           </h1>
 
-          {/* Description */}
-          <p
-            className="mt-7 max-w-lg text-[15px] font-light leading-relaxed text-[#444]"
-            style={{ opacity: allIn ? 1 : 0, transform: allIn ? 'translateY(0)' : 'translateY(10px)', transition: 'opacity 0.8s ease, transform 0.8s ease', transitionDelay: '200ms' }}
-          >
-            {t('hero.description')}
+          <p className="t-lead enter-up mt-7 max-w-xl" style={{ '--d': '470ms' } as React.CSSProperties}>
+            {isRTL
+              ? 'نصمّم ونصنّع ونورّد ونركّب حلول الإضاءة المعمارية في الكويت والإمارات والصين ومصر — بدعم من مصنعنا الخاص MS Lighting في جيانغمن.'
+              : 'We specify, manufacture, supply and install architectural lighting across Kuwait, the UAE, China and Egypt — backed by MS Lighting, our own factory in Jiangmen, Guangdong.'}
           </p>
 
-          {/* CTAs */}
           <div
-            className="mt-9 flex flex-wrap items-center justify-center gap-4"
-            style={{ opacity: allIn ? 1 : 0, transition: 'opacity 0.8s ease', transitionDelay: '360ms' }}
+            className="enter-up mt-9 flex flex-wrap items-center gap-3"
+            style={{ '--d': '620ms' } as React.CSSProperties}
           >
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 bg-[#D4A843] px-7 py-3.5 text-[11px] font-normal uppercase tracking-[0.18em] text-black transition-all duration-300 hover:bg-[#C49730]"
-            >
-              {isRTL ? 'استكشف مشاريعنا' : 'Explore Projects'}
-              <ArrowRight className="size-3.5" />
+            <Link href="/products" className="btn btn-primary btn-lg">
+              {isRTL ? 'تصفّح الكتالوج' : 'Browse the catalogue'}
+              <ArrowRight className={`size-4 ${isRTL ? 'rotate-180' : ''}`} />
             </Link>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 border border-[#2A2A2A] px-7 py-3.5 text-[11px] font-normal uppercase tracking-[0.18em] text-[#555] transition-all duration-300 hover:border-[#D4A843] hover:text-white"
-            >
-              {isRTL ? 'تواصل معنا' : 'Get In Touch'}
+            <Link href="/projects" className="btn btn-outline btn-lg">
+              {isRTL ? 'شاهد مشاريعنا' : 'See our projects'}
             </Link>
           </div>
-        </div>
 
-        {/* Scroll indicator */}
-        <div
-          aria-hidden
-          className="flex justify-center py-3 transition-all duration-700"
-          style={{ opacity: allIn ? 1 : 0, transitionDelay: '600ms' }}
-        >
-          <div className="flex flex-col items-center gap-1.5">
-            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[#2A2A2A]">
-              {isRTL ? 'مرر' : 'Scroll'}
-            </span>
-            <ChevronDown className="animate-scroll-pulse size-3.5 text-[#D4A843]" />
-          </div>
-        </div>
-
-        {/* Stats strip pinned to bottom */}
-        <div
-          className="w-full border-t border-[#1A1A1A] transition-all duration-700"
-          style={{ opacity: allIn ? 1 : 0, transitionDelay: '500ms' }}
-        >
-          <div className="grid grid-cols-2 divide-x divide-[#1A1A1A] sm:grid-cols-4">
+          {/* Stats — a hairline-ruled row, not four floating cards */}
+          <dl className="mt-12 grid grid-cols-2 gap-px border-t border-line pt-6 sm:grid-cols-4">
             {STATS.map((s, i) => (
-              <div key={i} className="flex flex-col items-center px-4 py-5 text-center">
-                <span
-                  className="font-display leading-none text-white"
-                  style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', fontWeight: 300 }}
-                >
-                  <StatCounter to={s.to} suffix={s.suffix} />
-                </span>
-                <span className="mt-2 font-mono text-[9px] uppercase tracking-[0.22em] text-[#333]">
-                  {isRTL ? s.labelAr : s.labelEn}
-                </span>
+              <div
+                key={s.en}
+                className="enter-up"
+                style={{ '--d': `${720 + i * 90}ms` } as React.CSSProperties}
+              >
+                <dt className="t-mono text-[0.5625rem] text-ink-4">{isRTL ? s.ar : s.en}</dt>
+                <dd className="mt-1.5 text-[1.75rem] font-medium tracking-[-0.035em] text-ink">
+                  {s.value}
+                </dd>
               </div>
             ))}
+          </dl>
+        </div>
+
+        {/* ── Lit plate ── */}
+        <div className="enter-fade relative" style={{ '--d': '360ms' } as React.CSSProperties}>
+          <div className="relative aspect-square w-full overflow-hidden border border-line bg-surface sm:aspect-[4/5] lg:aspect-square">
+            {/* Warm cone from the top edge — this is the "light" in the picture */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 z-[2]"
+              style={{
+                background:
+                  'conic-gradient(from 200deg at 50% -8%, transparent 130deg, var(--lumen-glow) 160deg, var(--lumen-glow) 200deg, transparent 230deg)',
+              }}
+            />
+            <div aria-hidden className="beam-sweep left-0 z-[3]" />
+
+            {/* Crossfading product plates */}
+            {SLIDES.map((s, i) => (
+              <div
+                key={s.code}
+                aria-hidden={i !== index}
+                className="absolute inset-0 flex items-center justify-center p-10 sm:p-14"
+                style={{
+                  opacity: i === index ? 1 : 0,
+                  transform: i === index ? 'scale(1)' : 'scale(1.04)',
+                  transition:
+                    'opacity 1.1s var(--ease-out-expo), transform 1.4s var(--ease-out-expo)',
+                }}
+              >
+                <Image
+                  src={s.image}
+                  alt={`${s.code} — ${s.famName}`}
+                  fill
+                  sizes="(max-width: 1024px) 92vw, 44vw"
+                  priority={i === 0}
+                  className="object-contain p-6"
+                />
+              </div>
+            ))}
+
+            {/* Corner registration marks — quiet, technical */}
+            <span aria-hidden className="absolute left-3 top-3 z-[4] size-3 border-l border-t border-line-2" />
+            <span aria-hidden className="absolute right-3 top-3 z-[4] size-3 border-r border-t border-line-2" />
+            <span aria-hidden className="absolute bottom-3 left-3 z-[4] size-3 border-b border-l border-line-2" />
+            <span aria-hidden className="absolute bottom-3 right-3 z-[4] size-3 border-b border-r border-line-2" />
           </div>
+
+          {/* Caption bar */}
+          <div className="mt-px flex items-stretch border border-line border-t-0 bg-canvas">
+            <Link
+              href={`/products/${active.famSlug}/${active.slug}` as never}
+              className="group flex flex-1 items-center justify-between gap-4 px-5 py-4"
+            >
+              <span className="min-w-0">
+                <span className="t-mono block text-[0.5625rem] text-ink-4">{active.famName}</span>
+                <span className="mt-1 block truncate text-[0.9375rem] font-medium text-ink transition-colors group-hover:text-accent">
+                  {active.code}
+                </span>
+              </span>
+              <ArrowUpRight className="size-4 shrink-0 text-ink-4 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" />
+            </Link>
+
+            {/* Slide indicators double as the progress readout */}
+            <div className="flex items-center gap-1.5 border-s border-line px-5">
+              {SLIDES.map((s, i) => (
+                <button
+                  key={s.code}
+                  type="button"
+                  onClick={() => setIndex(i)}
+                  aria-label={`Show ${s.code}`}
+                  aria-current={i === index}
+                  className="group py-4"
+                >
+                  <span
+                    className="block h-[2px] w-5 transition-colors duration-500"
+                    style={{ background: i === index ? 'var(--accent)' : 'var(--line-2)' }}
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <p className="t-mono mt-3 text-[0.5625rem] text-ink-4">
+            {isRTL
+              ? `${CATALOG_FAMILY_COUNT} عائلة · ${CATALOG_MODEL_COUNT} موديل · MS Lighting`
+              : `${CATALOG_FAMILY_COUNT} families · ${CATALOG_MODEL_COUNT} models · manufactured by MS Lighting`}
+          </p>
         </div>
       </div>
     </section>

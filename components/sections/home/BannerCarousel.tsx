@@ -2,22 +2,23 @@
 
 import * as React from 'react';
 import Image from 'next/image';
-import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowUpRight, ChevronLeft, ChevronRight, MapPin, Pause, Play } from 'lucide-react';
+import { ArrowUpRight, Pause, Play } from 'lucide-react';
 import { useLocale } from 'next-intl';
 
 import { Link } from '@/i18n/routing';
 import { useBanners, useCountries } from '@/context/SiteContentContext';
 import { getImageUrl } from '@/lib/api';
 import { cn } from '@/lib/utils';
-import { GradientText } from '@/components/fx/GradientText';
 
-const AUTOPLAY_MS = 5000; // was 2000 ms — 2 s caused constant framer-motion work on the main thread
+const AUTOPLAY_MS = 6000;
 
 /**
- * Home page banner carousel — driven from the CMS `banners` table.
- * Shows every active banner (country-tagged slides link to their country page),
- * with play/pause, dot pagination, and keyboard arrow navigation.
+ * The market banner — CMS `banners`, one slide per country.
+ *
+ * Rebuilt as a single full-bleed plate with the slide index rendered as a
+ * ruled list beside it, rather than dots under a box. The active row's rule
+ * fills over the autoplay duration, so the timer is the progress indicator
+ * instead of a separate bar. Crossfade only: nothing slides, nothing zooms.
  */
 export function BannerCarousel() {
   const locale = useLocale();
@@ -32,23 +33,16 @@ export function BannerCarousel() {
         .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
         .map((b) => {
           const country = countries.find((c) => c.id === b.country_id);
-          const countryName = country
-            ? (isRTL ? country.name_ar || country.name_en : country.name_en) ||
-              ''
-            : '';
-          const countrySlug = country?.slug || '';
-          // Strip CMS placeholder suffixes such as "Kuwait Hero" → "Kuwait"
+          const countryName =
+            (country ? (isRTL ? country.name_ar || country.name_en : country.name_en) : '') || '';
           const rawTitle = (isRTL ? b.name_ar || b.name_en : b.name_en) || '';
-          const cleanTitle = rawTitle.replace(/\s+hero$/i, '').trim();
           return {
             id: b.id,
-            title: cleanTitle || countryName,
+            title: rawTitle.replace(/\s+hero$/i, '').trim() || countryName,
             description:
-              (isRTL
-                ? b.description_ar || b.description_en
-                : b.description_en) || '',
+              (isRTL ? b.description_ar || b.description_en : b.description_en) || '',
             country: countryName,
-            countrySlug,
+            countrySlug: country?.slug || '',
             image: getImageUrl(b.image_url),
           };
         })
@@ -60,209 +54,133 @@ export function BannerCarousel() {
   const [paused, setPaused] = React.useState(false);
   const count = slides.length;
 
-  const go = React.useCallback(
-    (delta: number) => {
-      if (count === 0) return;
-      setIndex((i) => (i + delta + count) % count);
-    },
-    [count],
-  );
-
-  // autoplay
   React.useEffect(() => {
-    if (paused || count < 2) return;
-    const id = window.setInterval(() => go(1), AUTOPLAY_MS);
-    return () => window.clearInterval(id);
-  }, [paused, count, go, index]);
+    if (count < 2 || paused) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const timer = setInterval(() => setIndex((i) => (i + 1) % count), AUTOPLAY_MS);
+    return () => clearInterval(timer);
+  }, [count, paused, index]);
 
-  // keyboard
-  React.useEffect(() => {
-    if (count === 0) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') go(isRTL ? -1 : 1);
-      if (e.key === 'ArrowLeft') go(isRTL ? 1 : -1);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [go, isRTL, count]);
-
-  if (count === 0) return null;
+  if (!count) return null;
 
   const active = slides[index];
 
   return (
-    <section className="relative py-16 md:py-24">
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div
-          className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-[color:var(--glass-border)] bg-[color:var(--bg-elevated)] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.8)] md:aspect-[21/9]"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-        >
-          {/* slides */}
-          <AnimatePresence mode="sync" initial={false}>
-            <motion.div
-              key={active.id}
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.02 }}
-              transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+    <section
+      className="relative border-b border-line bg-surface"
+      dir={isRTL ? 'rtl' : 'ltr'}
+      aria-roledescription="carousel"
+      aria-label={isRTL ? 'أسواقنا' : 'Our markets'}
+    >
+      <div className="wrap grid gap-8 py-14 lg:grid-cols-[1fr_20rem] lg:gap-12 lg:py-20">
+        {/* Plate */}
+        <div className="relative aspect-[16/10] overflow-hidden border border-line bg-canvas sm:aspect-[16/8]">
+          {slides.map((s, i) => (
+            <div
+              key={s.id}
+              aria-hidden={i !== index}
               className="absolute inset-0"
+              style={{
+                opacity: i === index ? 1 : 0,
+                transition: 'opacity 1.1s var(--ease-out-expo)',
+              }}
             >
               <Image
-                src={active.image}
-                alt={active.title || 'Banner'}
+                src={s.image}
+                alt={s.title}
                 fill
-                loading="lazy"
-                sizes="(max-width: 1280px) 100vw, 1280px"
+                sizes="(max-width: 1024px) 100vw, 62vw"
+                priority={i === 0}
                 className="object-cover"
               />
-            </motion.div>
-          </AnimatePresence>
-
-          {/* gradients */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background:
-                'linear-gradient(180deg, rgba(10,6,14,0.25) 0%, rgba(10,6,14,0.6) 70%, rgba(10,6,14,0.95) 100%)',
-            }}
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background:
-                'radial-gradient(ellipse at 20% 80%, rgba(194,50,74,0.28), transparent 55%), radial-gradient(ellipse at 80% 10%, rgba(201,169,79,0.18), transparent 50%)',
-            }}
-          />
-
-          {/* text overlay */}
-          {(active.title || active.description || active.country) && (
-            <div className="absolute inset-x-0 bottom-0 p-6 md:p-12">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`text-${active.id}`}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{
-                    duration: 0.45,
-                    delay: 0.1,
-                    ease: [0.25, 0.46, 0.45, 0.94],
-                  }}
-                  className="max-w-2xl"
-                >
-                  {active.country && (
-                    <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[color:var(--brand-gold)]/40 bg-black/40 px-3 py-1 backdrop-blur-md">
-                      <MapPin className="size-3 text-[color:var(--brand-gold)]" />
-                      <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[color:var(--brand-gold)]">
-                        {active.country}
-                      </span>
-                    </div>
-                  )}
-                  {active.title && (
-                    <h3 className="font-display text-3xl font-bold leading-[1.1] text-white md:text-5xl">
-                      <GradientText>{active.title}</GradientText>
-                    </h3>
-                  )}
-                  {active.description && (
-                    <p className="mt-3 max-w-xl text-sm text-white/80 md:mt-4 md:text-base">
-                      {active.description}
-                    </p>
-                  )}
-                  {active.countrySlug && (
-                    <Link
-                      href={`/${active.countrySlug}`}
-                      className="mt-5 inline-flex items-center gap-2 rounded-full border border-[color:var(--glass-border)] bg-white/5 px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] text-white backdrop-blur-md transition-all hover:border-[color:var(--brand-gold)] hover:bg-white/10"
-                    >
-                      {isRTL ? 'استكشف' : 'Explore'}
-                      <ArrowUpRight className="size-3.5" />
-                    </Link>
-                  )}
-                </motion.div>
-              </AnimatePresence>
             </div>
-          )}
+          ))}
 
-          {/* gold hairline */}
+          {/* Scrim keeps the caption legible over any photograph */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-px opacity-70"
+            className="absolute inset-0"
             style={{
               background:
-                'linear-gradient(90deg, transparent, rgba(201,169,79,0.8), transparent)',
+                'linear-gradient(to top, rgba(8,8,10,0.92) 0%, rgba(8,8,10,0.35) 45%, transparent 75%)',
             }}
           />
 
-          {/* arrows */}
-          {count > 1 && (
-            <>
-              <button
-                type="button"
-                onClick={() => go(isRTL ? 1 : -1)}
-                aria-label="Previous"
-                className={cn(
-                  'absolute top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border backdrop-blur-md transition-all',
-                  'border-[color:var(--glass-border)] bg-black/30 text-white hover:border-[color:var(--brand-gold)] hover:bg-black/50',
-                  'left-3 md:left-6',
-                )}
+          <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+            <p className="t-mono text-[0.5625rem] text-white/60">
+              {active.country || (isRTL ? 'السوق' : 'Market')}
+            </p>
+            <h3 className="t-h2 mt-2 max-w-lg text-white">{active.title}</h3>
+            {active.description && (
+              <p className="mt-2 line-clamp-2 max-w-md text-[0.875rem] text-white/70">
+                {active.description}
+              </p>
+            )}
+            {active.countrySlug && (
+              <Link
+                href={`/${active.countrySlug}` as never}
+                className="group mt-4 inline-flex items-center gap-2 text-[0.8125rem] font-medium text-white"
               >
-                <ChevronLeft className="size-5" />
-              </button>
-              <button
-                type="button"
-                onClick={() => go(isRTL ? -1 : 1)}
-                aria-label="Next"
-                className={cn(
-                  'absolute top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border backdrop-blur-md transition-all',
-                  'border-[color:var(--glass-border)] bg-black/30 text-white hover:border-[color:var(--brand-gold)] hover:bg-black/50',
-                  'right-3 md:right-6',
-                )}
-              >
-                <ChevronRight className="size-5" />
-              </button>
-            </>
-          )}
+                {isRTL ? 'اكتشف السوق' : 'Explore this market'}
+                <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </Link>
+            )}
+          </div>
+        </div>
 
-          {/* play/pause */}
+        {/* Ruled index */}
+        <div className="flex flex-col">
+          <p className="kicker">{isRTL ? 'أسواقنا' : 'Our markets'}</p>
+
+          <ul className="mt-6 flex-1 border-t border-line">
+            {slides.map((s, i) => (
+              <li key={s.id}>
+                <button
+                  type="button"
+                  onClick={() => setIndex(i)}
+                  aria-current={i === index}
+                  className="group relative flex w-full items-baseline justify-between gap-4 border-b border-line py-4 text-start"
+                >
+                  {/* The autoplay clock, drawn as the row's own rule */}
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-0 bottom-[-1px] h-px origin-left bg-accent"
+                    style={{
+                      transform: i === index ? 'scaleX(1)' : 'scaleX(0)',
+                      transition:
+                        i === index && !paused
+                          ? `transform ${AUTOPLAY_MS}ms linear`
+                          : 'transform 400ms var(--ease-out-expo)',
+                    }}
+                  />
+                  <span
+                    className={cn(
+                      'text-[0.9375rem] font-medium transition-colors duration-300',
+                      i === index ? 'text-accent' : 'text-ink-2 group-hover:text-ink',
+                    )}
+                  >
+                    {s.title}
+                  </span>
+                  <span className="t-mono text-[0.5625rem] text-ink-4">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+
           {count > 1 && (
             <button
               type="button"
               onClick={() => setPaused((p) => !p)}
-              aria-label={paused ? 'Play' : 'Pause'}
-              className="absolute right-3 top-3 z-10 flex size-9 items-center justify-center rounded-full border border-[color:var(--glass-border)] bg-black/40 text-white/80 backdrop-blur-md transition-all hover:border-[color:var(--brand-gold)] hover:text-white md:right-6 md:top-6"
+              className="mt-6 inline-flex w-fit items-center gap-2 text-[0.75rem] text-ink-3 transition-colors hover:text-accent"
+              aria-label={paused ? 'Resume autoplay' : 'Pause autoplay'}
             >
-              {paused ? <Play className="size-4" /> : <Pause className="size-4" />}
+              {paused ? <Play className="size-3.5" /> : <Pause className="size-3.5" />}
+              <span className="t-mono text-[0.5625rem]">
+                {paused ? (isRTL ? 'تشغيل' : 'Play') : (isRTL ? 'إيقاف' : 'Pause')}
+              </span>
             </button>
-          )}
-
-          {/* counter */}
-          {count > 1 && (
-            <div className="absolute left-3 top-3 z-10 rounded-full border border-[color:var(--glass-border)] bg-black/40 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.25em] text-[color:var(--brand-gold)] backdrop-blur-md md:left-6 md:top-6">
-              {String(index + 1).padStart(2, '0')}
-              <span className="text-white/40"> / {String(count).padStart(2, '0')}</span>
-            </div>
-          )}
-
-          {/* dots */}
-          {count > 1 && (
-            <div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center gap-2 md:bottom-6">
-              {slides.map((s, i) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  onClick={() => setIndex(i)}
-                  aria-label={`Go to slide ${i + 1}`}
-                  className={cn(
-                    'h-1.5 rounded-full transition-all duration-500',
-                    i === index
-                      ? 'w-8 bg-[color:var(--brand-gold)]'
-                      : 'w-1.5 bg-white/30 hover:bg-white/60',
-                  )}
-                />
-              ))}
-            </div>
           )}
         </div>
       </div>

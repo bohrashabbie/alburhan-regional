@@ -7,114 +7,98 @@ import { ArrowRight } from 'lucide-react';
 
 import { useReveal } from '@/hooks/useReveal';
 import { useSiteContent } from '@/context/SiteContentContext';
+import { cn } from '@/lib/utils';
 
+/**
+ * The positioning statement: what the group is, in one screen.
+ *
+ * Copy comes from the CMS (`home` / `introduction`) when it's there, with a
+ * written fallback so the section is never an empty box on a cold CMS.
+ * The four capability rows are the argument — specify, manufacture, supply,
+ * install — the loop that competitors have to subcontract.
+ */
 export function IntroSection() {
   const t = useTranslations();
   const locale = useLocale();
   const isRTL = locale === 'ar';
-  const { setting: _setting, content } = useSiteContent();
+  const { content } = useSiteContent();
 
   const { ref: leftRef, visible: leftVisible } = useReveal(0.2);
-  const { ref: rightRef, visible: rightVisible } = useReveal(0.15);
+  const { ref: rightRef, visible: rightVisible } = useReveal<HTMLOListElement>(0.15);
 
   const intro = content?.page_contents?.find(
     (p) => p.page_key === 'home' && p.section_key === 'introduction',
   );
-  const introTitle =
-    (isRTL ? intro?.title_ar : intro?.title_en) || t('sections.aboutUsTitle');
   const introBody =
     (isRTL ? intro?.content_ar : intro?.content_en) ||
     (isRTL
-      ? 'مجموعة البرهان تقدم حلول إضاءة مبتكرة تمزج الجمال بالأداء — عبر أربع دول ومئات المشاريع.'
-      : 'AL-Burhan Group delivers lighting solutions that fuse design with engineering — across four countries and hundreds of landmark projects.');
+      ? 'قلة من موردي الإضاءة يملكون المصنع الذي ينتج ما يورّدونه. نحن نملكه — وهذا يعني تحكماً في المواصفات والجدول الزمني والسعر من أول رسم حتى آخر تركيب.'
+      : 'Few lighting suppliers own the factory behind what they sell. We do — and that means control over specification, lead time and price, from the first drawing to the last fixture on site.');
 
-  const pillars = isRTL
+  const steps = isRTL
     ? [
-        { title: 'أداء', text: 'إضاءة دقيقة وموثوقة طوال دورة الحياة.' },
-        { title: 'استدامة', text: 'حلول موفرة للطاقة تخفض الأحمال الكهربائية.' },
-        { title: 'شراكة', text: 'فريق واحد من التصور إلى التشغيل.' },
-        { title: 'ابتكار', text: 'تقنيات LED ذكية وأنظمة إضاءة متطورة.' },
+        { n: '01', title: 'التصميم والمواصفات', text: 'حسابات إضاءة، اختيار الأجهزة، وملفات فوتومترية لاعتماد الاستشاري.' },
+        { n: '02', title: 'التصنيع', text: 'إنتاج داخلي في جيانغمن — مكوّنات Cree و Osram ومشغّلات Meanwell.' },
+        { n: '03', title: 'التوريد', text: 'مخزون إقليمي في الكويت والإمارات يقصّر مدة التسليم للمشاريع.' },
+        { n: '04', title: 'التركيب والتشغيل', text: 'فرق تركيب وتشغيل ودعم ما بعد التسليم في السوق نفسه.' },
       ]
     : [
-        { title: 'Performance', text: 'Precision lighting engineered for lifetime reliability.' },
-        { title: 'Sustainability', text: 'Smart, energy-efficient fixtures that cut grid load.' },
-        { title: 'Partnership', text: 'One team — from concept to commissioning.' },
-        { title: 'Innovation', text: 'Smart LED systems redefining modern spaces.' },
+        { n: '01', title: 'Specify', text: 'Lighting calculations, fixture selection and photometric files your consultant can sign off.' },
+        { n: '02', title: 'Manufacture', text: 'Built in-house in Jiangmen on tier-one components — Cree, Osram, Meanwell drivers.' },
+        { n: '03', title: 'Supply', text: 'Regional stock in Kuwait and the UAE, so project lead times stay in weeks, not quarters.' },
+        { n: '04', title: 'Install & commission', text: 'Our own crews on site, and after-handover support in the same market.' },
       ];
 
   return (
-    <section
-      className="luxury-section relative bg-[#080808] py-24 md:py-32"
-      dir={isRTL ? 'rtl' : 'ltr'}
-    >
-      {/* Subtle border top */}
-      <div className="absolute inset-x-0 top-0 h-px bg-[#1A1A1A]" />
-
-      <div className="mx-auto grid w-full max-w-7xl gap-16 px-4 sm:px-6 lg:grid-cols-2 lg:gap-24 lg:px-8">
-
-        {/* Left — eyebrow + heading */}
+    <section className="section border-b border-line" dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="wrap grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24">
+        {/* Statement */}
         <div
           ref={leftRef}
-          className="reveal-left flex flex-col justify-center"
-          data-visible={leftVisible || undefined}
-          style={{
-            opacity: leftVisible ? 1 : 0,
-            transform: leftVisible ? 'translateX(0)' : (isRTL ? 'translateX(40px)' : 'translateX(-40px)'),
-            transition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)',
-          }}
+          className={cn('reveal-left', leftVisible && 'on')}
         >
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#D4A843]">
-            {t('sections.introduction')}
-          </p>
-
-          <h2 className="mt-5 font-display text-[clamp(2rem,4vw,3rem)] font-light leading-[1.1] tracking-[-0.02em] text-white">
-            {introTitle}
+          <p className="kicker">{t('sections.introduction')}</p>
+          <h2 className="t-h1 mt-5">
+            {isRTL ? (
+              <>
+                نملك <em className="t-accent text-accent">المصنع</em>، لا الوسيط فقط
+              </>
+            ) : (
+              <>
+                We own the <em className="t-accent text-accent">factory</em>, not just the invoice
+              </>
+            )}
           </h2>
+          <p className="t-lead mt-6 max-w-md">{introBody}</p>
 
-          <p className="mt-6 text-[15px] font-light leading-relaxed text-[#555]">
-            {introBody}
-          </p>
-
-          <Link
-            href="/about"
-            className="mt-10 inline-flex w-fit items-center gap-2 border-b border-[#2A2A2A] pb-1 text-[12px] uppercase tracking-[0.18em] text-[#555] transition-all duration-300 hover:border-[#D4A843] hover:text-white"
-          >
-            {isRTL ? 'تعرف علينا' : 'Learn more'}
-            <ArrowRight className="size-3" />
+          <Link href="/about" className="link-underline mt-9 inline-flex w-fit items-center gap-2 text-[0.875rem] font-medium text-accent">
+            {isRTL ? 'قصة المجموعة' : 'The group’s story'}
+            <ArrowRight className={cn('size-4', isRTL && 'rotate-180')} />
           </Link>
         </div>
 
-        {/* Right — pillars list */}
-        <div
-          ref={rightRef}
-          className="flex flex-col justify-center gap-0"
-        >
-          {pillars.map((p, i) => (
-            <div
-              key={p.title}
-              className="group flex items-start gap-5 border-b border-[#111] py-6 last:border-0"
+        {/* Capability loop */}
+        <ol ref={rightRef} className="border-t border-line">
+          {steps.map((s, i) => (
+            <li
+              key={s.n}
+              className="group grid grid-cols-[3rem_1fr] gap-5 border-b border-line py-7 transition-colors duration-500 hover:bg-surface"
               style={{
                 opacity: rightVisible ? 1 : 0,
-                transform: rightVisible ? 'translateX(0)' : 'translateX(24px)',
-                transition: `opacity 0.7s cubic-bezier(0.16,1,0.3,1) ${i * 100}ms, transform 0.7s cubic-bezier(0.16,1,0.3,1) ${i * 100}ms`,
+                transform: rightVisible ? 'none' : 'translateY(18px)',
+                transition: `opacity 0.8s var(--ease-out-expo) ${i * 90}ms, transform 0.8s var(--ease-out-expo) ${i * 90}ms, background-color 0.5s`,
               }}
             >
-              {/* Gold dot */}
-              <span
-                className="mt-[7px] size-1.5 shrink-0 rounded-full bg-[#D4A843] transition-all duration-300 group-hover:scale-150 group-hover:shadow-[0_0_8px_rgba(212,168,67,0.6)]"
-                aria-hidden
-              />
+              <span className="t-mono pt-1 text-[0.625rem] text-ink-4 transition-colors duration-300 group-hover:text-accent">
+                {s.n}
+              </span>
               <div>
-                <h3 className="text-[15px] font-light text-white transition-colors duration-300 group-hover:text-[#D4A843]">
-                  {p.title}
-                </h3>
-                <p className="mt-1 text-[13px] font-light leading-relaxed text-[#444]">
-                  {p.text}
-                </p>
+                <h3 className="t-h3">{s.title}</h3>
+                <p className="t-small mt-1.5 max-w-md">{s.text}</p>
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   );

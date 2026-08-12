@@ -6,6 +6,7 @@ import Header from './Header';
 import Footer from './Footer';
 import { BackToTop } from './chrome/BackToTop';
 import { ScrollProgress } from './chrome/ScrollProgress';
+import { Curtain } from './chrome/Curtain';
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -16,23 +17,32 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const isRTL = locale === 'ar';
 
   return (
-    <div
-      dir={isRTL ? 'rtl' : 'ltr'}
-      className="relative flex min-h-screen flex-col bg-[#080808] text-white"
-    >
-      {/* 2 px gold progress bar — fixed at the very top */}
-      <ScrollProgress />
+    <>
+      {/* Sits outside #ct-stage so it doesn't inherit the settle transform. */}
+      <Curtain />
 
-      <Header />
+      {/* Everything the curtain reveals. The 3% overscale → 1 settle is applied
+          to this element by the .ct-active / .ct-lifting classes on <html>. */}
+      <div
+        id="ct-stage"
+        dir={isRTL ? 'rtl' : 'ltr'}
+        className="relative flex min-h-screen flex-col bg-canvas text-ink"
+      >
+        <ScrollProgress />
 
-      <main className="relative z-[1] flex flex-1 flex-col">
-        {children}
-      </main>
+        <Header />
 
-      <Footer />
+        <main className="relative z-[1] flex flex-1 flex-col">{children}</main>
 
-      <BackToTop />
-    </div>
+        <Footer />
+
+        <BackToTop />
+      </div>
+
+      {/* Film grain over the whole composition — fixed, so it never scrolls
+          with the content and never lands on a scaled layer. */}
+      <div className="grain" aria-hidden />
+    </>
   );
 };
 

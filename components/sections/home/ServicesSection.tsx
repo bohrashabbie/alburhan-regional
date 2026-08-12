@@ -9,105 +9,86 @@ import { useReveal } from '@/hooks/useReveal';
 import { useServices } from '@/context/SiteContentContext';
 
 function pickIcon(title: string) {
-  const t = title.toLowerCase();
-  if (/consult|advis|support|help/i.test(t)) return Headphones;
-  if (/design|plan|concept|draft/i.test(t)) return PenTool;
-  if (/supply|product|deliver|source/i.test(t)) return Package;
-  if (/install|maintain|service|repair/i.test(t)) return Wrench;
+  if (/consult|advis|support|help/i.test(title)) return Headphones;
+  if (/design|plan|concept|draft/i.test(title)) return PenTool;
+  if (/supply|product|deliver|source/i.test(title)) return Package;
+  if (/install|maintain|service|repair/i.test(title)) return Wrench;
   return Lightbulb;
 }
 
+/**
+ * Services as a ruled index rather than a card grid — six equal boxes make
+ * every service look identical and none look considered. Rows let the eye
+ * scan titles, and the hover state fills the row's leading rule in crimson
+ * so the pointer has something to land on.
+ */
 export function ServicesSection() {
   const services = useServices();
   const locale = useLocale();
   const isRTL = locale === 'ar';
   const displayed = services.slice(0, 6);
 
-  const { ref: headRef, visible: headVisible } = useReveal(0.3);
   const { ref: listRef, visible: listVisible } = useReveal(0.1);
 
   if (!displayed.length) return null;
 
   return (
-    <section
-      className="luxury-section relative bg-[#080808] py-24 md:py-32"
-      dir={isRTL ? 'rtl' : 'ltr'}
-    >
-      <div className="absolute inset-x-0 top-0 h-px bg-[#1A1A1A]" />
-
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-
-        {/* Header */}
-        <div
-          ref={headRef}
-          className="mb-14 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end"
-          style={{
-            opacity: headVisible ? 1 : 0,
-            transform: headVisible ? 'translateX(0)' : (isRTL ? 'translateX(30px)' : 'translateX(-30px)'),
-            transition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)',
-          }}
-        >
+    <section className="section border-b border-line bg-surface" dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="wrap">
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#D4A843]">
-              {isRTL ? 'خدماتنا' : 'What we offer'}
-            </p>
-            <h2 className="mt-4 font-display text-[clamp(2rem,4vw,3rem)] font-light leading-[1.1] tracking-[-0.02em] text-white">
-              {isRTL ? 'خدمات الإضاءة المتكاملة' : 'End-to-end lighting services'}
+            <p className="kicker">{isRTL ? 'خدماتنا' : 'What we do'}</p>
+            <h2 className="t-h1 mt-5 max-w-lg">
+              {isRTL ? 'خدمات إضاءة من الفكرة إلى التشغيل' : 'End-to-end lighting services'}
             </h2>
           </div>
 
-          <Link
-            href="/services"
-            className="inline-flex items-center gap-2 border-b border-[#2A2A2A] pb-1 text-[11px] uppercase tracking-[0.2em] text-[#555] transition-all duration-300 hover:border-[#D4A843] hover:text-white"
-          >
-            {isRTL ? 'عرض الكل' : 'View all'}
-            <ArrowUpRight className="size-3" />
+          <Link href="/services" className="link-underline inline-flex w-fit items-center gap-2 text-[0.875rem] font-medium text-accent">
+            {isRTL ? 'عرض الكل' : 'All services'}
+            <ArrowUpRight className="size-4" />
           </Link>
         </div>
 
-        {/* List */}
-        <div ref={listRef} className="divide-y divide-[#111]">
+        <div ref={listRef} className="mt-12 border-t border-line">
           {displayed.map((svc, i) => {
-            const title = isRTL ? svc.title_ar || svc.title_en : svc.title_en;
+            const title = (isRTL ? svc.title_ar || svc.title_en : svc.title_en) || '';
             const desc = isRTL ? svc.description_ar || svc.description_en : svc.description_en;
             const Icon = pickIcon(svc.title_en || '');
-            const num = String(i + 1).padStart(2, '0');
 
             return (
-              <div
+              <Link
                 key={svc.id}
-                className="group flex items-center gap-6 py-7 transition-colors duration-300"
+                href="/services"
+                className="group relative grid grid-cols-[2.5rem_1fr_auto] items-center gap-5 border-b border-line py-6 sm:grid-cols-[3rem_2.5rem_1fr_auto] sm:gap-6"
                 style={{
                   opacity: listVisible ? 1 : 0,
-                  transform: listVisible ? 'translateX(0)' : (isRTL ? 'translateX(30px)' : 'translateX(-30px)'),
-                  transition: `opacity 0.7s cubic-bezier(0.16,1,0.3,1) ${i * 80}ms, transform 0.7s cubic-bezier(0.16,1,0.3,1) ${i * 80}ms`,
+                  transform: listVisible ? 'none' : 'translateY(16px)',
+                  transition: `opacity 0.7s var(--ease-out-expo) ${i * 70}ms, transform 0.7s var(--ease-out-expo) ${i * 70}ms`,
                 }}
               >
-                {/* Number */}
-                <span className="w-8 shrink-0 font-mono text-[11px] text-[#333] transition-colors duration-300 group-hover:text-[#D4A843]">
-                  {num}
+                {/* Crimson rule that draws in under the row on hover */}
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 bottom-[-1px] h-px origin-left scale-x-0 bg-accent transition-transform duration-[600ms] [transition-timing-function:var(--ease-out-expo)] group-hover:scale-x-100"
+                />
+
+                <span className="t-mono hidden text-[0.625rem] text-ink-4 transition-colors duration-300 group-hover:text-accent sm:block">
+                  {String(i + 1).padStart(2, '0')}
                 </span>
 
-                {/* Icon */}
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-[#1A1A1A] text-[#333] transition-all duration-300 group-hover:border-[#D4A843]/40 group-hover:text-[#D4A843]">
+                <span className="flex size-10 items-center justify-center rounded-full border border-line text-ink-3 transition-colors duration-300 group-hover:border-accent group-hover:text-accent">
                   <Icon className="size-4" />
-                </div>
+                </span>
 
-                {/* Text */}
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-[15px] font-light text-white transition-colors duration-300 group-hover:text-[#D4A843]">
+                <span className="min-w-0">
+                  <span className="block text-[1.0625rem] font-medium text-ink transition-colors duration-300 group-hover:text-accent">
                     {title}
-                  </h3>
-                  {desc && (
-                    <p className="mt-1 line-clamp-1 text-[12px] font-light text-[#444]">
-                      {desc}
-                    </p>
-                  )}
-                </div>
+                  </span>
+                  {desc && <span className="t-small mt-1 line-clamp-1 block">{desc}</span>}
+                </span>
 
-                {/* Arrow */}
-                <ArrowUpRight className="size-4 shrink-0 text-[#2A2A2A] transition-all duration-300 group-hover:text-[#D4A843] group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </div>
+                <ArrowUpRight className="size-4 shrink-0 text-ink-4 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" />
+              </Link>
             );
           })}
         </div>

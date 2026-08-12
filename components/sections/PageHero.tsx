@@ -1,9 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { GradientText } from '@/components/fx/GradientText';
 
 interface Props {
   eyebrow?: string;
@@ -15,9 +13,15 @@ interface Props {
 }
 
 /**
- * Shared hero band for every interior page (about, contact, projects,
- * services, products, legal, case-studies, careers).
- * Dark glass backdrop with a burgundy glow and gold hairline at the bottom.
+ * Shared page head for every interior screen (about, contact, projects,
+ * services, legal, case studies, careers).
+ *
+ * Matched to the catalogue hero so the whole site opens the same way: a
+ * blueprint grid masked to nothing before it reaches the type, one shaft of
+ * warm light, and the title in ink rather than a gradient. Entrances are CSS
+ * animations offset by --enter-delay, so they wait out the intro curtain
+ * instead of playing behind it — and no Framer Motion is pulled into the
+ * bundle for what three keyframes can do.
  */
 export function PageHero({
   eyebrow,
@@ -29,89 +33,49 @@ export function PageHero({
 }: Props) {
   return (
     <section
-      className={cn(
-        'relative overflow-hidden pt-24 pb-16 md:pt-32 md:pb-24',
-        className,
-      )}
+      className={cn('relative overflow-hidden border-b border-line', className)}
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 opacity-90"
+        className="bg-grid pointer-events-none absolute inset-0 opacity-50"
         style={{
-          background:
-            'radial-gradient(ellipse at 50% 0%, rgba(212,168,67,0.12), transparent 55%), radial-gradient(ellipse at 90% 20%, rgba(212,168,67,0.07), transparent 50%)',
+          maskImage: 'radial-gradient(110% 80% at 50% 0%, #000 10%, transparent 75%)',
+          WebkitMaskImage: 'radial-gradient(110% 80% at 50% 0%, #000 10%, transparent 75%)',
         }}
       />
+      <div aria-hidden className="lumen-wash" />
+
       <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-grid-soft opacity-60"
-        style={{
-          maskImage:
-            'radial-gradient(ellipse at center, black 40%, transparent 85%)',
-          WebkitMaskImage:
-            'radial-gradient(ellipse at center, black 40%, transparent 85%)',
-        }}
-      />
-      <div
-        className={cn(
-          'mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8',
-          align === 'center' && 'text-center',
-        )}
+        className={cn('wrap relative py-16 md:py-24', align === 'center' && 'text-center')}
       >
         {eyebrow && (
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="font-mono text-xs uppercase tracking-[0.3em] text-[color:var(--brand-gold)]"
-          >
+          <p className={cn('kicker enter-fade', align === 'center' && 'justify-center')}>
             {eyebrow}
-          </motion.p>
+          </p>
         )}
-        <motion.h1
-          initial={{ opacity: 0, y: 22 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, delay: 0.05, ease: [0.19, 1, 0.22, 1] }}
-          className={cn(
-            'font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl',
-            eyebrow ? 'mt-4' : '',
-          )}
+
+        <h1
+          className={cn('t-h1 max-w-3xl enter-up', eyebrow && 'mt-5', align === 'center' && 'mx-auto')}
+          style={{ '--d': '90ms' } as React.CSSProperties}
         >
-          {typeof title === 'string' ? <GradientText>{title}</GradientText> : title}
-        </motion.h1>
+          {title}
+        </h1>
+
         {description && (
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, delay: 0.15, ease: [0.19, 1, 0.22, 1] }}
-            className={cn(
-              'mt-6 max-w-2xl text-base leading-relaxed text-[color:var(--fg-muted)] md:text-lg',
-              align === 'center' && 'mx-auto',
-            )}
+          <p
+            className={cn('t-lead enter-up mt-5 max-w-2xl', align === 'center' && 'mx-auto')}
+            style={{ '--d': '200ms' } as React.CSSProperties}
           >
             {description}
-          </motion.p>
+          </p>
         )}
+
         {children && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, delay: 0.25, ease: [0.19, 1, 0.22, 1] }}
-            className="mt-8"
-          >
+          <div className="enter-up mt-8" style={{ '--d': '320ms' } as React.CSSProperties}>
             {children}
-          </motion.div>
+          </div>
         )}
       </div>
-      {/* Gold hairline divider */}
-      <div
-        aria-hidden
-        className="absolute inset-x-0 bottom-0 mx-auto h-px w-[80%] opacity-60"
-        style={{
-          background:
-            'linear-gradient(90deg, transparent, rgba(201,169,79,0.6), transparent)',
-        }}
-      />
     </section>
   );
 }

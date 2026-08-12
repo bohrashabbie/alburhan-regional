@@ -16,8 +16,8 @@ export function GridBackdrop({ className, size = 48, masked = true, ...props }: 
       aria-hidden
       className={cn('pointer-events-none absolute inset-0', className)}
       style={{
-        backgroundImage: `linear-gradient(rgba(201,169,79,0.07) 1px, transparent 1px),
-                          linear-gradient(90deg, rgba(201,169,79,0.07) 1px, transparent 1px)`,
+        backgroundImage: `linear-gradient(var(--line) 1px, transparent 1px),
+                          linear-gradient(90deg, var(--line) 1px, transparent 1px)`,
         backgroundSize: `${size}px ${size}px`,
         maskImage: masked
           ? 'radial-gradient(ellipse at center, black 45%, transparent 85%)'

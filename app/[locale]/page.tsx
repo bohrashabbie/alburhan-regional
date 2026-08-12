@@ -1,45 +1,31 @@
 import dynamic from 'next/dynamic';
 import HeroSection from '@/components/sections/home/HeroSection';
+import MarqueeStrip from '@/components/sections/home/MarqueeStrip';
 
-// Above-the-fold: HeroSection is imported statically so it SSRs instantly.
-// Everything else is below the fold — load it only after the hero is painted.
-// `ssr: true` keeps server-rendered HTML for SEO; the JS bundle for these
-// sections is split into a separate chunk and streamed in after hydration.
+// Above the fold — imported statically so they SSR and paint immediately.
+// Everything below is code-split into its own chunk and streamed in after
+// hydration; `ssr: true` keeps the server-rendered HTML for SEO.
 
-const BannerCarousel = dynamic(() => import('@/components/sections/home/BannerCarousel'), {
-  ssr: true,
-});
-const IntroSection = dynamic(() => import('@/components/sections/home/IntroSection'), {
-  ssr: true,
-});
-const PresenceSection = dynamic(() => import('@/components/sections/home/PresenceSection'), {
-  ssr: true,
-});
-const ServicesSection = dynamic(() => import('@/components/sections/home/ServicesSection'), {
-  ssr: true,
-});
-const ProductsSection = dynamic(() => import('@/components/sections/home/ProductsSection'), {
-  ssr: true,
-});
-const BrandsSection = dynamic(() => import('@/components/sections/home/BrandsSection'), {
-  ssr: true,
-});
-const FoundersSection = dynamic(() => import('@/components/sections/home/FoundersSection'), {
-  ssr: true,
-});
-const CTASection = dynamic(() => import('@/components/sections/home/CTASection'), {
-  ssr: true,
-});
+const IntroSection = dynamic(() => import('@/components/sections/home/IntroSection'));
+const RangeSection = dynamic(() => import('@/components/sections/home/RangeSection'));
+const BannerCarousel = dynamic(() => import('@/components/sections/home/BannerCarousel'));
+const PresenceSection = dynamic(() => import('@/components/sections/home/PresenceSection'));
+const ServicesSection = dynamic(() => import('@/components/sections/home/ServicesSection'));
+const BrandsSection = dynamic(() => import('@/components/sections/home/BrandsSection'));
+const FoundersSection = dynamic(() => import('@/components/sections/home/FoundersSection'));
+const CTASection = dynamic(() => import('@/components/sections/home/CTASection'));
 
 export default function Home() {
   return (
     <>
+      {/* What we do → what we sell → where we are → who says so → the ask */}
       <HeroSection />
-      <BannerCarousel />
+      <MarqueeStrip />
       <IntroSection />
-      <PresenceSection />
+      <RangeSection />
+      <BannerCarousel />
       <ServicesSection />
-      <ProductsSection />
+      <PresenceSection />
       <BrandsSection />
       <FoundersSection />
       <CTASection />

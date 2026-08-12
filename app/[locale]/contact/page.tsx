@@ -185,10 +185,10 @@ export default function ContactPage() {
                         }}
                       />
                       <div className="flex items-center justify-between">
-                        <h3 className="font-display text-xl font-semibold text-[color:var(--fg-default)] group-hover:text-[#D4A843]">
+                        <h3 className="font-display text-xl font-semibold text-[color:var(--fg-default)] group-hover:text-accent">
                           {b.name}
                         </h3>
-                        <ArrowUpRight className="size-4 text-[color:var(--fg-subtle)] transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#D4A843]" />
+                        <ArrowUpRight className="size-4 text-[color:var(--fg-subtle)] transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent" />
                       </div>
                       {b.firm && (
                         <p className="mt-1 text-xs text-[color:var(--fg-muted)]">{b.firm}</p>
@@ -198,9 +198,9 @@ export default function ContactPage() {
                           <a
                             href={`tel:${b.phone.replace(/\s+/g, '')}`}
                             onClick={(e) => e.stopPropagation()}
-                            className="flex items-center gap-2 transition-colors hover:text-[#D4A843]"
+                            className="flex items-center gap-2 transition-colors hover:text-accent"
                           >
-                            <Phone className="size-3 text-[#D4A843]" />
+                            <Phone className="size-3 text-accent" />
                             <span>{b.phone}</span>
                           </a>
                         )}
@@ -208,20 +208,20 @@ export default function ContactPage() {
                           <a
                             href={`mailto:${b.email}`}
                             onClick={(e) => e.stopPropagation()}
-                            className="flex items-center gap-2 transition-colors hover:text-[#D4A843]"
+                            className="flex items-center gap-2 transition-colors hover:text-accent"
                           >
-                            <Mail className="size-3 text-[#D4A843]" />
+                            <Mail className="size-3 text-accent" />
                             <span className="truncate">{b.email}</span>
                           </a>
                         )}
                         {isValid(b.address) && (
                           <div className="flex items-start gap-2">
-                            <MapPin className="mt-0.5 size-3 shrink-0 text-[#D4A843]" />
+                            <MapPin className="mt-0.5 size-3 shrink-0 text-accent" />
                             <span className="line-clamp-2">{b.address}</span>
                           </div>
                         )}
                         {!isValid(b.phone) && !isValid(b.email) && !isValid(b.address) && (
-                          <span className="inline-flex items-center border border-[#D4A843]/20 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-[#D4A843]/60">
+                          <span className="inline-flex items-center border border-accent/25 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-accent">
                             {isRTL ? 'قريباً' : 'Coming soon'}
                           </span>
                         )}

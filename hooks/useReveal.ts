@@ -10,8 +10,8 @@ import { useEffect, useRef, useState } from 'react';
  * Pair with the `.reveal` / `.reveal-left` CSS utility classes in globals.css:
  *   <div ref={ref} className={`reveal ${visible ? 'on' : ''}`} />
  */
-export function useReveal(threshold = 0.15) {
-  const ref = useRef<HTMLDivElement>(null);
+export function useReveal<T extends HTMLElement = HTMLDivElement>(threshold = 0.15) {
+  const ref = useRef<T>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {

@@ -8,17 +8,17 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * Dark-glass shimmer placeholder. Used for CMS-driven sections that are
- * still loading (home page bento, product grid, etc.).
+ * Shimmer placeholder for CMS-driven sections that are still loading.
+ * Built from surface/line tokens so it reads correctly in both themes — the
+ * old white-alpha fill was invisible on a light canvas.
  */
 export function Skeleton({ className, shimmer = true, ...rest }: Props) {
   return (
     <div
       aria-hidden
       className={cn(
-        'relative overflow-hidden rounded-lg bg-white/[0.04]',
-        'border border-[color:var(--glass-border)]',
-        shimmer && 'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2.2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent',
+        'relative overflow-hidden rounded-sm bg-surface-2 border border-line',
+        shimmer && 'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2.2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-canvas/60 before:to-transparent',
         className,
       )}
       {...rest}

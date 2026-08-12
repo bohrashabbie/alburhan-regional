@@ -1,50 +1,34 @@
 'use client';
 
 import * as React from 'react';
-import { motion } from 'framer-motion';
-import { GridBackdrop } from '@/components/fx/GridBackdrop';
 
 /**
- * Full-viewport loading screen with the brand monogram and an
- * animated neon ring. Used by `app/[locale]/loading.tsx`.
+ * Route-level loading state, used by `app/[locale]/loading.tsx`.
+ *
+ * Deliberately the quiet sibling of the first-load curtain: same canvas, same
+ * mono metadata, but one indeterminate hairline sweeping across the seam
+ * instead of the full sequence. A route change is not an arrival, so it
+ * doesn't get an arrival animation.
  */
 export function LoadingScreen({ label = 'Loading' }: { label?: string }) {
   return (
-    <div className="fixed inset-0 z-[1000] grid place-items-center bg-[color:var(--bg-base)]">
-      <GridBackdrop />
-      <motion.div
-        initial={{ opacity: 0, scale: 0.94 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
-        className="relative flex flex-col items-center gap-6"
-      >
-        <div className="relative grid size-28 place-items-center">
-          <motion.span
-            aria-hidden
-            className="absolute inset-0 rounded-full border border-[color:var(--brand-gold)]/40"
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 6, ease: 'linear' }}
+    <div className="fixed inset-0 z-[700] grid place-items-center bg-canvas">
+      <div className="flex w-full max-w-xs flex-col items-center gap-5 px-6">
+        <span className="t-mono text-[0.625rem] text-ink-4">{label}</span>
+
+        {/* Indeterminate hairline */}
+        <span className="relative block h-px w-full overflow-hidden bg-line">
+          <span
+            className="absolute inset-y-0 w-1/3 bg-accent"
+            style={{ animation: 'ls-sweep 1.25s var(--ease-in-out-expo) infinite' }}
           />
-          <motion.span
-            aria-hidden
-            className="absolute inset-2 rounded-full border border-dashed border-[#D4A843]/40"
-            animate={{ rotate: -360 }}
-            transition={{ repeat: Infinity, duration: 10, ease: 'linear' }}
-          />
-          <span className="text-gradient-brand font-display text-2xl font-bold tracking-[0.3em]">
-            AB
-          </span>
-        </div>
-        <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.4em] text-[color:var(--fg-muted)]">
-          <span>{label}</span>
-          <motion.span
-            animate={{ opacity: [0.2, 1, 0.2] }}
-            transition={{ repeat: Infinity, duration: 1.2 }}
-          >
-            •••
-          </motion.span>
-        </div>
-      </motion.div>
+        </span>
+
+        <style>{`@keyframes ls-sweep{
+          0%{transform:translateX(-120%)}
+          100%{transform:translateX(420%)}
+        }`}</style>
+      </div>
     </div>
   );
 }

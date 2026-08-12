@@ -5,124 +5,98 @@ import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { useReveal } from '@/hooks/useReveal';
-import { MarqueeRow } from '@/components/motion/MarqueeRow';
 import { useBrands } from '@/context/SiteContentContext';
 import { getImageUrl } from '@/lib/api';
 
-interface BrandTileProps {
-  name: string;
-  img: string;
-  href?: string | null;
-}
-
-function BrandTile({ name, img, href }: BrandTileProps) {
-  const Wrapper: React.ElementType = href ? 'a' : 'div';
-  const extra = href ? { href, target: '_blank', rel: 'noopener noreferrer' } : {};
-
-  return (
-    <Wrapper
-      {...extra}
-      aria-label={name}
-      title={name}
-      className="brand-tile group flex shrink-0 flex-col items-center gap-2 px-2"
-    >
-      <div className="brand-card relative flex h-16 w-36 items-center justify-center rounded-lg border border-[#1A1A1A] bg-white/[0.04] p-3 transition-all duration-300 group-hover:border-[#D4A843]/40 group-hover:bg-white/[0.08]">
-        <Image
-          src={img}
-          alt={name}
-          width={120}
-          height={48}
-          loading="lazy"
-          className="brand-logo max-h-full max-w-full object-contain"
-        />
-      </div>
-      <span className="max-w-[140px] truncate text-center font-mono text-[8px] uppercase tracking-[0.22em] text-[#444] transition-colors duration-300 group-hover:text-[#D4A843]">
-        {name}
-      </span>
-    </Wrapper>
-  );
-}
-
+/**
+ * The brand wall.
+ *
+ * A hairline grid of logo cells rather than a scrolling marquee — partners
+ * are a credibility claim, and a claim that slides past unreadably isn't one.
+ * Logos sit in neutral grey and resolve to full colour on hover, which keeps
+ * fifty different brand palettes from fighting the page.
+ */
 export function BrandsSection() {
   const brands = useBrands();
   const locale = useLocale();
   const isRTL = locale === 'ar';
   const t = useTranslations();
 
-  const { ref: headRef, visible: headVisible } = useReveal(0.3);
+  const { ref, visible } = useReveal(0.1);
 
-  if (!brands || brands.length === 0) return null;
-
-  const valid = brands
-    .filter((b) => b.is_active !== false)
-    .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
-    .map((b) => ({ ...b, img: getImageUrl(b.logo_url) }))
-    .filter((b): b is typeof b & { img: string } => Boolean(b.img));
+  const valid = React.useMemo(
+    () =>
+      (brands || [])
+        .filter((b) => b.is_active !== false)
+        .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
+        .map((b) => ({ ...b, img: getImageUrl(b.logo_url) }))
+        .filter((b): b is typeof b & { img: string } => Boolean(b.img)),
+    [brands],
+  );
 
   if (!valid.length) return null;
 
   return (
-    <section
-      className="luxury-section relative overflow-hidden bg-[#080808] py-24 md:py-32"
-      dir={isRTL ? 'rtl' : 'ltr'}
-    >
-      {/* CSS for brand logo hover — no JS needed */}
-      <style>{`
-        .brand-logo {
-          opacity: 0.9;
-          transition: opacity 0.4s ease, transform 0.4s ease;
-        }
-        .brand-tile:hover .brand-logo {
-          opacity: 1;
-          transform: scale(1.04);
-        }
-      `}</style>
+    <section className="section border-b border-line bg-surface" dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="wrap">
+        <div className="mx-auto max-w-xl text-center">
+          <p className="kicker justify-center">{t('sections.europeanBrands')}</p>
+          <h2 className="t-h2 mt-5">{t('sections.ourBrand')}</h2>
+          <p className="t-lead mt-4">
+            {isRTL
+              ? 'إلى جانب إنتاجنا الخاص، نمثّل ونورّد علامات إضاءة أوروبية مختارة للمشاريع التي تطلبها بالاسم.'
+              : 'Alongside our own production, we represent and supply selected European lighting houses for projects that specify them by name.'}
+          </p>
+        </div>
 
-      <div className="absolute inset-x-0 top-0 h-px bg-[#1A1A1A]" />
+        {/* Logo grid — 1px gaps on the line colour give the ruled sheet look */}
+        <div
+          ref={ref}
+          className="mt-12 grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-3 lg:grid-cols-5"
+        >
+          {valid.map((b, i) => {
+            const Cell: React.ElementType = b.website_url ? 'a' : 'div';
+            const linkProps = b.website_url
+              ? { href: b.website_url, target: '_blank', rel: 'noopener noreferrer' }
+              : {};
 
-      {/* Header */}
-      <div
-        ref={headRef}
-        className="mx-auto mb-12 w-full max-w-7xl px-4 text-center sm:px-6 lg:px-8"
-        style={{
-          opacity: headVisible ? 1 : 0,
-          transform: headVisible ? 'translateY(0)' : 'translateY(24px)',
-          transition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)',
-        }}
-      >
-        <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#D4A843]">
-          {t('sections.europeanBrands')}
-        </p>
-        <h2 className="mt-4 text-[clamp(1.8rem,3.5vw,2.8rem)] font-light leading-[1.1] tracking-[-0.02em] text-white">
-          {t('sections.ourBrand')}
-        </h2>
-        <p className="mx-auto mt-3 max-w-md text-[13px] font-light text-[#444]">
-          {isRTL
-            ? 'شراكات مع أفضل علامات الإضاءة الأوروبية.'
-            : "Partnered with Europe's most respected lighting ateliers."}
-        </p>
-      </div>
+            return (
+              <Cell
+                key={b.id}
+                {...linkProps}
+                title={b.name}
+                aria-label={b.name}
+                className="group flex h-28 items-center justify-center bg-canvas p-6 transition-colors duration-500 hover:bg-surface"
+                style={{
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? 'none' : 'translateY(14px)',
+                  transition: `opacity 0.7s var(--ease-out-expo) ${Math.min(i, 12) * 45}ms, transform 0.7s var(--ease-out-expo) ${Math.min(i, 12) * 45}ms, background-color 0.5s`,
+                }}
+              >
+                {/* Monochrome at rest so fifty brand palettes don't fight the
+                    page; on dark, logos are knocked out to white because most
+                    partner marks are dark-on-transparent and would vanish. */}
+                <Image
+                  src={b.img}
+                  alt={b.name}
+                  width={132}
+                  height={48}
+                  loading="lazy"
+                  className="max-h-12 w-auto object-contain opacity-60 grayscale transition-all duration-500 group-hover:scale-[1.04] group-hover:opacity-100 group-hover:grayscale-0 dark:opacity-70 dark:brightness-0 dark:invert dark:group-hover:opacity-100 dark:group-hover:brightness-100 dark:group-hover:invert-0"
+                />
+              </Cell>
+            );
+          })}
+        </div>
 
-      {/* Marquee */}
-      <MarqueeRow speed={55} fade>
-        {valid.map((b) => (
-          <BrandTile key={b.id} name={b.name} img={b.img} href={b.website_url} />
-        ))}
-      </MarqueeRow>
-
-      {/* Bottom attestations */}
-      <div className="mx-auto mt-10 w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 border-t border-[#111] pt-7">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-3">
           {[
             isRTL ? 'مصادر أصلية' : 'Authentic sourcing',
             isRTL ? 'ضمان المصنّع' : 'Manufacturer warranty',
             isRTL ? 'دعم ما بعد البيع' : 'After-sales support',
           ].map((item) => (
-            <span
-              key={item}
-              className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.25em] text-[#333]"
-            >
-              <span className="size-1 shrink-0 rounded-full bg-[#D4A843]" aria-hidden />
+            <span key={item} className="t-mono flex items-center gap-2 text-[0.5625rem] text-ink-4">
+              <span className="size-1 shrink-0 rounded-full bg-accent" aria-hidden />
               {item}
             </span>
           ))}

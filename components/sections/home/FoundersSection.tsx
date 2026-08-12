@@ -11,14 +11,20 @@ import { getImageUrl } from '@/lib/api';
 const FALLBACK_OWNER =
   'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=80';
 
+/**
+ * Founders, set as pull quotes.
+ *
+ * The quote is the largest thing in the block — it's the only place on the
+ * homepage where the company speaks in the first person, so it gets the
+ * serif and the room. Portraits are small, square and secondary.
+ */
 export function FoundersSection() {
   const t = useTranslations();
   const locale = useLocale();
   const isRTL = locale === 'ar';
   const team = useTeam();
 
-  const { ref: headRef, visible: headVisible } = useReveal(0.3);
-  const { ref: cardsRef, visible: cardsVisible } = useReveal(0.1);
+  const { ref, visible } = useReveal(0.12);
 
   const founder =
     team.find(
@@ -34,115 +40,53 @@ export function FoundersSection() {
   if (!owners.length) return null;
 
   return (
-    <section
-      className="luxury-section relative bg-[#080808] py-24 md:py-32"
-      dir={isRTL ? 'rtl' : 'ltr'}
-    >
-      <div className="absolute inset-x-0 top-0 h-px bg-[#1A1A1A]" />
+    <section className="section border-b border-line" dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="wrap">
+        <p className="kicker">{isRTL ? 'من المؤسسين' : 'From the founders'}</p>
+        <h2 className="t-h1 mt-5 max-w-lg">{t('sections.fromOwner')}</h2>
 
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-
-        {/* Header */}
-        <div
-          ref={headRef}
-          className="mb-14 text-center"
-          style={{
-            opacity: headVisible ? 1 : 0,
-            transform: headVisible ? 'translateY(0)' : 'translateY(24px)',
-            transition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)',
-          }}
-        >
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#D4A843]">
-            {isRTL ? 'صوت المؤسسين' : 'Voices behind the vision'}
-          </p>
-          <h2 className="mt-4 font-display text-[clamp(2rem,4vw,3rem)] font-light leading-[1.1] tracking-[-0.02em] text-white">
-            {t('sections.fromOwner')}
-          </h2>
-          <div aria-hidden className="mx-auto mt-6 h-px w-16 bg-[#D4A843]/30" />
-        </div>
-
-        {/* Cards */}
-        <div
-          ref={cardsRef}
-          className="grid gap-5 md:grid-cols-2"
-        >
+        <div ref={ref} className="mt-12 grid gap-px bg-line md:grid-cols-2">
           {owners.map((m, i) => {
-            const name = isRTL ? m.name_ar || m.name_en : m.name_en;
+            const name = (isRTL ? m.name_ar || m.name_en : m.name_en) || '';
             const role = isRTL ? m.designation_ar || m.designation_en : m.designation_en;
-            const quote = isRTL ? m.quote_ar || m.quote_en : m.quote_en;
+            const quote =
+              (isRTL ? m.quote_ar || m.quote_en : m.quote_en) ||
+              (isRTL
+                ? 'الإضاءة ليست مجرد ضوء — إنها حكاية تُروى بصمت.'
+                : 'Lighting is storytelling — told quietly, felt instantly.');
             const img = getImageUrl(m.image_url) || FALLBACK_OWNER;
 
             return (
-              <div
+              <figure
                 key={m.id}
-                className="group relative overflow-hidden border border-[#1A1A1A] bg-[#0C0C0C] transition-all duration-500 hover:border-[#D4A843]/30"
+                className="flex flex-col justify-between bg-canvas p-8 md:p-10"
                 style={{
-                  opacity: cardsVisible ? 1 : 0,
-                  transform: cardsVisible ? 'translateY(0)' : 'translateY(32px)',
-                  transition: `opacity 0.7s cubic-bezier(0.16,1,0.3,1) ${i * 120}ms, transform 0.7s cubic-bezier(0.16,1,0.3,1) ${i * 120}ms, border-color 0.5s`,
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? 'none' : 'translateY(22px)',
+                  transition: `opacity 0.9s var(--ease-out-expo) ${i * 130}ms, transform 0.9s var(--ease-out-expo) ${i * 130}ms`,
                 }}
               >
-                <div className="grid grid-cols-1 sm:grid-cols-5">
-                  {/* Portrait */}
-                  <div
-                    className={`relative aspect-square sm:aspect-auto sm:col-span-2 ${i % 2 ? 'sm:order-last' : ''}`}
-                  >
+                <blockquote className="t-accent text-[clamp(1.25rem,2.2vw,1.75rem)] leading-[1.35] text-ink">
+                  “{quote}”
+                </blockquote>
+
+                <figcaption className="mt-8 flex items-center gap-4 border-t border-line pt-6">
+                  <span className="relative size-12 shrink-0 overflow-hidden rounded-full border border-line">
                     <Image
                       src={img}
                       alt={name}
                       fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 40vw, 20vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                      sizes="48px"
                       loading="lazy"
+                      className="object-cover"
                     />
-                    {/* Side fade */}
-                    <div
-                      aria-hidden
-                      className="absolute inset-0"
-                      style={{
-                        background: i % 2
-                          ? 'linear-gradient(270deg, rgba(12,12,12,0.05), rgba(12,12,12,0.9))'
-                          : 'linear-gradient(90deg, rgba(12,12,12,0.05), rgba(12,12,12,0.9))',
-                      }}
-                    />
-                  </div>
-
-                  {/* Quote */}
-                  <div className="relative flex flex-col justify-center gap-4 p-7 sm:col-span-3 sm:p-9">
-                    {/* Decorative large serif " */}
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute -top-2 left-5 select-none font-serif text-[7rem] leading-none text-[#1A1A1A] transition-colors duration-500 group-hover:text-[#D4A843]/10"
-                    >
-                      &ldquo;
-                    </span>
-
-                    <p
-                      className="relative z-10 font-light leading-relaxed text-[#777] transition-colors duration-700"
-                      style={{
-                        fontSize: 'clamp(0.9rem, 1.5vw, 1.1rem)',
-                        color: cardsVisible ? undefined : '#555',
-                      }}
-                    >
-                      {quote ||
-                        (isRTL
-                          ? 'الإضاءة ليست مجرد ضوء — إنها حكاية تروى بصمت.'
-                          : 'Lighting is storytelling — told quietly, felt instantly.')}
-                    </p>
-
-                    <div className="relative z-10 mt-2 border-t border-[#1A1A1A] pt-4">
-                      <p className="text-[14px] font-light text-white">
-                        {name}
-                      </p>
-                      {role && (
-                        <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-[#D4A843]">
-                          {role}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
+                  </span>
+                  <span>
+                    <span className="block text-[0.9375rem] font-medium text-ink">{name}</span>
+                    {role && <span className="t-mono mt-0.5 block text-[0.5625rem] text-accent">{role}</span>}
+                  </span>
+                </figcaption>
+              </figure>
             );
           })}
         </div>
