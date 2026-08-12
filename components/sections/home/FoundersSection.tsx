@@ -7,16 +7,18 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useReveal } from '@/hooks/useReveal';
 import { useTeam } from '@/context/SiteContentContext';
 import { getImageUrl } from '@/lib/api';
+import { cn } from '@/lib/utils';
 
 const FALLBACK_OWNER =
   'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=80';
 
 /**
- * Founders, set as pull quotes.
+ * Founders, set as pull quotes beside full-height portraits.
  *
- * The quote is the largest thing in the block — it's the only place on the
- * homepage where the company speaks in the first person, so it gets the
- * serif and the room. Portraits are small, square and secondary.
+ * The quote carries the serif because it's the only place on the homepage
+ * where the company speaks in the first person, but the portrait gets real
+ * estate on equal terms — it runs the whole height of the card and mirrors
+ * on the second founder so the two quotes face each other.
  */
 export function FoundersSection() {
   const t = useTranslations();
@@ -59,33 +61,44 @@ export function FoundersSection() {
             return (
               <figure
                 key={m.id}
-                className="flex flex-col justify-between bg-canvas p-8 md:p-10"
+                className="group grid grid-cols-1 bg-canvas sm:grid-cols-5"
                 style={{
                   opacity: visible ? 1 : 0,
                   transform: visible ? 'none' : 'translateY(22px)',
                   transition: `opacity 0.9s var(--ease-out-expo) ${i * 130}ms, transform 0.9s var(--ease-out-expo) ${i * 130}ms`,
                 }}
               >
-                <blockquote className="t-accent text-[clamp(1.25rem,2.2vw,1.75rem)] leading-[1.35] text-ink">
-                  “{quote}”
-                </blockquote>
+                {/* Portrait fills the full height of the card and mirrors to the
+                    outer edge on the second founder, so the two quotes face
+                    each other across the middle of the section. */}
+                <div
+                  className={cn(
+                    'relative aspect-[4/5] overflow-hidden border-line sm:col-span-2 sm:aspect-auto sm:min-h-[26rem]',
+                    i % 2 ? 'sm:order-last sm:border-s' : 'sm:border-e',
+                  )}
+                >
+                  <Image
+                    src={img}
+                    alt={name}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 40vw, 22vw"
+                    loading="lazy"
+                    className="object-cover grayscale transition-all duration-[900ms] [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.03] group-hover:grayscale-0"
+                  />
+                </div>
 
-                <figcaption className="mt-8 flex items-center gap-4 border-t border-line pt-6">
-                  <span className="relative size-12 shrink-0 overflow-hidden rounded-full border border-line">
-                    <Image
-                      src={img}
-                      alt={name}
-                      fill
-                      sizes="48px"
-                      loading="lazy"
-                      className="object-cover"
-                    />
-                  </span>
-                  <span>
-                    <span className="block text-[0.9375rem] font-medium text-ink">{name}</span>
-                    {role && <span className="t-mono mt-0.5 block text-[0.5625rem] text-accent">{role}</span>}
-                  </span>
-                </figcaption>
+                <div className="flex flex-col justify-between gap-8 p-8 sm:col-span-3 md:p-10">
+                  <blockquote className="t-accent text-[clamp(1.25rem,2.2vw,1.75rem)] leading-[1.35] text-ink">
+                    “{quote}”
+                  </blockquote>
+
+                  <figcaption className="border-t border-line pt-6">
+                    <p className="text-[1.0625rem] font-medium text-ink">{name}</p>
+                    {role && (
+                      <p className="t-mono mt-1 text-[0.5625rem] text-accent">{role}</p>
+                    )}
+                  </figcaption>
+                </div>
               </figure>
             );
           })}
