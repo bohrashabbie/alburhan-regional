@@ -259,10 +259,17 @@ const Header: React.FC = () => {
       </header>
 
       {/* ── Mobile sheet ── */}
+      {/* Visibility lives on this wrapper, not on individual children. Fading
+          only the backdrop left the sheet's own chrome — the Menu label, the
+          close button, the Appearance row, the quote CTA — painted on top of
+          the page at all times. `invisible` also pulls the whole sheet out of
+          the tab order while it's closed. */}
       <div
         className={cn(
-          'fixed inset-0 z-[900] lg:hidden',
-          mobileOpen ? 'pointer-events-auto' : 'pointer-events-none',
+          'fixed inset-0 z-[900] transition-[opacity,visibility] duration-500 lg:hidden',
+          mobileOpen
+            ? 'visible opacity-100 pointer-events-auto'
+            : 'invisible opacity-0 pointer-events-none',
         )}
         aria-hidden={!mobileOpen}
       >
