@@ -5,6 +5,13 @@ FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
+# node:20-alpine ships npm 10, but package-lock.json is written by npm 11,
+# which records transitive optional deps (@emnapi/*, @swc/helpers) differently.
+# npm 10 reads that as an out-of-sync lock and `npm ci` hard-fails. Match the
+# npm that wrote the lock rather than loosening the install to `npm install` —
+# `npm ci` is the whole point of shipping a lockfile.
+RUN npm i -g npm@11 --no-audit --no-fund
+
 COPY package.json package-lock.json* ./
 RUN npm ci --no-audit --no-fund
 
