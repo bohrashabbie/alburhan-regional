@@ -11,6 +11,7 @@ const RangeSection = dynamic(() => import('@/components/sections/home/RangeSecti
 const BannerCarousel = dynamic(() => import('@/components/sections/home/BannerCarousel'));
 const PresenceSection = dynamic(() => import('@/components/sections/home/PresenceSection'));
 const ServicesSection = dynamic(() => import('@/components/sections/home/ServicesSection'));
+const FeaturedProjectSection = dynamic(() => import('@/components/sections/home/FeaturedProjectSection'));
 const BrandsSection = dynamic(() => import('@/components/sections/home/BrandsSection'));
 const FoundersSection = dynamic(() => import('@/components/sections/home/FoundersSection'));
 const CTASection = dynamic(() => import('@/components/sections/home/CTASection'));
@@ -18,13 +19,15 @@ const CTASection = dynamic(() => import('@/components/sections/home/CTASection')
 export default function Home() {
   return (
     <>
-      {/* What we do → what we sell → where we are → who says so → the ask */}
+      {/* What we do → what we sell → what we just delivered → where we are →
+          who says so → the ask */}
       <HeroSection />
       <MarqueeStrip />
       <IntroSection />
       <RangeSection />
       <BannerCarousel />
       <ServicesSection />
+      <FeaturedProjectSection />
       <PresenceSection />
       <BrandsSection />
       <FoundersSection />
